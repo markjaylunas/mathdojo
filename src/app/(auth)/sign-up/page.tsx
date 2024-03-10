@@ -6,7 +6,7 @@ import Link from "next/link";
 
 const Page = () => {
   return (
-    <div>
+    <div className="mt-4">
       <Heading>Sign up</Heading>
       <Text className="mb-4">
         Sign up to access all the features of our platform.

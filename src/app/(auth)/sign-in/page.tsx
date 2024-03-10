@@ -6,7 +6,7 @@ import Link from "next/link";
 
 const Page = () => {
   return (
-    <div>
+    <div className="mt-4">
       <Heading>Sign in</Heading>
       <Text className="mb-4">
         Sign in to access your account and start math wars with your friends.
