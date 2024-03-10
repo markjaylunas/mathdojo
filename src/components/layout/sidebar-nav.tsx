@@ -6,11 +6,11 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { SidebarNavItem } from "@/lib/types";
 
-export interface DocsSidebarNavProps {
+export interface SidebarNavProps {
   items: SidebarNavItem[];
 }
 
-export function DocsSidebarNav({ items }: DocsSidebarNavProps) {
+export function SidebarNav({ items }: SidebarNavProps) {
   const pathname = usePathname();
 
   return items.length ? (
@@ -21,7 +21,7 @@ export function DocsSidebarNav({ items }: DocsSidebarNavProps) {
             {item.title}
           </h4>
           {item?.items?.length && (
-            <DocsSidebarNavItems items={item.items} pathname={pathname} />
+            <SidebarNavItems items={item.items} pathname={pathname} />
           )}
         </div>
       ))}
@@ -29,15 +29,12 @@ export function DocsSidebarNav({ items }: DocsSidebarNavProps) {
   ) : null;
 }
 
-interface DocsSidebarNavItemsProps {
+interface SidebarNavItemsProps {
   items: SidebarNavItem[];
   pathname: string | null;
 }
 
-export function DocsSidebarNavItems({
-  items,
-  pathname,
-}: DocsSidebarNavItemsProps) {
+export function SidebarNavItems({ items, pathname }: SidebarNavItemsProps) {
   return items?.length ? (
     <div className="grid grid-flow-row auto-rows-max text-sm">
       {items.map((item, index) =>
