@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  TSignupSchema,
-  signinSchema,
-  signupSchema,
-} from "@/lib/validationSchema";
+import { TSignupSchema, signupSchema } from "@/lib/validationSchema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -17,14 +13,24 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { authSignup } from "@/actions/signup";
 
 const SignupForm = () => {
   const form = useForm<TSignupSchema>({
     resolver: zodResolver(signupSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   });
 
-  const onSubmit = (data: TSignupSchema) => {
-    console.log(data);
+  const onSubmit = async (data: TSignupSchema) => {
+    try {
+      const response = await authSignup(data);
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

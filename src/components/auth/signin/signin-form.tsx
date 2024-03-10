@@ -17,6 +17,10 @@ import { Button } from "@/components/ui/button";
 const SigninForm = () => {
   const form = useForm<TSigninSchema>({
     resolver: zodResolver(signinSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   });
 
   const onSubmit = (data: TSigninSchema) => {
