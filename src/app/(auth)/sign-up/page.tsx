@@ -1,7 +1,7 @@
-import OauthButtons from "@/components/auth/oauth/oauth-buttons";
-import SignupForm from "@/components/auth/signup/signup-form";
-import Heading from "@/components/ui/heading";
-import Text from "@/components/ui/text";
+import OauthButtons from "@components/auth/oauth/oauth-buttons";
+import SignupForm from "@components/auth/signup/signup-form";
+import Heading from "@components/ui/heading";
+import Text from "@components/ui/text";
 import Link from "next/link";
 
 const Page = () => {

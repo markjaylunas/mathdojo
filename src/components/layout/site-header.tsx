@@ -1,6 +1,6 @@
-import { MobileNav } from "@/components/layout/mobile-nav";
-import { MainNav } from "@/components/layout/main-nav";
-import AuthNav from "@/components/layout/auth-nav";
+import { MobileNav } from "@components/layout/mobile-nav";
+import { MainNav } from "@components/layout/main-nav";
+import AuthNav from "@components/layout/auth-nav";
 
 export function SiteHeader() {
   return (

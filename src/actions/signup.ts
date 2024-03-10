@@ -1,14 +1,17 @@
 "use server";
 
-import { TSignupSchema, signupSchema } from "@/lib/validationSchema";
-import prisma from "@/lib/prisma";
+import { TSignupSchema, signupSchema } from "@lib/validationSchema";
+import prisma from "@lib/prisma";
 import bcrypt from "bcrypt";
+import { ActionResponse } from "@lib/types";
 
-export const authSignup = async (values: TSignupSchema) => {
+export const authSignup = async (
+  values: TSignupSchema
+): Promise<ActionResponse> => {
   const validatedFields = signupSchema.safeParse(values);
 
   if (!validatedFields.success) {
-    return { error: validatedFields.error.message };
+    return { status: "error", message: validatedFields.error.message };
   }
 
   const { email, password } = validatedFields.data;
@@ -18,7 +21,7 @@ export const authSignup = async (values: TSignupSchema) => {
   });
 
   if (existingUser) {
-    return { error: "Email already in use!" };
+    return { status: "error", path: "email", message: "Email already in use" };
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -33,5 +36,5 @@ export const authSignup = async (values: TSignupSchema) => {
   //   todo: send email verification token
 
   //   return { success: "Email sent to your inbox. Please verify your email." };
-  return { success: "User created!" };
+  return { status: "success", message: "User created" };
 };

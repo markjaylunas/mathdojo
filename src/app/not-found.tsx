@@ -1,5 +1,5 @@
-import BackButton from "@/components/ui/back-button";
-import { Button } from "@/components/ui/button";
+import BackButton from "@components/ui/back-button";
+import { Button } from "@components/ui/button";
 import { IconArrowBack, IconHome } from "@tabler/icons-react";
 
 export default async function NotFound() {

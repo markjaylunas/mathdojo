@@ -1,5 +1,5 @@
-import { ModeToggle } from "@/components/theme/theme-toggler";
-import { Button } from "@/components/ui/button";
+import { ModeToggle } from "@components/theme/theme-toggler";
+import { Button } from "@components/ui/button";
 
 export default function Home() {
   return (

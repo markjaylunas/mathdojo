@@ -6,9 +6,9 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import { IconLogin2 } from "@tabler/icons-react";
 import { usePathname } from "next/navigation";
-import { AUTH_PAGE } from "@/lib/constants";
+import { AUTH_PAGE } from "@lib/constants";
 
-const AuthNav = () => {
+const AuthNav = async () => {
   const pathname = usePathname();
   const isSignedIn = false;
   const isAuthPage = AUTH_PAGE.includes(pathname);

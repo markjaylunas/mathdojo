@@ -5,7 +5,7 @@ const Text: React.FC<React.HTMLProps<HTMLParagraphElement>> = ({
 }) => {
   return (
     <p
-      className={`leading-7 [&:not(:first-child)]:mt-4 text-gray-600 ${className}`}
+      className={`leading-7 [&:not(:first-child)]:mt-4 text-gray-600 dark:text-gray-300 ${className}`}
       {...props}
     >
       {children}

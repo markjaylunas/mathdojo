@@ -1,7 +1,7 @@
 "use client";
 
-import { TSigninSchema, signinSchema } from "@/lib/validationSchema";
-import { useForm } from "react-hook-form";
+import { TSigninSchema, signinSchema } from "@lib/validationSchema";
+import { FieldPath, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
@@ -10,11 +10,17 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+} from "@components/ui/form";
+import { Input } from "@components/ui/input";
+import { Button } from "@components/ui/button";
+import { authSignin } from "@actions/signin";
+import { useToast } from "@/src/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 const SigninForm = () => {
+  const { toast } = useToast();
+  const router = useRouter();
+
   const form = useForm<TSigninSchema>({
     resolver: zodResolver(signinSchema),
     defaultValues: {
@@ -23,8 +29,35 @@ const SigninForm = () => {
     },
   });
 
-  const onSubmit = (data: TSigninSchema) => {
-    console.log(data);
+  const onSubmit = async (data: TSigninSchema) => {
+    try {
+      const { status, message, path } = await authSignin(data);
+      const isError = status === "error";
+      if (isError && path) {
+        form.setError(path as FieldPath<TSigninSchema>, {
+          type: "validate",
+          message,
+        });
+        return;
+      }
+
+      toast({
+        title: `Sign in ${isError ? "failed" : "success"}`,
+        description: message,
+        variant: status === "error" ? "destructive" : "default",
+      });
+      if (isError) return;
+
+      form.reset();
+      router.push("/setting");
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Sign in failed",
+        description: "Something went wrong, please try again",
+        variant: "destructive",
+      });
+    }
   };
 
   return (

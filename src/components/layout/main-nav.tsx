@@ -4,9 +4,9 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { siteConfig } from "@/lib/config";
-import { cn } from "@/lib/utils";
-import { Icons } from "@/components/ui/icons";
+import { siteConfig } from "@lib/config";
+import { cn } from "@lib/utils";
+import { Icons } from "@components/ui/icons";
 
 export function MainNav() {
   const pathname = usePathname();

@@ -1,3 +1,5 @@
+import { MainNavItem, SidebarNavItem } from "@lib/types";
+
 export const siteConfig = {
   name: "mathwars",
   url: "https://mathwars.makje.com",
@@ -8,8 +10,6 @@ export const siteConfig = {
 };
 
 export type SiteConfig = typeof siteConfig;
-
-import { MainNavItem, SidebarNavItem } from "@/lib/types";
 
 interface RoutesConfig {
   mainNav: MainNavItem[];

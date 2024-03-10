@@ -1,4 +1,4 @@
-import { Icons } from "@/components/ui/icons";
+import { Icons } from "@components/ui/icons";
 
 export type NavItem = {
   title: string;
@@ -16,3 +16,9 @@ export type NavItemWithChildren = NavItem & {
 export type MainNavItem = NavItem & {};
 
 export type SidebarNavItem = NavItemWithChildren & {};
+
+export type ActionResponse = {
+  status: "success" | "error";
+  path?: string;
+  message: string;
+};

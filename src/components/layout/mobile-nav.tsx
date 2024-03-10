@@ -5,12 +5,12 @@ import Link, { LinkProps } from "next/link";
 import { useRouter } from "next/navigation";
 import { ViewVerticalIcon } from "@radix-ui/react-icons";
 
-import { routesConfig, siteConfig } from "@/lib/config";
-import { cn } from "@/lib/utils";
-import { Icons } from "@/components/ui/icons";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Button } from "@/components/ui/button";
+import { routesConfig, siteConfig } from "@lib/config";
+import { cn } from "@lib/utils";
+import { Icons } from "@components/ui/icons";
+import { Sheet, SheetContent, SheetTrigger } from "@components/ui/sheet";
+import { ScrollArea } from "@components/ui/scroll-area";
+import { Button } from "@components/ui/button";
 
 export function MobileNav() {
   const [open, setOpen] = React.useState(false);
