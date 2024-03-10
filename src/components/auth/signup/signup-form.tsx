@@ -1,6 +1,10 @@
 "use client";
 
-import { TSigninSchema, signinSchema } from "@/lib/validationSchema";
+import {
+  TSignupSchema,
+  signinSchema,
+  signupSchema,
+} from "@/lib/validationSchema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -14,12 +18,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-const SigninForm = () => {
-  const form = useForm<TSigninSchema>({
-    resolver: zodResolver(signinSchema),
+const SignupForm = () => {
+  const form = useForm<TSignupSchema>({
+    resolver: zodResolver(signupSchema),
   });
 
-  const onSubmit = (data: TSigninSchema) => {
+  const onSubmit = (data: TSignupSchema) => {
     console.log(data);
   };
 
@@ -53,7 +57,6 @@ const SigninForm = () => {
             </FormItem>
           )}
         />
-
         <Button className="w-full" type="submit">
           Submit
         </Button>
@@ -62,4 +65,4 @@ const SigninForm = () => {
   );
 };
 
-export default SigninForm;
+export default SignupForm;

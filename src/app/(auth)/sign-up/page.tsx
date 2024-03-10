@@ -1,5 +1,5 @@
 import OauthButtons from "@/components/auth/oauth/oauth-buttons";
-import SigninForm from "@/components/auth/signin/signin-form";
+import SignupForm from "@/components/auth/signup/signup-form";
 import Heading from "@/components/ui/heading";
 import Text from "@/components/ui/text";
 import Link from "next/link";
@@ -7,17 +7,17 @@ import Link from "next/link";
 const Page = () => {
   return (
     <div>
-      <Heading>Sign in</Heading>
+      <Heading>Sign up</Heading>
       <Text className="mb-4">
-        Sign in to access your account and start math wars with your friends.
+        Sign up to access all the features of our platform.
       </Text>
 
-      <SigninForm />
+      <SignupForm />
 
       <Text className="text-xs text-center space-x-1">
         <span>Already have an account?</span>
-        <Link href="/sign-up" className="underline">
-          <span>Sign up</span>
+        <Link href="/sign-in" className="underline">
+          <span>Sign in</span>
         </Link>
       </Text>
 
