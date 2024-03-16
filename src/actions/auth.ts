@@ -7,6 +7,7 @@ import { ActionResponse } from "@lib/types";
 
 import prisma from "@lib/prisma";
 import bcryptjs from "bcryptjs";
+import { DEFAULT_SIGNIN_REDIRECT } from "../lib/routes";
 
 export const actionSignin = async (
   values: TSignupSchema
@@ -23,8 +24,7 @@ export const actionSignin = async (
     await signIn("credentials", {
       email,
       password,
-      redirect: false,
-      // redirectTo: DEFAULT_LOGIN_REDIRECT,
+      redirectTo: DEFAULT_SIGNIN_REDIRECT,
     });
   } catch (error) {
     if (error instanceof AuthError) {

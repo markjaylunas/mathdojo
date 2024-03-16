@@ -13,6 +13,7 @@ export const publicRoutes = ["/"];
 export const authRoutes = [
   "/sign-in",
   "/sign-up",
+  "/auth/error",
   "/forgot-password",
   "/reset-password",
 ];
@@ -29,4 +30,17 @@ export const apiAuthPrefix = "/api/auth";
  * The default login redirect path
  * @type {string}
  */
-export const DEFAULT_LOGIN_REDIRECT = "/setting";
+export const DEFAULT_SIGNIN_REDIRECT = "/setting";
+
+/**
+ * The default sign in path
+ * @type {string}
+ */
+export const DEFAULT_SIGNIN_PATH = "/sign-in";
+
+/**
+ * The default sign up path
+ * @type {string}
+ */
+
+export const DEFAULT_SIGNUP_PATH = "/sign-up";

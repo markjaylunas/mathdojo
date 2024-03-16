@@ -4,6 +4,7 @@ import prisma from "@lib/prisma";
 import authConfig from "./auth.config";
 import { getUserById } from "@/data/user";
 import { UserRole } from "@prisma/client";
+import { DEFAULT_SIGNIN_PATH } from "./routes";
 
 export type ExtendedUser = DefaultSession["user"] & {
   role: "ADMIN" | "USER";
@@ -21,6 +22,20 @@ export const {
   signIn,
   signOut,
 } = NextAuth({
+  pages: {
+    signIn: DEFAULT_SIGNIN_PATH,
+    error: "/auth-error",
+  },
+  events: {
+    async linkAccount({ user }) {
+      await prisma.user.update({
+        where: { id: user.id },
+        data: {
+          emailVerified: new Date(),
+        },
+      });
+    },
+  },
   callbacks: {
     async session({ token, session }) {
       if (token.sub && session.user) {

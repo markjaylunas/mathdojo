@@ -6,12 +6,12 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import { IconLogin2 } from "@tabler/icons-react";
 import { usePathname } from "next/navigation";
-import { AUTH_PAGE } from "@lib/constants";
+import { DEFAULT_SIGNIN_PATH, authRoutes } from "@/src/lib/routes";
 
 const AuthNav = async () => {
   const pathname = usePathname();
   const isSignedIn = false;
-  const isAuthPage = AUTH_PAGE.includes(pathname);
+  const isAuthPage = authRoutes.includes(pathname);
   return (
     <nav className="flex items-center gap-2">
       {/* <Link href={siteConfig.links.github} target="_blank" rel="noreferrer">
@@ -21,7 +21,7 @@ const AuthNav = async () => {
             </Button>
           </Link> */}
       {!isSignedIn && !isAuthPage && (
-        <Link href="/sign-in">
+        <Link href={DEFAULT_SIGNIN_PATH}>
           <Button variant="outline" className="px-3">
             <IconLogin2 className="mr-1 h-4" />
             Sign in

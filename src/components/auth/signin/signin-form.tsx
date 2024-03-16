@@ -17,7 +17,7 @@ import { useToast } from "@/src/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import SubmitButton from "../../ui/submit-button";
-import { DEFAULT_LOGIN_REDIRECT } from "@/src/lib/routes";
+import { DEFAULT_SIGNIN_REDIRECT } from "@/src/lib/routes";
 
 const SigninForm = () => {
   const router = useRouter();
@@ -53,7 +53,7 @@ const SigninForm = () => {
       if (isError) return;
 
       form.reset();
-      router.push(DEFAULT_LOGIN_REDIRECT);
+      router.push(DEFAULT_SIGNIN_REDIRECT);
     } catch (error) {
       console.error(error);
       toast({

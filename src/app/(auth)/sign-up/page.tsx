@@ -1,3 +1,4 @@
+import { DEFAULT_SIGNIN_PATH } from "@/src/lib/routes";
 import OauthButtons from "@components/auth/oauth/oauth-buttons";
 import SignupForm from "@components/auth/signup/signup-form";
 import Heading from "@components/ui/heading";
@@ -14,7 +15,7 @@ const Page = () => {
 
       <Text className="text-xs text-center space-x-1">
         <span>Already have an account?</span>
-        <Link href="/sign-in" className="underline">
+        <Link href={DEFAULT_SIGNIN_PATH} className="underline">
           <span>Sign in</span>
         </Link>
       </Text>

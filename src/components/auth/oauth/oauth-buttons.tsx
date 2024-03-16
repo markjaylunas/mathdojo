@@ -1,6 +1,6 @@
 "use client";
 
-import { DEFAULT_LOGIN_REDIRECT } from "@/src/lib/routes";
+import { DEFAULT_SIGNIN_REDIRECT } from "@/src/lib/routes";
 import { Button } from "@components/ui/button";
 import { Separator } from "@components/ui/separator";
 import { IconBrandGithub, IconBrandGoogle } from "@tabler/icons-react";
@@ -9,7 +9,7 @@ import { signIn } from "next-auth/react";
 
 const OauthButtons = () => {
   const onSignIn = (provider: "google" | "github") => {
-    signIn(provider, { callbackUrl: DEFAULT_LOGIN_REDIRECT });
+    signIn(provider, { callbackUrl: DEFAULT_SIGNIN_REDIRECT });
   };
 
   return (
