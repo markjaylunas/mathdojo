@@ -12,13 +12,17 @@ import {
   FormMessage,
 } from "@components/ui/form";
 import { Input } from "@components/ui/input";
-import { Button } from "@components/ui/button";
 import { actionSignin } from "@/src/actions/auth";
 import { useToast } from "@/src/components/ui/use-toast";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import SubmitButton from "../../ui/submit-button";
+import { DEFAULT_LOGIN_REDIRECT } from "@/src/lib/routes";
 
 const SigninForm = () => {
+  const router = useRouter();
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<TSigninSchema>({
     resolver: zodResolver(signinSchema),
@@ -30,6 +34,7 @@ const SigninForm = () => {
 
   const onSubmit = async (data: TSigninSchema) => {
     try {
+      setIsLoading(true);
       const { status, message, path } = await actionSignin(data);
       const isError = status === "error";
       if (isError && path) {
@@ -48,6 +53,7 @@ const SigninForm = () => {
       if (isError) return;
 
       form.reset();
+      router.push(DEFAULT_LOGIN_REDIRECT);
     } catch (error) {
       console.error(error);
       toast({
@@ -55,6 +61,8 @@ const SigninForm = () => {
         description: "Something went wrong, please try again",
         variant: "destructive",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -68,7 +76,11 @@ const SigninForm = () => {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="makje@gmail.com" {...field} />
+                <Input
+                  placeholder="makje@gmail.com"
+                  {...field}
+                  disabled={isLoading}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -82,16 +94,16 @@ const SigninForm = () => {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input type="password" {...field} />
+                <Input type="password" {...field} disabled={isLoading} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <Button className="w-full" type="submit">
+        <SubmitButton loading={isLoading} className="w-full" type="submit">
           Submit
-        </Button>
+        </SubmitButton>
       </form>
     </Form>
   );

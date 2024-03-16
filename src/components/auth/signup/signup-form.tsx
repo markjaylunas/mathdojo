@@ -12,13 +12,15 @@ import {
   FormMessage,
 } from "@components/ui/form";
 import { Input } from "@components/ui/input";
-import { Button } from "@components/ui/button";
 import { actionSignup } from "@actions/auth";
 import { useToast } from "@/src/components/ui/use-toast";
 import _ from "lodash";
+import SubmitButton from "../../ui/submit-button";
+import { useState } from "react";
 
 const SignupForm = () => {
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<TSignupSchema>({
     resolver: zodResolver(signupSchema),
@@ -30,6 +32,7 @@ const SignupForm = () => {
 
   const onSubmit = async (data: TSignupSchema) => {
     try {
+      setIsLoading(true);
       const { status, path, message } = await actionSignup(data);
       const isError = status === "error";
       if (isError && path) {
@@ -52,6 +55,8 @@ const SignupForm = () => {
         description: "Something went wrong, please try again",
         variant: "destructive",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -85,9 +90,9 @@ const SignupForm = () => {
             </FormItem>
           )}
         />
-        <Button className="w-full" type="submit">
+        <SubmitButton loading={isLoading} className="w-full" type="submit">
           Submit
-        </Button>
+        </SubmitButton>
       </form>
     </Form>
   );
