@@ -8,9 +8,7 @@ const Page = () => {
   return (
     <div className="mt-4">
       <Heading>Sign up</Heading>
-      <Text className="mb-4">
-        Sign up to access all the features of our platform.
-      </Text>
+      <Text className="mb-4">Create an account to start using the app</Text>
 
       <SignupForm />
 

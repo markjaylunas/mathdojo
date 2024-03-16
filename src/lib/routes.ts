@@ -10,7 +10,12 @@ export const publicRoutes = ["/"];
  * @type {string[]}
  */
 
-export const protectedRoutes = ["/setting"];
+export const authRoutes = [
+  "/sign-in",
+  "/sign-up",
+  "/forgot-password",
+  "/reset-password",
+];
 
 /**
  * The prefix for the API authentication routes
@@ -24,4 +29,4 @@ export const apiAuthPrefix = "/api/auth";
  * The default login redirect path
  * @type {string}
  */
-export const DEFAULT_LOGIN_REDIRECT = "/user/setting";
+export const DEFAULT_LOGIN_REDIRECT = "/setting";

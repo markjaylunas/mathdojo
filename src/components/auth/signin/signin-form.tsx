@@ -13,13 +13,12 @@ import {
 } from "@components/ui/form";
 import { Input } from "@components/ui/input";
 import { Button } from "@components/ui/button";
-import { authSignin } from "@actions/signin";
+import { actionSignin } from "@/src/actions/auth";
 import { useToast } from "@/src/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 
 const SigninForm = () => {
   const { toast } = useToast();
-  const router = useRouter();
 
   const form = useForm<TSigninSchema>({
     resolver: zodResolver(signinSchema),
@@ -31,7 +30,7 @@ const SigninForm = () => {
 
   const onSubmit = async (data: TSigninSchema) => {
     try {
-      const { status, message, path } = await authSignin(data);
+      const { status, message, path } = await actionSignin(data);
       const isError = status === "error";
       if (isError && path) {
         form.setError(path as FieldPath<TSigninSchema>, {
@@ -49,7 +48,6 @@ const SigninForm = () => {
       if (isError) return;
 
       form.reset();
-      router.push("/setting");
     } catch (error) {
       console.error(error);
       toast({

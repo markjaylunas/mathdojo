@@ -1,8 +1,14 @@
-import { auth } from "@/auth";
+import SignoutButton from "@/src/components/auth/signout/signout-button";
+import { auth } from "@/src/lib/auth";
 
 const Page = async () => {
   const session = await auth();
-  return <div>{JSON.stringify(session)}</div>;
+  return (
+    <div>
+      <pre>{JSON.stringify(session, null, 2)}</pre>
+      <SignoutButton />
+    </div>
+  );
 };
 
 export default Page;

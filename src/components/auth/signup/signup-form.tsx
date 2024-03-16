@@ -13,7 +13,7 @@ import {
 } from "@components/ui/form";
 import { Input } from "@components/ui/input";
 import { Button } from "@components/ui/button";
-import { authSignup } from "@actions/signup";
+import { actionSignup } from "@actions/auth";
 import { useToast } from "@/src/components/ui/use-toast";
 import _ from "lodash";
 
@@ -30,7 +30,7 @@ const SignupForm = () => {
 
   const onSubmit = async (data: TSignupSchema) => {
     try {
-      const { status, path, message } = await authSignup(data);
+      const { status, path, message } = await actionSignup(data);
       const isError = status === "error";
       if (isError && path) {
         form.setError(path as FieldPath<TSignupSchema>, {

@@ -43,8 +43,8 @@ export const routesConfig: RoutesConfig = {
       title: "Setting",
       items: [
         {
-          title: "User",
-          href: "/user/setting",
+          title: "Setting",
+          href: "/setting",
           items: [],
         },
       ],
