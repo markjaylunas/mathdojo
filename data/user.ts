@@ -2,7 +2,7 @@ import prisma from "@lib/prisma";
 
 export const getUserByEmail = async (params: { email: string }) => {
   const { email } = params;
-  const user = await prisma.user.findUnique({
+  const user = await prisma.user.findFirst({
     where: {
       email,
     },

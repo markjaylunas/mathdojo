@@ -8,6 +8,8 @@ import { ActionResponse } from "@lib/types";
 import prisma from "@lib/prisma";
 import bcryptjs from "bcryptjs";
 import { DEFAULT_SIGNIN_REDIRECT } from "../lib/routes";
+import { generateVerificationToken } from "../lib/tokens";
+import { getUserByEmail } from "@/data/user";
 
 export const actionSignin = async (
   values: TSignupSchema
@@ -19,6 +21,20 @@ export const actionSignin = async (
   }
 
   const { email, password } = validatedFields.data;
+
+  const existingUser = await getUserByEmail({ email });
+
+  if (!existingUser || !existingUser.email || !existingUser.password) {
+    return { status: "error", message: "Email does not exists!" };
+  }
+
+  if (!existingUser.emailVerified) {
+    await generateVerificationToken({ email });
+    return {
+      status: "success",
+      message: "Email not verified. Confirmation email sent!",
+    };
+  }
 
   try {
     await signIn("credentials", {
@@ -72,10 +88,10 @@ export const actionSignup = async (
     },
   });
 
-  //   todo: send email verification token
+  const verificationToken = await generateVerificationToken({ email });
 
   //   return { success: "Email sent to your inbox. Please verify your email." };
-  return { status: "success", message: "User created" };
+  return { status: "success", message: "Confirmation email sent!" };
 };
 
 export const actionSignOut = async () => {

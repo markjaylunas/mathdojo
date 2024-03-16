@@ -44,14 +44,12 @@ const SignupForm = () => {
       }
 
       toast({
-        title: `Sign up ${isError ? "failed" : "success"}`,
         description: message,
         variant: status === "error" ? "destructive" : "default",
       });
     } catch (error) {
       console.error(error);
       toast({
-        title: "Sign up failed",
         description: "Something went wrong, please try again",
         variant: "destructive",
       });

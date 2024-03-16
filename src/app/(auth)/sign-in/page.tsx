@@ -4,7 +4,7 @@ import Text from "@components/ui/text";
 import SigninForm from "@components/auth/signin/signin-form";
 
 import Link from "next/link";
-import { DEFAULT_SIGNIN_PATH } from "@/src/lib/routes";
+import { DEFAULT_SIGNUP_PATH } from "@/src/lib/routes";
 
 const Page = () => {
   return (
@@ -18,7 +18,7 @@ const Page = () => {
 
       <Text className="text-xs text-center space-x-1">
         <span>Already have an account?</span>
-        <Link href={DEFAULT_SIGNIN_PATH} className="underline">
+        <Link href={DEFAULT_SIGNUP_PATH} className="underline">
           <span>Sign up</span>
         </Link>
       </Text>

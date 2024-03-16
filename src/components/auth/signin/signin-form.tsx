@@ -46,7 +46,6 @@ const SigninForm = () => {
       }
 
       toast({
-        title: `Sign in ${isError ? "failed" : "success"}`,
         description: message,
         variant: status === "error" ? "destructive" : "default",
       });
@@ -57,7 +56,6 @@ const SigninForm = () => {
     } catch (error) {
       console.error(error);
       toast({
-        title: "Sign in failed",
         description: "Something went wrong, please try again",
         variant: "destructive",
       });
