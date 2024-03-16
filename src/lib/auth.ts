@@ -22,10 +22,6 @@ export const {
   signIn,
   signOut,
 } = NextAuth({
-  pages: {
-    signIn: DEFAULT_SIGNIN_PATH,
-    error: "/auth-error",
-  },
   events: {
     async linkAccount({ user }) {
       await prisma.user.update({

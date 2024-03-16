@@ -24,6 +24,7 @@ export const actionSignin = async (
     await signIn("credentials", {
       email,
       password,
+      redirect: false,
       redirectTo: DEFAULT_SIGNIN_REDIRECT,
     });
   } catch (error) {

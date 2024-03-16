@@ -8,8 +8,11 @@ import React from "react";
 import { signIn } from "next-auth/react";
 
 const OauthButtons = () => {
-  const onSignIn = (provider: "google" | "github") => {
-    signIn(provider, { callbackUrl: DEFAULT_SIGNIN_REDIRECT });
+  const onSignIn = async (provider: "google" | "github") => {
+    await signIn(provider, {
+      redirect: false,
+      callbackUrl: DEFAULT_SIGNIN_REDIRECT,
+    });
   };
 
   return (
