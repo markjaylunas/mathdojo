@@ -21,7 +21,7 @@ export function MainNav() {
       </Link>
 
       <nav className="flex items-center justify-center w-full   gap-6 text-sm">
-        <Link
+        {/* <Link
           href="/"
           className={cn(
             "transition-colors hover:text-foreground/80",
@@ -37,7 +37,7 @@ export function MainNav() {
           )}
         >
           GitHub
-        </Link>
+        </Link> */}
       </nav>
     </div>
   );
