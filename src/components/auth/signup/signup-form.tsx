@@ -53,6 +53,7 @@ const SignupForm = () => {
         description: message,
         variant: status === "error" ? "destructive" : "default",
       });
+      form.reset();
     } catch (error) {
       console.error(error);
       toast({
@@ -62,10 +63,6 @@ const SignupForm = () => {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const togglePasswordVisibility = () => {
-    setPasswordVisible(!passwordVisible);
   };
 
   return (
@@ -124,7 +121,7 @@ const SignupForm = () => {
                   <Button
                     variant="outline"
                     type="button"
-                    onClick={togglePasswordVisibility}
+                    onClick={() => setPasswordVisible(!passwordVisible)}
                     className="absolute top-1/2 right-1 transform -translate-y-1/2 px-2 py-0 h-7 "
                   >
                     {passwordVisible ? (

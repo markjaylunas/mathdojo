@@ -1,22 +1,36 @@
-import { Resend } from "resend";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+import nodemailer from "nodemailer";
 
 export const sendVerificationEmail = async (params: {
   email: string;
   token: string;
 }) => {
   const { email, token } = params;
-  const confirmLink = `${process.env.SITE_URL}/auth/new-verification?token=${token}`;
+  const confirmLink = `${process.env.NEXT_PUBLIC_BASE_URL}/new-verification?token=${token}`;
 
-  await resend.emails.send({
-    from: process.env.RESEND_FROM_EMAIL || "",
-    to: email,
-    subject: "Verify your email address",
-    html: `
-        <p>Thank you for signing up to Mathwars. To complete the process, please click the link below to verify your email address:</p>
-        <p><a href="${confirmLink}">Verify email</a></p>
-        <p>If you did not sign up for an account, please ignore this email.</p>
-    `,
+  const { SMTP_HOST, SMTP_USER, SMTP_PASSWORD } = process.env;
+
+  const transporter = nodemailer.createTransport({
+    service: SMTP_HOST,
+    auth: {
+      user: SMTP_USER,
+      pass: SMTP_PASSWORD,
+    },
   });
+
+  const mailOption = {
+    from: SMTP_USER,
+    to: email,
+    subject: "Email Verification",
+    html: `
+    <h1>Welcome to Mathwars!</h1>
+    <p>Dear User,</p>
+    <p>Thank you for registering. Please click the link below to verify your email address:</p>
+    <p><a href="${confirmLink}">Verify Email Address</a></p>
+    <p>If you did not request this, please ignore this email.</p>
+    <p>Best,</p>
+    <p>Makje Team</p>
+      `,
+  };
+
+  await transporter.sendMail(mailOption);
 };

@@ -18,11 +18,15 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import SubmitButton from "../../ui/submit-button";
 import { DEFAULT_SIGNIN_REDIRECT } from "@/src/lib/routes";
+import { Button } from "../../ui/button";
+import { IconEye } from "@tabler/icons-react";
+import { IconEyeClosed } from "@tabler/icons-react";
 
 const SigninForm = () => {
   const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
   const form = useForm<TSigninSchema>({
     resolver: zodResolver(signinSchema),
@@ -92,7 +96,27 @@ const SigninForm = () => {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input type="password" {...field} disabled={isLoading} />
+                <div className="relative w-full">
+                  <Input
+                    type={passwordVisible ? "text" : "password"}
+                    className="pr-10"
+                    {...field}
+                    disabled={isLoading}
+                  />
+
+                  <Button
+                    variant="outline"
+                    type="button"
+                    onClick={() => setPasswordVisible(!passwordVisible)}
+                    className="absolute top-1/2 right-1 transform -translate-y-1/2 px-2 py-0 h-7 "
+                  >
+                    {passwordVisible ? (
+                      <IconEye size="0.9rem" className="opacity-50" />
+                    ) : (
+                      <IconEyeClosed size="0.9rem" className="opacity-50" />
+                    )}
+                  </Button>
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>

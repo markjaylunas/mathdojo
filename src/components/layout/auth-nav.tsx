@@ -8,7 +8,7 @@ import { IconLogin2 } from "@tabler/icons-react";
 import { usePathname } from "next/navigation";
 import { DEFAULT_SIGNIN_PATH, authRoutes } from "@/src/lib/routes";
 
-const AuthNav = async () => {
+const AuthNav = () => {
   const pathname = usePathname();
   const isSignedIn = false;
   const isAuthPage = authRoutes.includes(pathname);
