@@ -3,6 +3,7 @@
 import {
   TSigninSchema,
   TSignupSchema,
+  signinSchema,
   signupSchema,
 } from "@lib/validationSchema";
 import { signIn, signOut } from "@/src/lib/auth";
@@ -22,7 +23,7 @@ import { getVerificationTokenByToken } from "@/data/verification-token";
 export const actionSignin = async (
   values: TSigninSchema
 ): Promise<ActionResponse> => {
-  const validatedFields = signupSchema.safeParse(values);
+  const validatedFields = signinSchema.safeParse(values);
 
   if (!validatedFields.success) {
     console.log(validatedFields.error.message);
