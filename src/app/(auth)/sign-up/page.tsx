@@ -7,7 +7,7 @@ import Link from "next/link";
 
 const Page = () => {
   return (
-    <div className="mt-4">
+    <div>
       <Heading>Sign up</Heading>
       <Text className="mb-4">Create an account to start using the app</Text>
 

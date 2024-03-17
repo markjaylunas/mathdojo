@@ -8,7 +8,7 @@ import { DEFAULT_SIGNUP_PATH } from "@/src/lib/routes";
 
 const Page = () => {
   return (
-    <div className="mt-4">
+    <div>
       <Heading>Sign in</Heading>
       <Text className="mb-4">
         Sign in to access your account and start math wars with your friends.
