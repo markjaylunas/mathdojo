@@ -1,6 +1,10 @@
 "use server";
 
-import { TSignupSchema, signupSchema } from "@lib/validationSchema";
+import {
+  TSigninSchema,
+  TSignupSchema,
+  signupSchema,
+} from "@lib/validationSchema";
 import { signIn, signOut } from "@/src/lib/auth";
 import { AuthError } from "next-auth";
 import { ActionResponse } from "@lib/types";
@@ -10,9 +14,10 @@ import bcryptjs from "bcryptjs";
 import { DEFAULT_SIGNIN_REDIRECT } from "../lib/routes";
 import { generateVerificationToken } from "../lib/tokens";
 import { getUserByEmail } from "@/data/user";
+import { sendVerificationEmail } from "@lib/mail";
 
 export const actionSignin = async (
-  values: TSignupSchema
+  values: TSigninSchema
 ): Promise<ActionResponse> => {
   const validatedFields = signupSchema.safeParse(values);
 
@@ -29,7 +34,13 @@ export const actionSignin = async (
   }
 
   if (!existingUser.emailVerified) {
-    await generateVerificationToken({ email });
+    const verificationToken = await generateVerificationToken({ email });
+
+    await sendVerificationEmail({
+      email: verificationToken.email,
+      token: verificationToken.token,
+    });
+
     return {
       status: "success",
       message: "Email not verified. Confirmation email sent!",
@@ -89,9 +100,14 @@ export const actionSignup = async (
     },
   });
 
-  const verificationToken = await generateVerificationToken({ email });
+  const verificationToken = await generateVerificationToken({
+    email,
+  });
+  await sendVerificationEmail({
+    email: verificationToken.email,
+    token: verificationToken.token,
+  });
 
-  //   return { success: "Email sent to your inbox. Please verify your email." };
   return { status: "success", message: "Confirmation email sent!" };
 };
 
