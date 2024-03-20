@@ -6,7 +6,7 @@ import Text from "../ui/text";
 import { Button } from "../ui/button";
 import { IconLoader2 } from "@tabler/icons-react";
 import { useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { DEFAULT_SIGNIN_PATH } from "@/src/lib/routes";
 import { actionNewVerification } from "@/src/actions/auth";
@@ -14,13 +14,19 @@ import { toast } from "../ui/use-toast";
 import { toastErrorSomething } from "@/src/lib/toast";
 import { ActionResponse } from "@/src/lib/types";
 import { cn } from "@/src/lib/utils";
+import { IconMailCheck } from "@tabler/icons-react";
+import { IconCoins } from "@tabler/icons-react";
+import SubmitButton from "../ui/submit-button";
 
 const NewVerificationForm = () => {
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
   const [response, setResponse] = useState<ActionResponse | null>(null);
-  const onSubmit = useCallback(async () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const onVerifyEmail = async () => {
     try {
+      if (response) return;
+      setIsLoading(true);
       if (!token) {
         toast({
           description: "Missing token",
@@ -44,40 +50,61 @@ const NewVerificationForm = () => {
       });
     } catch (error) {
       toastErrorSomething();
+    } finally {
+      setIsLoading(false);
     }
-  }, [token]);
-
-  useEffect(() => {
-    onSubmit();
-  }, [onSubmit]);
+  };
 
   return (
     <Card className="py-6 px-4 mt-12">
       <Heading className="text-center mb-6">Email Verification</Heading>
 
-      {response ? (
-        <Text
+      {response && (
+        <Card
           className={cn(
-            "text-center mb-6",
-            response.status === "error" ? "text-red-600" : "text-green-600"
+            "flex justify-center items-center gap-3  pt-4 pb-8 mb-10"
           )}
         >
-          {response.message}
-        </Text>
-      ) : (
-        <div>
-          <Text className="text-center mb-6">Confirming your email.</Text>
-          <div className="flex justify-center items-center  mb-6">
-            <IconLoader2 className="h-12 w-12 animate-spin" />
+          <div className="flex justify-center items-center">
+            {response.status === "error" ? (
+              <IconCoins className="h-6 w-6 mt-4" />
+            ) : (
+              <IconMailCheck className="h-6 w-6 mt-4" />
+            )}
           </div>
+          <Text
+            className={cn(
+              "text-center mt-0",
+              response.status === "error" ? "text-red-600" : "text-green-600"
+            )}
+          >
+            {response.message}
+          </Text>
+        </Card>
+      )}
+
+      {!response && (
+        <div>
+          <Text className="text-center mb-6">
+            Click the button below to verify your email.
+          </Text>
+          <SubmitButton
+            className="w-full mt-10"
+            onClick={onVerifyEmail}
+            loading={isLoading}
+          >
+            Verify Email
+          </SubmitButton>
         </div>
       )}
 
-      <Link href={DEFAULT_SIGNIN_PATH}>
-        <Button variant="secondary" className="w-full">
-          Back to Sign In
-        </Button>
-      </Link>
+      {response && (
+        <Link href={DEFAULT_SIGNIN_PATH}>
+          <Button variant="secondary" className="w-full">
+            Back to Sign In
+          </Button>
+        </Link>
+      )}
     </Card>
   );
 };
