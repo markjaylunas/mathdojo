@@ -51,7 +51,7 @@ const Toast = React.forwardRef<
       className={cn(
         toastVariants({ variant }),
         className,
-        "bottom-0 right-0 flex fixed md:max-w-[420px] md:bottom-4 md:right-4"
+        "fixed bottom-0 right-0 flex md:bottom-4 md:right-4 md:max-w-[420px]"
       )}
       {...props}
     />

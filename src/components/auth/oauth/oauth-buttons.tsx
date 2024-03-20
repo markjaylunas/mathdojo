@@ -16,7 +16,7 @@ const OauthButtons = () => {
   };
 
   return (
-    <div className="space-y-2 w-full">
+    <div className="w-full space-y-2">
       <Separator className="my-4" />
       <Button
         variant="outline"

@@ -7,7 +7,7 @@ const Page = () => {
     <div>
       <Suspense
         fallback={
-          <div className="flex justify-center items-center  mb-6">
+          <div className="mb-6 flex items-center  justify-center">
             <IconLoader2 className="h-12 w-12 animate-spin" />
           </div>
         }

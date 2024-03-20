@@ -29,7 +29,7 @@ function PasswordRequirement({
   return (
     <Text
       className={cn(
-        "text-sm flex align-middle",
+        "flex align-middle text-sm",
         meets ? "text-teal-600" : "text-red-600"
       )}
     >

@@ -5,7 +5,7 @@ const Heading: React.FC<React.HTMLProps<HTMLHeadingElement>> = ({
 }) => {
   return (
     <h2
-      className={`scroll-m-20 text-3xl md:text-4xl font-extrabold tracking-tight lg:text-5xl ${className}`}
+      className={`scroll-m-20 text-3xl font-extrabold tracking-tight md:text-4xl lg:text-5xl ${className}`}
       {...props}
     >
       {children}

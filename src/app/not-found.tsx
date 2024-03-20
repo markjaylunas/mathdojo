@@ -5,7 +5,7 @@ import { IconArrowBack, IconHome } from "@tabler/icons-react";
 export default async function NotFound() {
   return (
     <div className="space-y-6">
-      <h2 className="text-4xl text-center mt-10 font-extrabold tracking-tight lg:text-5xl">
+      <h2 className="mt-10 text-center text-4xl font-extrabold tracking-tight lg:text-5xl">
         404 - Not Found
       </h2>
       <p>

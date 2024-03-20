@@ -12,7 +12,7 @@ export function MainNav() {
   const pathname = usePathname();
 
   return (
-    <div className=" mr-4 hidden md:flex  w-full ">
+    <div className=" mr-4 hidden w-full  md:flex ">
       <Link href="/" className="mr-6 flex items-center space-x-2">
         <Icons.logo className="h-6 w-6" />
         <span className="hidden font-bold sm:inline-block">
@@ -20,7 +20,7 @@ export function MainNav() {
         </span>
       </Link>
 
-      <nav className="flex items-center justify-center w-full   gap-6 text-sm">
+      <nav className="flex w-full items-center justify-center   gap-6 text-sm">
         {/* <Link
           href="/"
           className={cn(

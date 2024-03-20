@@ -9,7 +9,7 @@ const SubmitButton = ({
 }: { loading: boolean } & ButtonProps) => {
   return (
     <Button disabled={loading} {...props}>
-      <div className="flex gap-1 justify-center items-center">
+      <div className="flex items-center justify-center gap-1">
         {loading && <IconLoader2 className="h-4 w-4 animate-spin" />}
         {children}
       </div>

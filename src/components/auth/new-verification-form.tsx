@@ -56,25 +56,25 @@ const NewVerificationForm = () => {
   };
 
   return (
-    <Card className="py-6 px-4 mt-12">
-      <Heading className="text-center mb-6">Email Verification</Heading>
+    <Card className="mt-12 px-4 py-6">
+      <Heading className="mb-6 text-center">Email Verification</Heading>
 
       {response && (
         <Card
           className={cn(
-            "flex justify-center items-center gap-3  pt-4 pb-8 mb-10"
+            "mb-10 flex items-center justify-center gap-3 pb-8 pt-4"
           )}
         >
-          <div className="flex justify-center items-center">
+          <div className="flex items-center justify-center">
             {response.status === "error" ? (
-              <IconCoins className="h-6 w-6 mt-4" />
+              <IconCoins className="mt-4 h-6 w-6" />
             ) : (
-              <IconMailCheck className="h-6 w-6 mt-4" />
+              <IconMailCheck className="mt-4 h-6 w-6" />
             )}
           </div>
           <Text
             className={cn(
-              "text-center mt-0",
+              "mt-0 text-center",
               response.status === "error" ? "text-red-600" : "text-green-600"
             )}
           >
@@ -85,11 +85,11 @@ const NewVerificationForm = () => {
 
       {!response && (
         <div>
-          <Text className="text-center mb-6">
+          <Text className="mb-6 text-center">
             Click the button below to verify your email.
           </Text>
           <SubmitButton
-            className="w-full mt-10"
+            className="mt-10 w-full"
             onClick={onVerifyEmail}
             loading={isLoading}
           >
