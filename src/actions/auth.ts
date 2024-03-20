@@ -115,7 +115,10 @@ export const actionSignup = async (
     token: verificationToken.token,
   });
 
-  return { status: "success", message: "Confirmation email sent!" };
+  return {
+    status: "success",
+    message: "Confirmation email sent! Please verify your email",
+  };
 };
 
 // sign out action
