@@ -78,6 +78,7 @@ const SignupForm = () => {
                 <Input
                   placeholder="Makje"
                   {...field}
+                  disabled={isLoading}
                   onChange={(data) =>
                     field.onChange(
                       removeSpaceBetweenWords(data.currentTarget.value)
@@ -97,7 +98,11 @@ const SignupForm = () => {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="makje@gmail.com" {...field} />
+                <Input
+                  placeholder="makje@gmail.com"
+                  {...field}
+                  disabled={isLoading}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -115,6 +120,7 @@ const SignupForm = () => {
                   <Input
                     type={passwordVisible ? "text" : "password"}
                     className="pr-10"
+                    disabled={isLoading}
                     {...field}
                   />
 
