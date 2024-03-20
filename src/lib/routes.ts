@@ -44,3 +44,10 @@ export const DEFAULT_SIGNIN_PATH = "/sign-in";
  */
 
 export const DEFAULT_SIGNUP_PATH = "/sign-up";
+
+/**
+ * The default forgot password path
+ * @type {string}
+ */
+
+export const DEFAULT_FORGOT_PASSWORD_PATH = "/forgot-password";

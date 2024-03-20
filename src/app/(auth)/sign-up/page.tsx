@@ -13,14 +13,14 @@ const Page = () => {
 
       <SignupForm />
 
+      <OauthButtons />
+
       <Text className="space-x-1 text-center text-xs">
         <span>Already have an account?</span>
         <Link href={DEFAULT_SIGNIN_PATH} className="underline">
           <span>Sign in</span>
         </Link>
       </Text>
-
-      <OauthButtons />
     </div>
   );
 };
