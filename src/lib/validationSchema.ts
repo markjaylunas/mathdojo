@@ -35,3 +35,9 @@ export const signupSchema = z.object({
 });
 
 export type TSignupSchema = z.infer<typeof signupSchema>;
+
+export const forgotPasswordSchema = z.object({
+  email: z.string().email("Invalid email").min(1, "Email is required"),
+});
+
+export type TForgotPasswordSchema = z.infer<typeof forgotPasswordSchema>;

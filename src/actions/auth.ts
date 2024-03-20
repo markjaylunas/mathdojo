@@ -1,8 +1,10 @@
 "use server";
 
 import {
+  TForgotPasswordSchema,
   TSigninSchema,
   TSignupSchema,
+  forgotPasswordSchema,
   signinSchema,
   signupSchema,
 } from "@lib/validationSchema";
@@ -13,10 +15,14 @@ import { ActionResponse } from "@lib/types";
 import prisma from "@lib/prisma";
 import bcryptjs from "bcryptjs";
 import { DEFAULT_SIGNIN_REDIRECT } from "../lib/routes";
-import { generateVerificationToken } from "../lib/tokens";
+import {
+  generatePasswordResetToken,
+  generateVerificationToken,
+} from "../lib/tokens";
 import { getUserByEmail } from "@/data/user";
-import { sendVerificationEmail } from "@lib/mail";
+import { sendPasswordResetEmail, sendVerificationEmail } from "@lib/mail";
 import { getVerificationTokenByToken } from "@/data/verification-token";
+import { send } from "process";
 
 // sign in action
 
@@ -160,4 +166,33 @@ export const actionNewVerification = async (params: {
   });
 
   return { status: "success", message: "Email verified" };
+};
+
+// forgot password action
+
+export const actionForgotPassword = async (
+  values: TForgotPasswordSchema
+): Promise<ActionResponse> => {
+  const validatedFields = forgotPasswordSchema.safeParse(values);
+
+  if (!validatedFields.success) {
+    return { status: "error", message: validatedFields.error.message };
+  }
+
+  const { email } = validatedFields.data;
+
+  const existingUser = await getUserByEmail({ email });
+
+  if (!existingUser) {
+    return { status: "error", path: "email", message: "Email does not exists" };
+  }
+
+  const passwordResetToken = await generatePasswordResetToken({ email });
+
+  await sendPasswordResetEmail({
+    email: passwordResetToken.email,
+    token: passwordResetToken.token,
+  });
+
+  return { status: "success", message: "Reset password email sent" };
 };
