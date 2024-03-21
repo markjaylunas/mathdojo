@@ -1,12 +1,12 @@
-import { getVerificationTokenByEmail } from "@/data/verification-token";
+import { getVerificationTokenByEmail } from "@/data/token/verification-token";
 import { v4 as uuidV4 } from "uuid";
 import prisma from "@lib/prisma";
-import { getPasswordResetTokenByEmail } from "@/data/password-reset-token";
+import { getPasswordResetTokenByEmail } from "@/data/token/password-reset-token";
+import crypto from "crypto";
 
-// function to generate expiration date parameter should have duration and type like byHour or byDay
 export const createExpirationDate = (params: {
   duration: number;
-  type: "byHour" | "byDay";
+  type: "byHour" | "byDay" | "byMinute";
 }) => {
   const { duration, type } = params;
   const now = new Date();
@@ -16,6 +16,8 @@ export const createExpirationDate = (params: {
     expiresAt = new Date(now.getTime() + 3600 * duration);
   } else if (type === "byDay") {
     expiresAt = new Date(now.getTime() + 3600 * 24 * duration);
+  } else if (type === "byMinute") {
+    expiresAt = new Date(now.getTime() + 60 * duration);
   }
 
   return expiresAt;

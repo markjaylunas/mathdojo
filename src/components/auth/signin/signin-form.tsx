@@ -124,7 +124,7 @@ const SigninForm = () => {
         />
 
         <SubmitButton loading={isLoading} className="w-full" type="submit">
-          Submit
+          Sign In
         </SubmitButton>
       </form>
     </Form>

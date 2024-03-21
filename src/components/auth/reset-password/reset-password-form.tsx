@@ -1,6 +1,9 @@
 "use client";
 
-import { TSignupSchema, signupSchema } from "@lib/validationSchema";
+import {
+  TResetPasswordSchema,
+  resetPasswordSchema,
+} from "@lib/validationSchema";
 import { FieldPath, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -12,37 +15,42 @@ import {
   FormMessage,
 } from "@components/ui/form";
 import { Input } from "@components/ui/input";
-import { actionSignup } from "@actions/auth";
+import { actionResetPassword } from "@/src/actions/auth";
 import { useToast } from "@/src/components/ui/use-toast";
-import _ from "lodash";
-import SubmitButton from "../../ui/submit-button";
 import { useState } from "react";
-import { removeSpaceBetweenWords } from "@/src/lib/string";
+import SubmitButton from "../../ui/submit-button";
 import { Button } from "../../ui/button";
 import { IconEye } from "@tabler/icons-react";
 import { IconEyeClosed } from "@tabler/icons-react";
+import { useSearchParams } from "next/navigation";
+import { DEFAULT_SIGNIN_PATH } from "@/src/lib/routes";
+import { useRouter } from "next/navigation";
 
-const SignupForm = () => {
+const ResetPasswordForm = () => {
+  const router = useRouter();
   const { toast } = useToast();
+  const token = useSearchParams().get("token");
   const [isLoading, setIsLoading] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
 
-  const form = useForm<TSignupSchema>({
-    resolver: zodResolver(signupSchema),
+  const form = useForm<TResetPasswordSchema>({
+    resolver: zodResolver(resetPasswordSchema),
     defaultValues: {
-      name: "",
-      email: "",
       password: "",
     },
   });
 
-  const onSubmit = async (data: TSignupSchema) => {
+  const onSubmit = async (data: TResetPasswordSchema) => {
     try {
       setIsLoading(true);
-      const { status, path, message } = await actionSignup(data);
+      const { status, message, path } = await actionResetPassword({
+        values: data,
+        token: token,
+      });
+
       const isError = status === "error";
       if (isError && path) {
-        form.setError(path as FieldPath<TSignupSchema>, {
+        form.setError(path as FieldPath<TResetPasswordSchema>, {
           type: "validate",
           message,
         });
@@ -53,7 +61,10 @@ const SignupForm = () => {
         description: message,
         variant: status === "error" ? "destructive" : "default",
       });
+      if (isError) return;
+
       form.reset();
+      router.push(DEFAULT_SIGNIN_PATH);
     } catch (error) {
       console.error(error);
       toast({
@@ -68,47 +79,6 @@ const SignupForm = () => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Makje"
-                  {...field}
-                  disabled={isLoading}
-                  onChange={(data) =>
-                    field.onChange(
-                      removeSpaceBetweenWords(data.currentTarget.value)
-                    )
-                  }
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="makje@gmail.com"
-                  {...field}
-                  disabled={isLoading}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
         <FormField
           control={form.control}
           name="password"
@@ -144,11 +114,11 @@ const SignupForm = () => {
         />
 
         <SubmitButton loading={isLoading} className="w-full" type="submit">
-          Sign Up
+          Reset
         </SubmitButton>
       </form>
     </Form>
   );
 };
 
-export default SignupForm;
+export default ResetPasswordForm;

@@ -2,9 +2,11 @@
 
 import {
   TForgotPasswordSchema,
+  TResetPasswordSchema,
   TSigninSchema,
   TSignupSchema,
   forgotPasswordSchema,
+  resetPasswordSchema,
   signinSchema,
   signupSchema,
 } from "@lib/validationSchema";
@@ -21,8 +23,8 @@ import {
 } from "../lib/tokens";
 import { getUserByEmail } from "@/data/user";
 import { sendPasswordResetEmail, sendVerificationEmail } from "@lib/mail";
-import { getVerificationTokenByToken } from "@/data/verification-token";
-import { send } from "process";
+import { getVerificationTokenByToken } from "@/data/token/verification-token";
+import { getPasswordResetTokenByToken } from "@/data/token/password-reset-token";
 
 // sign in action
 
@@ -192,6 +194,59 @@ export const actionForgotPassword = async (
   await sendPasswordResetEmail({
     email: passwordResetToken.email,
     token: passwordResetToken.token,
+  });
+
+  return { status: "success", message: "Reset password email sent" };
+};
+
+// reset password action
+
+export const actionResetPassword = async ({
+  values,
+  token,
+}: {
+  values: TResetPasswordSchema;
+  token: string | null;
+}): Promise<ActionResponse> => {
+  if (!token) {
+    return { status: "error", message: "Invalid token" };
+  }
+
+  const validatedFields = resetPasswordSchema.safeParse(values);
+
+  if (!validatedFields.success) {
+    return { status: "error", message: validatedFields.error.message };
+  }
+
+  const { password } = validatedFields.data;
+
+  const existingToken = await getPasswordResetTokenByToken({ token });
+
+  if (!existingToken) {
+    return { status: "error", message: " Token does not exists" };
+  }
+
+  const hasExpired = new Date(existingToken.expiresAt) > new Date();
+
+  if (hasExpired) {
+    return { status: "error", message: "Token has expired" };
+  }
+
+  const existingUser = await getUserByEmail({ email: existingToken.email });
+
+  if (!existingUser) {
+    return { status: "error", message: "Email does not exists" };
+  }
+
+  const hashedPassword = await bcryptjs.hash(password, 10);
+
+  await prisma.user.update({
+    where: { id: existingUser.id },
+    data: { password: hashedPassword },
+  });
+
+  await prisma.passwordResetToken.delete({
+    where: { id: existingToken.id },
   });
 
   return { status: "success", message: "Reset password email sent" };

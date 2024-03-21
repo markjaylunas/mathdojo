@@ -1,6 +1,23 @@
 import z from "zod";
 import { removeExtraSpaces } from "./string";
 
+const zCreatePassword = z
+  .string()
+  .min(1, "Password is required")
+  .min(6, "Password is too short")
+  .max(255, "Password is too long")
+  .refine((value) => {
+    return /[a-z]/.test(value);
+  }, "Password must have at least one lowercase letter")
+  .refine(
+    (value) => /[A-Z]/.test(value),
+    "Password must have at least one uppercase letter"
+  )
+  .refine(
+    (value) => /[$&+,:;=?@#|'<>.^*()%!-]/.test(value),
+    "Password must have a special symbol"
+  );
+
 export const signinSchema = z.object({
   email: z.string().email("Invalid email").min(1, "Email is required"),
   password: z.string().min(1, "Password is required"),
@@ -16,22 +33,7 @@ export const signupSchema = z.object({
     .email("Invalid email")
     .max(255, "Email is too long")
     .refine((value) => removeExtraSpaces(value)),
-  password: z
-    .string()
-    .min(1, "Password is required")
-    .min(6, "Password is too short")
-    .max(255, "Password is too long")
-    .refine((value) => {
-      return /[a-z]/.test(value);
-    }, "Password must have at least one lowercase letter")
-    .refine(
-      (value) => /[A-Z]/.test(value),
-      "Password must have at least one uppercase letter"
-    )
-    .refine(
-      (value) => /[$&+,:;=?@#|'<>.^*()%!-]/.test(value),
-      "Password must have a special symbol"
-    ),
+  password: zCreatePassword,
 });
 
 export type TSignupSchema = z.infer<typeof signupSchema>;
@@ -41,3 +43,9 @@ export const forgotPasswordSchema = z.object({
 });
 
 export type TForgotPasswordSchema = z.infer<typeof forgotPasswordSchema>;
+
+export const resetPasswordSchema = z.object({
+  password: zCreatePassword,
+});
+
+export type TResetPasswordSchema = z.infer<typeof resetPasswordSchema>;

@@ -39,9 +39,6 @@ export const {
       const existingUser = await getUserById({ id: `${user?.id}` });
 
       if (!existingUser?.emailVerified) return false;
-
-      // todo: 2fa
-
       return true;
     },
     async session({ token, session }) {

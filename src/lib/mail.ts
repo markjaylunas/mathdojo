@@ -23,7 +23,6 @@ export const sendVerificationEmail = async (params: {
     subject: "Mathwars | Email Verification",
     html: `
     <h1>Welcome to Mathwars!</h1>
-    <p>Dear User,</p>
     <p>Thank you for registering. Please click the link below to verify your email address:</p>
     <p><a href="${confirmLink}">Verify Email Address</a></p>
     <p>If you did not request this, please ignore this email.</p>
@@ -40,7 +39,7 @@ export const sendPasswordResetEmail = async (params: {
   token: string;
 }) => {
   const { email, token } = params;
-  const confirmLink = `${process.env.NEXT_PUBLIC_BASE_URL}/new-password?token=${token}`;
+  const confirmLink = `${process.env.NEXT_PUBLIC_BASE_URL}/reset-password?token=${token}`;
 
   const { SMTP_HOST, SMTP_USER, SMTP_PASSWORD } = process.env;
 
@@ -58,7 +57,6 @@ export const sendPasswordResetEmail = async (params: {
     subject: "Mathwars | Reset Password",
     html: `
     <h1>Reset Password</h1>
-    <p>Dear User,</p>
     <p>Please click the link below to reset your password:</p>
     <span><a href="${confirmLink}">Reset Password</a></span>
     <p>If you did not request this, please ignore this email.</p>

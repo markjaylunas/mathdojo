@@ -15,7 +15,7 @@ import {
   FormMessage,
 } from "@components/ui/form";
 import { Input } from "@components/ui/input";
-import { actionForgotPassword, actionSignin } from "@/src/actions/auth";
+import { actionForgotPassword } from "@/src/actions/auth";
 import { useToast } from "@/src/components/ui/use-toast";
 import { useState } from "react";
 import SubmitButton from "../../ui/submit-button";
