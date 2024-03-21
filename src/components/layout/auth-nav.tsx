@@ -7,10 +7,11 @@ import { Button } from "../ui/button";
 import { IconLogin2 } from "@tabler/icons-react";
 import { usePathname } from "next/navigation";
 import { DEFAULT_SIGNIN_PATH, authRoutes } from "@/src/lib/routes";
+import useUser from "@/src/hooks/use-user";
 
 const AuthNav = () => {
+  const user = useUser();
   const pathname = usePathname();
-  const isSignedIn = false;
   const isAuthPage = authRoutes.includes(pathname);
   return (
     <nav className="flex items-center gap-2">
@@ -20,7 +21,7 @@ const AuthNav = () => {
               <span className="sr-only">GitHub</span>
             </Button>
           </Link> */}
-      {!isSignedIn && !isAuthPage && (
+      {!user && !isAuthPage && (
         <Link href={DEFAULT_SIGNIN_PATH}>
           <Button variant="outline" className="px-3">
             <IconLogin2 className="mr-1 h-4" />
@@ -28,7 +29,7 @@ const AuthNav = () => {
           </Button>
         </Link>
       )}
-      {!isSignedIn && <ModeToggle />}
+      {!user && <ModeToggle />}
     </nav>
   );
 };
