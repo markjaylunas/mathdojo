@@ -21,6 +21,7 @@ import { DEFAULT_SIGNIN_REDIRECT } from "@/src/lib/routes";
 import { Button } from "../../ui/button";
 import { IconEye } from "@tabler/icons-react";
 import { IconEyeClosed } from "@tabler/icons-react";
+import { revalidatePath } from "next/cache";
 
 const SigninForm = () => {
   const router = useRouter();
@@ -56,7 +57,7 @@ const SigninForm = () => {
       if (isError) return;
 
       form.reset();
-      router.push(DEFAULT_SIGNIN_REDIRECT);
+      router.push(`${DEFAULT_SIGNIN_REDIRECT}?revalidate=true`);
     } catch (error) {
       console.error(error);
       toast({

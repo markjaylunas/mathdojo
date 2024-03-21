@@ -9,9 +9,16 @@ export const removeSpaceBetweenWords = (str: string) => {
 export const haveLowerCase = (str: string) => {
   return /[a-z]/.test(str);
 };
+
 export const haveUpperCase = (str: string) => {
   return /[A-Z]/.test(str);
 };
+
 export const haveSpecialSymbol = (str: string) => {
   return /[$&+,:;=?@#|'<>.^*()%!-]/.test(str);
+};
+
+export const getUserInitials = (name: string) => {
+  const [firstName, lastName] = name.split(" ");
+  return `${firstName.charAt(0)}${lastName ? lastName.charAt(0) : ""}`;
 };

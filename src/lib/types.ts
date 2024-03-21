@@ -1,4 +1,5 @@
 import { Icons } from "@components/ui/icons";
+import { User } from "next-auth";
 
 export type NavItem = {
   title: string;
@@ -22,3 +23,5 @@ export type ActionResponse = {
   path?: string;
   message: string;
 };
+
+export type TUser = (User & { role: "USER" | "ADMIN" }) | null | undefined;

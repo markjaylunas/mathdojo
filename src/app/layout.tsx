@@ -35,14 +35,14 @@ export default async function RootLayout({
   const session = await auth();
 
   return (
-    <html lang="en" suppressHydrationWarning={true}>
-      <body
-        className={cn(
-          "min-h-screen bg-background font-sans antialiased",
-          fontSans.variable
-        )}
-      >
-        <SessionProvider session={session}>
+    <SessionProvider session={session}>
+      <html lang="en" suppressHydrationWarning={true}>
+        <body
+          className={cn(
+            "min-h-screen bg-background font-sans antialiased",
+            fontSans.variable
+          )}
+        >
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -66,10 +66,10 @@ export default async function RootLayout({
               <SiteFooter />
             </div>
           </ThemeProvider>
-        </SessionProvider>
 
-        <Toaster />
-      </body>
-    </html>
+          <Toaster />
+        </body>
+      </html>
+    </SessionProvider>
   );
 }
