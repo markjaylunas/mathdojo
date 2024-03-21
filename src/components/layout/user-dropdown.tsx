@@ -15,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@components/ui/dropdown-menu";
 import Link from "next/link";
+import SignoutButtonUnstyled from "../auth/signout/signout-button-unstyled";
 
 const UserDropdown = () => {
   const user = useUser();
@@ -30,7 +31,9 @@ const UserDropdown = () => {
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>Profile</DropdownMenuItem>
+          <DropdownMenuItem>
+            <Link href="/user/profile">Profile</Link>
+          </DropdownMenuItem>
           <DropdownMenuItem>Settings</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
@@ -40,8 +43,8 @@ const UserDropdown = () => {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => actionSignOut()}>
-          Log out
+        <DropdownMenuItem>
+          <SignoutButtonUnstyled>Log out</SignoutButtonUnstyled>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
