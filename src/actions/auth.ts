@@ -34,7 +34,6 @@ export const actionSignin = async (
   const validatedFields = signinSchema.safeParse(values);
 
   if (!validatedFields.success) {
-    console.log(validatedFields.error.message);
     return { status: "error", message: validatedFields.error.message };
   }
 
