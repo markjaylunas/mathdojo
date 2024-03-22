@@ -23,6 +23,7 @@ import { IconEye } from "@tabler/icons-react";
 import { IconEyeClosed } from "@tabler/icons-react";
 import { revalidatePath } from "next/cache";
 import useUserStore from "@/src/store/useUserStore";
+import { Role } from "@/src/lib/types";
 
 const SigninForm = () => {
   const router = useRouter();
@@ -58,7 +59,18 @@ const SigninForm = () => {
         variant: status === "error" ? "destructive" : "default",
       });
       if (isError) return;
-      if (user) setUser(user);
+
+      if (user) {
+        const signedUser = {
+          id: user.id,
+          email: `${user.email}`,
+          name: `${user.name}`,
+          image: `${user.image}`,
+          role: `${user.role}` as Role,
+        };
+        setUser(signedUser);
+      }
+
       form.reset();
       router.push(DEFAULT_SIGNIN_REDIRECT);
     } catch (error) {

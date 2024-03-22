@@ -25,4 +25,6 @@ export type ActionResponse = {
   message: string;
 };
 
-export type TUser = (User & { role: "USER" | "ADMIN" }) | null | undefined;
+export type Role = "ADMIN" | "USER";
+
+export type TUser = (User & { role: Role }) | null | undefined;

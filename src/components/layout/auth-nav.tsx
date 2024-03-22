@@ -10,17 +10,32 @@ import UserDropdown from "./user-dropdown";
 import useUserStore from "@/src/store/useUserStore";
 import { useEffect } from "react";
 import useCurrentUser from "@/src/hooks/use-current-user";
+import { getUserById } from "@/data/user";
 
 const AuthNav = () => {
   const pathname = usePathname();
   const isPublicPage = publicRoutes.includes(pathname);
   const userStore = useUserStore((state) => state.user);
+  const setUser = useUserStore((state) => state.setUser);
   const user = useCurrentUser();
-  const avatar = user ? user.image : userStore?.image;
-  const name = user ? user.name : userStore?.name;
+  const onSetUser = async () => {
+    if (user) {
+      const newUser = {
+        id: `${user.id}`,
+        email: `${user.email}`,
+        name: `${user.name}`,
+        image: `${user.image}`,
+        role: user.role,
+      };
+
+      setUser(newUser);
+    }
+  };
 
   useEffect(() => {
     useUserStore.persist.rehydrate();
+    onSetUser();
+    console.log({ userStore });
   }, []);
 
   return (
@@ -40,8 +55,10 @@ const AuthNav = () => {
         </Link>
       )}
 
-      {!name && <ModeToggle />}
-      {name && <UserDropdown name={name} avatar={`${avatar}`} />}
+      {!userStore && <ModeToggle />}
+      {userStore && (
+        <UserDropdown name={userStore?.name} avatar={`${userStore?.image}`} />
+      )}
     </nav>
   );
 };
