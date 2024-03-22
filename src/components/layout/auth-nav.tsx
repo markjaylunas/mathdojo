@@ -35,7 +35,6 @@ const AuthNav = () => {
   useEffect(() => {
     useUserStore.persist.rehydrate();
     onSetUser();
-    console.log({ userStore });
   }, []);
 
   return (
@@ -55,10 +54,11 @@ const AuthNav = () => {
         </Link>
       )}
 
-      {!userStore && <ModeToggle />}
+      {/* {!userStore && <ModeToggle />} */}
       {userStore && (
         <UserDropdown name={userStore?.name} avatar={`${userStore?.image}`} />
       )}
+      <ModeToggle />
     </nav>
   );
 };

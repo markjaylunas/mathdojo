@@ -22,3 +22,9 @@ export const getUserInitials = (name: string) => {
   const [firstName, lastName] = name.split(" ");
   return `${firstName.charAt(0)}${lastName ? lastName.charAt(0) : ""}`;
 };
+
+export const isUUID = (str: string) => {
+  const uuidRegex =
+    /^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$/;
+  return uuidRegex.test(str);
+};
