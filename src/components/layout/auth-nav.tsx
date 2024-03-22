@@ -5,14 +5,14 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import { IconLogin2 } from "@tabler/icons-react";
 import { usePathname } from "next/navigation";
-import { DEFAULT_SIGNIN_PATH, authRoutes } from "@/src/lib/routes";
+import { DEFAULT_SIGNIN_PATH, publicRoutes } from "@/src/lib/routes";
 import UserDropdown from "./user-dropdown";
 import { useSession } from "next-auth/react";
 
 const AuthNav = () => {
   const session = useSession();
   const pathname = usePathname();
-  const isAuthPage = authRoutes.includes(pathname);
+  const isPublicPage = publicRoutes.includes(pathname);
   const isAuthenticated = session.status === "authenticated";
 
   return (
@@ -23,7 +23,7 @@ const AuthNav = () => {
               <span className="sr-only">GitHub</span>
             </Button>
           </Link> */}
-      {!isAuthenticated && !isAuthPage && (
+      {!isAuthenticated && isPublicPage && (
         <Link href={DEFAULT_SIGNIN_PATH}>
           <Button variant="outline" className="px-3">
             <IconLogin2 className="mr-1 h-4" />

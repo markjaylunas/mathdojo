@@ -1,8 +1,7 @@
 "use client";
 
-import { actionSignOut } from "@/src/actions/auth";
-import useUser from "@/src/hooks/use-user";
-import { siteConfig } from "@/src/lib/config";
+import useCurrentUser from "@/src/hooks/use-current-user";
+import { routesConfig } from "@/src/lib/config";
 import { getUserInitials } from "@/src/lib/string";
 import { Avatar, AvatarFallback, AvatarImage } from "@components/ui/avatar";
 import {
@@ -15,36 +14,38 @@ import {
   DropdownMenuTrigger,
 } from "@components/ui/dropdown-menu";
 import Link from "next/link";
+import { Fragment } from "react";
 
 const UserDropdown = () => {
-  const user = useUser();
+  const user = useCurrentUser();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Avatar className="cursor-pointer border-gray-950">
+        <Avatar className="h-7 w-7 cursor-pointer border-gray-950">
           <AvatarImage src={`${user?.image}`} />
           <AvatarFallback>{getUserInitials(`${user?.name}`)}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56">
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <Link href="/user/profile">Profile</Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem>Settings</DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <Link href={siteConfig.links.github} target="_blank">
-            GitHub
-          </Link>
-          <DropdownMenuSeparator />
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => actionSignOut()}>
-          Log out
-        </DropdownMenuItem>
+      <DropdownMenuContent className="mr-2 mt-1 w-56 ">
+        {routesConfig.userNav.map((navItem, navItemIndex) => (
+          <Fragment key={navItem.title}>
+            <DropdownMenuLabel>{navItem.title}</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              {navItem.items.map((item) => {
+                return !item.onClick && item.href ? (
+                  <Link href={item.href} key={item.title}>
+                    <DropdownMenuItem>{item.title}</DropdownMenuItem>
+                  </Link>
+                ) : (
+                  <DropdownMenuItem key={item.title} onClick={item.onClick}>
+                    {item.title}
+                  </DropdownMenuItem>
+                );
+              })}
+            </DropdownMenuGroup>
+          </Fragment>
+        ))}
       </DropdownMenuContent>
     </DropdownMenu>
   );

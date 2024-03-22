@@ -8,6 +8,7 @@ export type NavItem = {
   external?: boolean;
   icon?: keyof typeof Icons;
   label?: string;
+  onClick?: () => void;
 };
 
 export type NavItemWithChildren = NavItem & {
@@ -15,6 +16,7 @@ export type NavItemWithChildren = NavItem & {
 };
 
 export type MainNavItem = NavItem & {};
+export type UserNavItem = NavItemWithChildren & {};
 
 export type SidebarNavItem = NavItemWithChildren & {};
 
