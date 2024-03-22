@@ -15,7 +15,6 @@ import {
   DropdownMenuTrigger,
 } from "@components/ui/dropdown-menu";
 import Link from "next/link";
-import SignoutButtonUnstyled from "../auth/signout/signout-button-unstyled";
 
 const UserDropdown = () => {
   const user = useUser();
@@ -41,10 +40,10 @@ const UserDropdown = () => {
           <Link href={siteConfig.links.github} target="_blank">
             GitHub
           </Link>
+          <DropdownMenuSeparator />
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <SignoutButtonUnstyled>Log out</SignoutButtonUnstyled>
+        <DropdownMenuItem onClick={() => actionSignOut()}>
+          Log out
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
