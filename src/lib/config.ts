@@ -71,12 +71,6 @@ export const routesConfig: RoutesConfig = {
           href: siteConfig.links.github,
           items: [],
         },
-        {
-          title: "Log out",
-          href: "",
-          onClick: () => actionSignOut(),
-          items: [],
-        },
       ],
     },
   ],

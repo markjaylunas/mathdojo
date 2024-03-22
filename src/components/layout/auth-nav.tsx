@@ -7,13 +7,21 @@ import { IconLogin2 } from "@tabler/icons-react";
 import { usePathname } from "next/navigation";
 import { DEFAULT_SIGNIN_PATH, publicRoutes } from "@/src/lib/routes";
 import UserDropdown from "./user-dropdown";
-import { useSession } from "next-auth/react";
+import useUserStore from "@/src/store/useUserStore";
+import { useEffect } from "react";
+import useCurrentUser from "@/src/hooks/use-current-user";
 
 const AuthNav = () => {
-  const session = useSession();
   const pathname = usePathname();
   const isPublicPage = publicRoutes.includes(pathname);
-  const isAuthenticated = session.status === "authenticated";
+  const userStore = useUserStore((state) => state.user);
+  const user = useCurrentUser();
+  const avatar = user ? user.image : userStore?.image;
+  const name = user ? user.name : userStore?.name;
+
+  useEffect(() => {
+    useUserStore.persist.rehydrate();
+  }, []);
 
   return (
     <nav className="flex items-center gap-2">
@@ -23,7 +31,7 @@ const AuthNav = () => {
               <span className="sr-only">GitHub</span>
             </Button>
           </Link> */}
-      {!isAuthenticated && isPublicPage && (
+      {!user && isPublicPage && (
         <Link href={DEFAULT_SIGNIN_PATH}>
           <Button variant="outline" className="px-3">
             <IconLogin2 className="mr-1 h-4" />
@@ -32,8 +40,8 @@ const AuthNav = () => {
         </Link>
       )}
 
-      {!isAuthenticated && <ModeToggle />}
-      {isAuthenticated && <UserDropdown />}
+      {!name && <ModeToggle />}
+      {name && <UserDropdown name={name} avatar={`${avatar}`} />}
     </nav>
   );
 };

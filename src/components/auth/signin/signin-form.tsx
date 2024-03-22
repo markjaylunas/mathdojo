@@ -22,10 +22,13 @@ import { Button } from "../../ui/button";
 import { IconEye } from "@tabler/icons-react";
 import { IconEyeClosed } from "@tabler/icons-react";
 import { revalidatePath } from "next/cache";
+import useUserStore from "@/src/store/useUserStore";
 
 const SigninForm = () => {
   const router = useRouter();
   const { toast } = useToast();
+  const setUser = useUserStore((state) => state.setUser);
+
   const [isLoading, setIsLoading] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
 
@@ -40,7 +43,7 @@ const SigninForm = () => {
   const onSubmit = async (data: TSigninSchema) => {
     try {
       setIsLoading(true);
-      const { status, message, path } = await actionSignin(data);
+      const { status, message, path, user } = await actionSignin(data);
       const isError = status === "error";
       if (isError && path) {
         form.setError(path as FieldPath<TSigninSchema>, {
@@ -55,9 +58,9 @@ const SigninForm = () => {
         variant: status === "error" ? "destructive" : "default",
       });
       if (isError) return;
-
+      if (user) setUser(user);
       form.reset();
-      router.push(`${DEFAULT_SIGNIN_REDIRECT}?revalidate=true`);
+      router.push(DEFAULT_SIGNIN_REDIRECT);
     } catch (error) {
       console.error(error);
       toast({

@@ -25,12 +25,13 @@ import { getUserByEmail } from "@/data/user";
 import { sendPasswordResetEmail, sendVerificationEmail } from "@lib/mail";
 import { getVerificationTokenByToken } from "@/data/token/verification-token";
 import { getPasswordResetTokenByToken } from "@/data/token/password-reset-token";
+import { User } from "@prisma/client";
 
 // sign in action
 
 export const actionSignin = async (
   values: TSigninSchema
-): Promise<ActionResponse> => {
+): Promise<ActionResponse & { user?: User | null }> => {
   const validatedFields = signinSchema.safeParse(values);
 
   if (!validatedFields.success) {
@@ -79,7 +80,7 @@ export const actionSignin = async (
       }
     }
   }
-  return { status: "success", message: "User signed in" };
+  return { status: "success", message: "User signed in", user: existingUser };
 };
 
 // sign up action
