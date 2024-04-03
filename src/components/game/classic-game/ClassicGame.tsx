@@ -8,6 +8,7 @@ import { Game, Problem, Score } from "@/src/lib/types";
 import GameView from "../layout/GameView";
 import { v4 as uuidV4 } from "uuid";
 import GameScore from "../layout/GameScore";
+import GameChoices from "../layout/GameChoices";
 
 const game: Game = {
   id: "1",
@@ -113,9 +114,9 @@ const ClassicGame = ({}: Props) => {
         <Heading className="text-center sm:text-left">Classic</Heading>
         <GameScore score={score} />
       </div>
-      <div className="flex-auto">
+      <div className="flex flex-auto flex-col gap-4">
         {problem && <GameView problem={problem} />}
-        {/* <GameChoices game={game} /> */}
+        <GameChoices choices={problem?.choices || []} />
       </div>
 
       {!problemList && !problem && (
