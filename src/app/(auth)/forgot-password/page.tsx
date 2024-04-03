@@ -10,7 +10,7 @@ const Page = () => {
     <div>
       <Heading>Forgot password</Heading>
 
-      <Text className="mb-4">
+      <Text className="my-4">
         Enter your email address and we will send you a link to reset your
         password.
       </Text>

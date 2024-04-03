@@ -8,7 +8,7 @@ const Page = () => {
   return (
     <div>
       <Heading>Error</Heading>
-      <Text>Oops! Something went wrong.</Text>
+      <Text className="mt-4">Oops! Something went wrong.</Text>
 
       <Link href={DEFAULT_SIGNIN_PATH}>
         <Button className="min-w-10">Back to Sign in</Button>

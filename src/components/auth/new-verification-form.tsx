@@ -85,7 +85,7 @@ const NewVerificationForm = () => {
 
       {!response && (
         <div>
-          <Text className="mb-6 text-center">
+          <Text className="mb-6 mt-4 text-center">
             Click the button below to verify your email.
           </Text>
           <SubmitButton

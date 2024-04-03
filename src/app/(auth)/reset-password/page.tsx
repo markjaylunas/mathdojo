@@ -11,7 +11,7 @@ const Page = () => {
     <div>
       <Heading>Reset password</Heading>
 
-      <Text className="mb-4">Please enter your new password</Text>
+      <Text className="my-4">Please enter your new password</Text>
 
       <ResetPasswordForm />
 

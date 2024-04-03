@@ -13,7 +13,7 @@ const Page = () => {
   return (
     <div>
       <Heading>Sign in</Heading>
-      <Text className="mb-4">
+      <Text className="my-4">
         Sign in to access your account and start math wars with your friends.
       </Text>
 
@@ -27,7 +27,7 @@ const Page = () => {
 
       <OauthButtons />
 
-      <Text className="space-x-1 text-center text-xs">
+      <Text className="mt-4 space-x-1 text-center text-xs">
         <span>Don&apos;t have an account?</span>
         <Link href={DEFAULT_SIGNUP_PATH} className="underline">
           <span>Sign up</span>

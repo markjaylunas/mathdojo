@@ -9,13 +9,13 @@ const Page = () => {
   return (
     <div>
       <Heading>Sign up</Heading>
-      <Text className="mb-4">Create an account to start using the app</Text>
+      <Text className="my-4">Create an account to start using the app</Text>
 
       <SignupForm />
 
       <OauthButtons />
 
-      <Text className="space-x-1 text-center text-xs">
+      <Text className="mt-4 space-x-1 text-center text-xs">
         <span>Already have an account?</span>
         <Link href={DEFAULT_SIGNIN_PATH} className="underline">
           <span>Sign in</span>
