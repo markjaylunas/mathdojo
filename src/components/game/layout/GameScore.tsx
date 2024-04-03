@@ -5,9 +5,10 @@ type Props = {
   score: Score;
 };
 const GameScore = ({ score }: Props) => {
-  const { correct, incorrect, total } = score;
+  const { correct, incorrect } = score;
+  const total = correct + incorrect;
   return (
-    <div className="mt-4 flex">
+    <div className="mt-4 flex gap-2">
       <Text>Correct: {correct}</Text>
       <Text>Incorrect: {incorrect}</Text>
       <Text>Total: {total}</Text>

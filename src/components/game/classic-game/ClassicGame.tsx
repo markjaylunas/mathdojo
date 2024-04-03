@@ -89,7 +89,6 @@ const ClassicGame = ({}: Props) => {
   const [score, setScore] = useState<Score>({
     correct: 0,
     incorrect: 0,
-    total: 0,
   });
 
   // const handleAnswer = (answer: number) => {
@@ -110,13 +109,19 @@ const ClassicGame = ({}: Props) => {
 
   return (
     <GameLayout>
-      <Heading>Classic Game</Heading>
-      <GameScore score={score} />
-      {problem && <GameView problem={problem} />}
-      {/* <GameChoices game={game} /> */}
+      <div className="flex-none">
+        <Heading className="text-center sm:text-left">Classic</Heading>
+        <GameScore score={score} />
+      </div>
+      <div className="flex-auto">
+        {problem && <GameView problem={problem} />}
+        {/* <GameChoices game={game} /> */}
+      </div>
 
       {!problemList && !problem && (
-        <Button onClick={handleGameStart}>Start Game</Button>
+        <Button className="flex-none" onClick={handleGameStart}>
+          Start Game
+        </Button>
       )}
     </GameLayout>
   );

@@ -78,5 +78,4 @@ export type Game = {
 export type Score = {
   correct: number;
   incorrect: number;
-  total: number;
 };
