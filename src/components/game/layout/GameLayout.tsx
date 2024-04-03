@@ -5,7 +5,7 @@ type Props = {
 };
 const GameLayout = ({ children }: Props) => {
   return (
-    <Card className="sm:min-h-[calc(80vh-70px) flex min-h-[calc(85vh)] flex-col p-3">
+    <Card className="sm:min-h-[calc(80vh-70px) mx-auto flex min-h-[calc(85vh)] max-w-[500px] flex-col p-3">
       {children}
     </Card>
   );
