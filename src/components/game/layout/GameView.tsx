@@ -8,7 +8,7 @@ const GameView = ({ problem }: Props) => {
   const { operationSymbol } = problem;
   const [firstNumber, secondNumber] = problem.numberList;
   return (
-    <div className="flex-1">
+    <div className="">
       <Number>{firstNumber}</Number>
       <Number>{operationSymbol}</Number>
       <Number>{secondNumber}</Number>

@@ -114,10 +114,12 @@ const ClassicGame = ({}: Props) => {
         <Heading className="text-center sm:text-left">Classic</Heading>
         <GameScore score={score} />
       </div>
-      <div className="flex flex-auto flex-col gap-4">
-        {problem && <GameView problem={problem} />}
-        <GameChoices choices={problem?.choices || []} />
-      </div>
+      {problem && (
+        <div className="flex h-full flex-1 flex-col justify-between gap-4">
+          {problem && <GameView problem={problem} />}
+          <GameChoices choices={problem?.choices || []} />
+        </div>
+      )}
 
       {!problemList && !problem && (
         <Button className="flex-none" onClick={handleGameStart}>

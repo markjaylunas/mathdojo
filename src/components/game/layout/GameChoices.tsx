@@ -6,12 +6,12 @@ type Props = {
 };
 const GameChoices = ({ choices }: Props) => {
   return (
-    <div className="grid flex-1 grid-cols-2 gap-5">
+    <div className="grid grid-flow-row auto-rows-fr  grid-cols-2 gap-5">
       {choices.map((choice, index) => (
         <Button
           variant="secondary"
           size="icon"
-          className="size-full text-5xl font-bold"
+          className=" size-full min-h-24 text-5xl font-bold"
           key={index}
         >
           {choice}
