@@ -11,7 +11,7 @@ const GameChoices = ({ choices }: Props) => {
         <Button
           variant="secondary"
           size="icon"
-          className=" size-full min-h-24 text-5xl font-bold"
+          className="size-full min-h-20 text-4xl font-bold text-gray-600 dark:text-gray-300"
           key={index}
         >
           {choice}

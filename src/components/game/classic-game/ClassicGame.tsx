@@ -1,14 +1,15 @@
 "use client";
 
-import Heading from "../../ui/heading";
 import GameLayout from "../layout/GameLayout";
 import { useState } from "react";
 import { Button } from "../../ui/button";
 import { Game, Problem, Score } from "@/src/lib/types";
 import GameView from "../layout/GameView";
 import { v4 as uuidV4 } from "uuid";
-import GameScore from "../layout/GameScore";
+import GameScore from "../layout/GameHeader";
 import GameChoices from "../layout/GameChoices";
+import GameHeader from "../layout/GameHeader";
+import { CardContent, CardFooter, CardHeader } from "../../ui/card";
 
 const game: Game = {
   id: "1",
@@ -110,10 +111,7 @@ const ClassicGame = ({}: Props) => {
 
   return (
     <GameLayout>
-      <div className="flex-none">
-        <Heading className="text-center sm:text-left">Classic</Heading>
-        <GameScore score={score} />
-      </div>
+      <GameHeader showScore={Boolean(problem)} score={score} />
       {problem && (
         <div className="flex h-full flex-1 flex-col justify-between gap-4">
           {problem && <GameView problem={problem} />}
