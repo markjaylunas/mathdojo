@@ -19,18 +19,18 @@ const game: Game = {
   digit_range: [
     {
       id: "1",
-      digit: 1,
+      digit: 4,
       order: 1,
-      minRange: 1,
-      maxRange: 9,
+      minRange: 1111,
+      maxRange: 91111,
       game_id: 1,
     },
     {
       id: "2",
-      digit: 2,
+      digit: 6,
       order: 2,
-      minRange: 11,
-      maxRange: 99,
+      minRange: 11111,
+      maxRange: 991111,
       game_id: 1,
     },
   ],
@@ -121,7 +121,7 @@ const ClassicGame = ({}: Props) => {
 
       {!problemList && !problem && (
         <Button className="flex-none" onClick={handleGameStart}>
-          Start Game
+          Start
         </Button>
       )}
     </GameLayout>

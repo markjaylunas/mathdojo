@@ -1,10 +1,24 @@
 import Text from "../../ui/text";
 
 type Props = {
-  children: React.ReactNode;
+  value: number;
+  maxDigitLength: number;
 };
-const Number = ({ children }: Props) => {
-  return <Text className="text-right text-5xl font-bold">{children}</Text>;
+const Number = ({ value, maxDigitLength }: Props) => {
+  const spaceCount = maxDigitLength - value.toString().length;
+  const numberValue = `${" ".repeat(spaceCount)}${value}`;
+  return (
+    <div className={`grid grid-flow-col grid-cols-${value.toString().length}`}>
+      {numberValue
+        .toString()
+        .split("")
+        .map((digit, index) => (
+          <Text key={index} className="w-8 text-center text-5xl font-bold">
+            {digit}
+          </Text>
+        ))}
+    </div>
+  );
 };
 
 export default Number;

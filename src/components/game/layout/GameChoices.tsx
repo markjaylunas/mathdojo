@@ -1,3 +1,5 @@
+"use client";
+
 import { Problem } from "@/src/lib/types";
 import { Button } from "../../ui/button";
 
@@ -11,10 +13,10 @@ const GameChoices = ({ choices }: Props) => {
         <Button
           variant="secondary"
           size="icon"
-          className="size-full min-h-20 text-4xl font-bold text-gray-600 dark:text-gray-300"
+          className=" size-full min-h-20 text-4xl font-bold text-gray-600 dark:text-gray-300"
           key={index}
         >
-          {choice}
+          <p className="px-2">{choice}</p>
         </Button>
       ))}
     </div>
