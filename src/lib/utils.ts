@@ -19,3 +19,12 @@ export function calculateAspectRatio(width: number) {
   // Return the aspect ratio and new height
   return { aspectRatio: aspectRatio, newHeight: newHeight };
 }
+
+export const formatTime = (timeInMilliseconds: number) => {
+  const hours = Math.floor(timeInMilliseconds / 3600000);
+  const minutes = Math.floor((timeInMilliseconds % 3600000) / 60000);
+  const seconds = Math.floor((timeInMilliseconds % 60000) / 1000);
+  const milliseconds = Math.floor(timeInMilliseconds % 1000);
+  const formattedTime = `${hours.toString().padStart(2, "0")}h:${minutes.toString().padStart(2, "0")}m:${seconds.toString().padStart(2, "0")}s:${milliseconds.toString().padStart(2, "0")}ms`;
+  return { hours, minutes, seconds, milliseconds, formattedTime };
+};

@@ -11,6 +11,8 @@ import GameChoices from "../layout/GameChoices";
 import GameHeader from "../layout/GameHeader";
 import { CardContent, CardFooter, CardHeader } from "../../ui/card";
 import { set } from "lodash";
+import GameTimer from "../layout/GameTimer";
+import useGameTimer from "@/src/hooks/use-game-timer";
 
 const game: Game = {
   id: "1",
@@ -89,10 +91,22 @@ type Props = {};
 const ClassicGame = ({}: Props) => {
   const [problemList, setProblemList] = useState<Problem[] | null>(null);
   const [problem, setProblem] = useState<Problem | null>(null);
+
   const [score, setScore] = useState<Score>({
     correct: 0,
     incorrect: 0,
   });
+
+  const {
+    state: { milliseconds },
+    start,
+    pause,
+    reset,
+    add,
+    lap,
+    history,
+    resume,
+  } = useGameTimer(60 * 1000);
 
   const handleGameStart = () => {
     setProblem(generateProblem(game));
@@ -126,7 +140,18 @@ const ClassicGame = ({}: Props) => {
 
   return (
     <GameLayout>
-      <GameHeader showScore={Boolean(problem)} score={score} />
+      <GameHeader showScore={Boolean(problem)} score={score}>
+        <GameTimer milliseconds={milliseconds} history={history} />
+        <div className="space-x-1">
+          <button onClick={start}>Start</button>
+          <button onClick={resume}>Continue</button>
+          <button onClick={pause}>Pause</button>
+          <button onClick={reset}>Reset</button>
+          <button onClick={lap}>Lap</button>
+          <button onClick={() => add(10000)}>Add</button>
+        </div>
+      </GameHeader>
+
       {problem && (
         <div className="flex h-full flex-1 flex-col justify-between gap-4">
           {problem && <GameView problem={problem} />}
