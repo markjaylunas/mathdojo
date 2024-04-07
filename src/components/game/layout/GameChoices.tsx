@@ -5,8 +5,9 @@ import { Button } from "../../ui/button";
 
 type Props = {
   choices: Problem["choices"];
+  onAnswer: (answer: number) => void;
 };
-const GameChoices = ({ choices }: Props) => {
+const GameChoices = ({ choices, onAnswer }: Props) => {
   return (
     <div className="grid grid-flow-row auto-rows-fr  grid-cols-2 gap-5">
       {choices.map((choice, index) => (
@@ -14,6 +15,7 @@ const GameChoices = ({ choices }: Props) => {
           variant="secondary"
           size="icon"
           className=" size-full min-h-20 text-4xl font-bold text-gray-600 dark:text-gray-300"
+          onClick={() => onAnswer(choice)}
           key={index}
         >
           <p className="px-2">{choice}</p>

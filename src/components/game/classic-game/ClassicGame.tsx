@@ -10,6 +10,7 @@ import GameScore from "../layout/GameHeader";
 import GameChoices from "../layout/GameChoices";
 import GameHeader from "../layout/GameHeader";
 import { CardContent, CardFooter, CardHeader } from "../../ui/card";
+import { set } from "lodash";
 
 const game: Game = {
   id: "1",
@@ -19,18 +20,18 @@ const game: Game = {
   digit_range: [
     {
       id: "1",
-      digit: 4,
+      digit: 2,
       order: 1,
-      minRange: 1111,
-      maxRange: 91111,
+      minRange: 11,
+      maxRange: 99,
       game_id: 1,
     },
     {
       id: "2",
-      digit: 6,
+      digit: 1,
       order: 2,
-      minRange: 11111,
-      maxRange: 991111,
+      minRange: 1,
+      maxRange: 9,
       game_id: 1,
     },
   ],
@@ -93,19 +94,33 @@ const ClassicGame = ({}: Props) => {
     incorrect: 0,
   });
 
-  // const handleAnswer = (answer: number) => {
-  //   if (answer === problem.answer) {
-  //     setProblem({ ...problem, status: "correct" });
-  //   } else {
-  //     setProblem({ ...problem, status: "incorrect" });
-  //   }
-  // };
-
-  const handleNext = () => {
+  const handleGameStart = () => {
     setProblem(generateProblem(game));
   };
 
-  const handleGameStart = () => {
+  const handleAnswer = (answer: number) => {
+    if (!problem) return;
+    const isCorrect = answer === problem.answer;
+    if (isCorrect) {
+      setScore({ ...score, correct: score.correct + 1 });
+    } else {
+      setScore({ ...score, incorrect: score.incorrect + 1 });
+    }
+
+    const problemAnswered: Problem = {
+      ...problem,
+      userAnswer: answer,
+      status: isCorrect ? "correct" : "incorrect",
+    };
+
+    setProblemList([...(problemList || []), problemAnswered]);
+
+    setScore({
+      ...score,
+      correct: isCorrect ? score.correct + 1 : score.correct,
+      incorrect: !isCorrect ? score.incorrect + 1 : score.incorrect,
+    });
+
     setProblem(generateProblem(game));
   };
 
@@ -115,7 +130,10 @@ const ClassicGame = ({}: Props) => {
       {problem && (
         <div className="flex h-full flex-1 flex-col justify-between gap-4">
           {problem && <GameView problem={problem} />}
-          <GameChoices choices={problem?.choices || []} />
+          <GameChoices
+            onAnswer={handleAnswer}
+            choices={problem?.choices || []}
+          />
         </div>
       )}
 

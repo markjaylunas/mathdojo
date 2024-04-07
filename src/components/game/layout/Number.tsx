@@ -5,8 +5,11 @@ type Props = {
   maxDigitLength: number;
 };
 const Number = ({ value, maxDigitLength }: Props) => {
-  const spaceCount = maxDigitLength - value.toString().length;
+  const valueLength = value.toString().length;
+  const spaceCount =
+    maxDigitLength > valueLength ? maxDigitLength - valueLength : 0;
   const numberValue = `${" ".repeat(spaceCount)}${value}`;
+
   return (
     <div className={`grid grid-flow-col grid-cols-${value.toString().length}`}>
       {numberValue
