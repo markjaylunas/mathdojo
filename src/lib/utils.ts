@@ -25,6 +25,6 @@ export const formatTime = (timeInMilliseconds: number) => {
   const minutes = Math.floor((timeInMilliseconds % 3600000) / 60000);
   const seconds = Math.floor((timeInMilliseconds % 60000) / 1000);
   const milliseconds = Math.floor(timeInMilliseconds % 1000);
-  const formattedTime = `${hours.toString().padStart(2, "0")}h:${minutes.toString().padStart(2, "0")}m:${seconds.toString().padStart(2, "0")}s:${milliseconds.toString().padStart(2, "0")}ms`;
+  const formattedTime = `${hours ? `${hours.toString().padStart(2, "0")}h:` : ""}${minutes ? `${minutes.toString().padStart(2, "0")}m:` : ""}${seconds.toString().padStart(2, "0")}s`;
   return { hours, minutes, seconds, milliseconds, formattedTime };
 };

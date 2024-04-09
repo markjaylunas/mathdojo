@@ -1,18 +1,17 @@
 "use client";
 
 import GameLayout from "../layout/GameLayout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../../ui/button";
 import { Game, Problem, Score } from "@/src/lib/types";
 import GameView from "../layout/GameView";
 import { v4 as uuidV4 } from "uuid";
-import GameScore from "../layout/GameHeader";
 import GameChoices from "../layout/GameChoices";
 import GameHeader from "../layout/GameHeader";
-import { CardContent, CardFooter, CardHeader } from "../../ui/card";
-import { set } from "lodash";
 import GameTimer from "../layout/GameTimer";
 import useGameTimer from "@/src/hooks/use-game-timer";
+import Text from "../../ui/text";
+import ClassicStartScreen from "./ClassicStartScreen";
 
 const game: Game = {
   id: "1",
@@ -66,12 +65,21 @@ const generateProblem = (game: Game): Problem => {
     default:
       throw new Error(`Invalid operation: ${operation}`);
   }
-  const wrongChoices = Array.from({ length: 3 }, () =>
-    Math.floor(
-      Math.random() * (answer + 10 - (answer - 10) + 1) + (answer - 10)
-    )
-  );
-  const choices = [answer, ...wrongChoices].sort(() => Math.random() - 0.5);
+
+  const generateChoices = (answer: number) => {
+    const choices = new Set<number>();
+
+    choices.add(answer);
+    while (choices.size !== 4) {
+      const choice = Math.floor(
+        Math.random() * (answer + 10 - (answer - 10) + 1) + (answer - 10)
+      );
+      choices.add(choice);
+    }
+    return Array.from(choices).sort(() => Math.random() - 0.5);
+  };
+
+  const choices = generateChoices(answer);
   const id = uuidV4();
   return {
     id,
@@ -86,38 +94,48 @@ const generateProblem = (game: Game): Problem => {
   };
 };
 
+type GameStatus = "start" | "running" | "paused" | "finished";
+
 type Props = {};
 
 const ClassicGame = ({}: Props) => {
+  const [status, setStatus] = useState<GameStatus>("start");
   const [problemList, setProblemList] = useState<Problem[] | null>(null);
   const [problem, setProblem] = useState<Problem | null>(null);
-
+  const oneSecond = 1000;
+  const initialTime = 60 * oneSecond;
   const [score, setScore] = useState<Score>({
     correct: 0,
     incorrect: 0,
   });
 
   const {
-    state: { timer },
+    timer,
     start,
     pause,
     reset,
-    add,
+    add: addTimer,
+    reduce: reduceTimer,
     lap,
     history,
     resume,
-  } = useGameTimer(60 * 1000);
+  } = useGameTimer(initialTime);
 
   const handleGameStart = () => {
+    start();
+    setStatus("running");
     setProblem(generateProblem(game));
   };
 
   const handleAnswer = (answer: number) => {
     if (!problem) return;
     const isCorrect = answer === problem.answer;
+    lap();
     if (isCorrect) {
+      addTimer(3000);
       setScore({ ...score, correct: score.correct + 1 });
     } else {
+      reduceTimer(3000);
       setScore({ ...score, incorrect: score.incorrect + 1 });
     }
 
@@ -138,21 +156,39 @@ const ClassicGame = ({}: Props) => {
     setProblem(generateProblem(game));
   };
 
+  useEffect(() => {
+    if (timer.value === 0) {
+      setStatus("finished");
+      setProblem(null);
+    }
+  }, [timer]);
+
   return (
     <GameLayout>
-      <GameHeader showScore={Boolean(problem)} score={score}>
-        <GameTimer timer={timer} history={history} />
-        <div className="space-x-1">
-          <button onClick={start}>Start</button>
-          <button onClick={resume}>Continue</button>
-          <button onClick={pause}>Pause</button>
-          <button onClick={reset}>Reset</button>
-          <button onClick={lap}>Lap</button>
-          <button onClick={() => add(10000)}>Add</button>
-        </div>
-      </GameHeader>
+      {status === "start" && <ClassicStartScreen />}
+      {status === "running" && (
+        <GameHeader>
+          <div className="flex  gap-2">
+            <Text>Correct: {score.correct}</Text>
+            <Text>Incorrect: {score.incorrect}</Text>
+          </div>
 
-      {problem && (
+          <GameTimer timer={timer} />
+          {/* {history.length > 0 &&
+          history.map((item, index) => {
+            return (
+              <div key={index}>
+                <Text>
+                  {item.action} - {item.time} - {item.lapDifference || 0} -{" "}
+                  {item.added || 0} - {item.reduced || 0}
+                </Text>
+              </div>
+            );
+          })} */}
+        </GameHeader>
+      )}
+
+      {status === "running" && (
         <div className="flex h-full flex-1 flex-col justify-between gap-4">
           {problem && <GameView problem={problem} />}
           <GameChoices
@@ -162,7 +198,7 @@ const ClassicGame = ({}: Props) => {
         </div>
       )}
 
-      {!problemList && !problem && (
+      {status === "start" && (
         <Button className="flex-none" onClick={handleGameStart}>
           Start
         </Button>

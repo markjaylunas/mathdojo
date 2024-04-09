@@ -1,8 +1,9 @@
-import { set } from "lodash";
 import { useState, useEffect, Dispatch, SetStateAction } from "react";
 
-type TimerState = {
-  timer: number;
+export type TimerProps = {
+  value: number;
+  initialValue: number;
+  totalAddedTime: number;
   isActive: boolean;
 };
 
@@ -11,54 +12,39 @@ export type TimerAction = {
   time: number;
   lapDifference?: number;
   added?: number;
+  reduced?: number;
 };
 
 type ReturnType = {
-  state: TimerState;
-  setMilliseconds: Dispatch<SetStateAction<number>>;
+  timer: TimerProps;
+  setValue: Dispatch<SetStateAction<number>>;
   start: () => void;
   pause: () => void;
   reset: () => void;
   lap: () => void;
   add: (milliseconds: number) => void;
+  reduce: (milliseconds: number) => void;
   resume: () => void;
   history: TimerAction[];
 };
 
-const useGameTimer = (initialMilliseconds: number): ReturnType => {
+const useGameTimer = (initialValue: number): ReturnType => {
   const [status, setStatus] = useState<"idle" | "running" | "paused">("idle");
-  const [timer, setMilliseconds] = useState(initialMilliseconds);
+  const [value, setValue] = useState(initialValue);
   const [isActive, setIsActive] = useState(false);
   const [history, setHistory] = useState<TimerAction[]>([]);
   const [lastLapTime, setLastLapTime] = useState(0);
   const [totalAddedTime, setTotalAddedTime] = useState(0);
-
-  useEffect(() => {
-    let interval: NodeJS.Timeout | null = null;
-
-    if (isActive && timer > 0) {
-      interval = setInterval(() => {
-        setMilliseconds((prevMilliseconds) => prevMilliseconds - 10);
-      }, 10);
-    } else if (interval) {
-      clearInterval(interval);
-    }
-
-    return () => {
-      if (interval) {
-        clearInterval(interval);
-      }
-    };
-  }, [isActive, timer]);
+  const [totalReducedTime, setTotalReducedTime] = useState(0);
 
   const start = () => {
     if (status !== "idle") return;
     setIsActive(true);
     setStatus("running");
-    setLastLapTime(timer);
+    setLastLapTime(value);
     setHistory((prevHistory) => [
       ...prevHistory,
-      { action: "Start", time: timer },
+      { action: "Start", time: value },
     ]);
   };
 
@@ -68,16 +54,17 @@ const useGameTimer = (initialMilliseconds: number): ReturnType => {
     setStatus("paused");
     setHistory((prevHistory) => [
       ...prevHistory,
-      { action: "Pause", time: timer },
+      { action: "Pause", time: value },
     ]);
   };
 
   const reset = () => {
     setIsActive(false);
     setStatus("idle");
-    setMilliseconds(initialMilliseconds);
+    setValue(initialValue);
     setLastLapTime(0);
-    setHistory([{ action: "Reset", time: initialMilliseconds }]);
+    setTotalAddedTime(0);
+    setHistory([{ action: "Reset", time: initialValue }]);
   };
 
   const lap = () => {
@@ -88,17 +75,20 @@ const useGameTimer = (initialMilliseconds: number): ReturnType => {
     const startTime =
       history.find((action) => action.action === "Start")?.time || 0;
     const lastLapTime = lastLapAction ? lastLapAction.time : startTime;
-    const lapDifference = Math.abs(timer - totalAddedTime - lastLapTime);
+    const lapDifference = Math.abs(
+      value - totalAddedTime + totalReducedTime - lastLapTime
+    );
     setTotalAddedTime(0);
+    setTotalReducedTime(0);
     setHistory((prevHistory) => [
       ...prevHistory,
-      { action: "Lap", time: timer, lapDifference },
+      { action: "Lap", time: value, lapDifference },
     ]);
   };
 
   const add = (addedMilliseconds: number) => {
     if (status !== "running") return;
-    setMilliseconds((prevMilliseconds) => prevMilliseconds + addedMilliseconds);
+    setValue((prevMilliseconds) => prevMilliseconds + addedMilliseconds);
     setTotalAddedTime(
       (prevTotalAddedTime) => prevTotalAddedTime + addedMilliseconds
     );
@@ -106,8 +96,24 @@ const useGameTimer = (initialMilliseconds: number): ReturnType => {
       ...prevHistory,
       {
         action: `Add`,
-        time: timer + addedMilliseconds,
+        time: value + addedMilliseconds,
         added: addedMilliseconds,
+      },
+    ]);
+  };
+
+  const reduce = (reducedMilliseconds: number) => {
+    if (status !== "running" || value - reducedMilliseconds < 0) return;
+    setValue((prevMilliseconds) => prevMilliseconds - reducedMilliseconds);
+    setTotalReducedTime(
+      (prevTotalReducedTime) => prevTotalReducedTime + reducedMilliseconds
+    );
+    setHistory((prevHistory) => [
+      ...prevHistory,
+      {
+        action: `Reduce`,
+        time: value - reducedMilliseconds,
+        reduced: reducedMilliseconds,
       },
     ]);
   };
@@ -118,18 +124,41 @@ const useGameTimer = (initialMilliseconds: number): ReturnType => {
     setStatus("running");
     setHistory((prevHistory) => [
       ...prevHistory,
-      { action: "Continue", time: timer },
+      { action: "Continue", time: value },
     ]);
   };
 
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null;
+
+    if (isActive && value > 0) {
+      interval = setInterval(() => {
+        setValue((prevMilliseconds) => prevMilliseconds - 10);
+      }, 10);
+    } else if (interval) {
+      clearInterval(interval);
+    }
+
+    if (value === 0) {
+      reset();
+    }
+
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [isActive, value]);
+
   return {
-    state: { timer, isActive },
-    setMilliseconds,
+    timer: { value, initialValue, totalAddedTime, isActive },
+    setValue,
     start,
     pause,
     reset,
     lap,
     add,
+    reduce,
     resume,
     history,
   };

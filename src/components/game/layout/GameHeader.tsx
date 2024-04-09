@@ -3,25 +3,11 @@ import Text from "../../ui/text";
 import Heading from "../../ui/heading";
 
 type Props = {
-  score?: Score;
-  showScore: boolean;
+  label?: string;
   children: React.ReactNode;
 };
-const GameHeader = ({ children, score, showScore }: Props) => {
-  return (
-    <div className="flex flex-col">
-      <div className="flex justify-between">
-        <Heading className="">Classic</Heading>
-        {showScore && score && (
-          <div className="flex flex-col gap-2">
-            <Text>Correct: {score.correct}</Text>
-            <Text>Incorrect: {score.incorrect}</Text>
-          </div>
-        )}
-      </div>
-      {children}
-    </div>
-  );
+const GameHeader = ({ children, label }: Props) => {
+  return <div className="flex flex-col">{children}</div>;
 };
 
 export default GameHeader;
