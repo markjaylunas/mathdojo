@@ -98,7 +98,7 @@ const ClassicGame = ({}: Props) => {
   });
 
   const {
-    state: { milliseconds },
+    state: { timer },
     start,
     pause,
     reset,
@@ -141,7 +141,7 @@ const ClassicGame = ({}: Props) => {
   return (
     <GameLayout>
       <GameHeader showScore={Boolean(problem)} score={score}>
-        <GameTimer milliseconds={milliseconds} history={history} />
+        <GameTimer timer={timer} history={history} />
         <div className="space-x-1">
           <button onClick={start}>Start</button>
           <button onClick={resume}>Continue</button>

@@ -3,18 +3,23 @@ import { formatTime } from "@/src/lib/utils";
 import React from "react";
 
 interface GameTimerProps {
-  milliseconds: number;
+  timer: number;
   history: TimerAction[];
 }
 
-const GameTimer: React.FC<GameTimerProps> = ({ milliseconds, history }) => {
-  const { formattedTime } = formatTime(milliseconds);
+const GameTimer: React.FC<GameTimerProps> = ({ timer, history }) => {
+  const { formattedTime, hours, minutes, seconds, milliseconds } =
+    formatTime(timer);
 
   return (
     <div>
-      <h1>Timer: {formattedTime}</h1>
+      <li>{hours}</li>
+      <li>{minutes}</li>
+      <li>{seconds}</li>
+      <li>{milliseconds}</li>
+      {/* <h1>Timer: {formattedTime}</h1> */}
 
-      <div>
+      {/* <div>
         <h2>Saved Times:</h2>
         <ul>
           {history.map((item, index) => (
@@ -25,7 +30,7 @@ const GameTimer: React.FC<GameTimerProps> = ({ milliseconds, history }) => {
             </li>
           ))}
         </ul>
-      </div>
+      </div> */}
     </div>
   );
 };
