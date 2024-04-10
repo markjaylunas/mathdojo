@@ -10,7 +10,7 @@ import GameChoices from "../layout/GameChoices";
 import GameHeader from "../layout/GameHeader";
 import GameTimer from "../layout/GameTimer";
 import useGameTimer from "@/src/hooks/use-game-timer";
-import Text from "../../ui/text";
+import { useFullscreen } from "@mantine/hooks";
 import ClassicStartScreen from "./ClassicStartScreen";
 import GameStartingCountdown from "../layout/GameStartingCountdown";
 import { formatTime } from "@/src/lib/utils";
@@ -105,6 +105,7 @@ const ClassicGame = ({}: Props) => {
   const [status, setStatus] = useState<GameStatus>("idle");
   const [problemList, setProblemList] = useState<Problem[] | null>(null);
   const [problem, setProblem] = useState<Problem | null>(null);
+  const { toggle: toggleFullscreen } = useFullscreen();
   const second = 1000;
   const minute = 60;
   const initialTime = 3 * minute * second;
@@ -135,6 +136,7 @@ const ClassicGame = ({}: Props) => {
     initialStart();
     setStatus("starting");
     setProblem(generateProblem(game));
+    toggleFullscreen();
   };
 
   const handleAnswer = (answer: number) => {
@@ -181,6 +183,7 @@ const ClassicGame = ({}: Props) => {
     if (timer.value === 0) {
       setStatus("finished");
       setProblem(null);
+      toggleFullscreen();
     }
   }, [timer]);
 
