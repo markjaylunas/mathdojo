@@ -50,3 +50,10 @@ export const DEFAULT_SIGNUP_PATH = "/sign-up";
  */
 
 export const DEFAULT_FORGOT_PASSWORD_PATH = "/forgot-password";
+
+/**
+ * The default home path
+ * @type {string}
+ */
+
+export const DEFAULT_HOME_PATH = "/";
