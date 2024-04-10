@@ -145,7 +145,7 @@ const ClassicGame = ({}: Props) => {
       addTimer(7000);
       setScore({ ...score, correct: score.correct + 1 });
     } else {
-      reduceTimer(1000);
+      reduceTimer(3000);
       setScore({ ...score, incorrect: score.incorrect + 1 });
     }
 
