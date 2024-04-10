@@ -21,9 +21,10 @@ const GameFinished = ({ gameInfo, onRetry }: Props) => {
         <h2 className=" text-2xl">Highest Combo: {gameInfo.highestCombo}</h2>
         <h2 className=" text-2xl">Total Combo: {gameInfo.totalCombo}</h2>
         <h2 className=" text-2xl">Total Question: {gameInfo.totalQuestion}</h2>
-        <h2 className=" text-2xl">
+        {/* todo: add total duration */}
+        {/* <h2 className=" text-2xl">
           Duration: {formatTime(gameInfo.duration).formattedTime}
-        </h2>
+        </h2> */}
       </div>
 
       <div className="flex justify-center gap-4 ">
