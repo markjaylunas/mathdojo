@@ -8,9 +8,7 @@ interface GameTimerProps {
 }
 
 const GameTimer: React.FC<GameTimerProps> = ({ timer }) => {
-  const { formattedTime, hours, minutes, seconds, milliseconds } = formatTime(
-    timer.value
-  );
+  const { formattedTime } = formatTime(timer.value);
   const percentage =
     (timer.value / (timer.initialValue + timer.totalAddedTime)) * 100;
 

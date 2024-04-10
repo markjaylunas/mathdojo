@@ -22,7 +22,7 @@ const GameView = ({ problem }: Props) => {
   const answer = problem.answer;
 
   return (
-    <div className="mx-auto flex max-w-fit flex-auto flex-col gap-1 p-3">
+    <div className="mx-auto flex max-w-fit flex-auto flex-col justify-center gap-1 p-3">
       <div className="flex items-end justify-between gap-5">
         <Text className="text-right text-5xl font-bold">{operationSymbol}</Text>
         <div>

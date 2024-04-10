@@ -12,6 +12,8 @@ import GameTimer from "../layout/GameTimer";
 import useGameTimer from "@/src/hooks/use-game-timer";
 import Text from "../../ui/text";
 import ClassicStartScreen from "./ClassicStartScreen";
+import GameStartingCountdown from "../layout/GameStartingCountdown";
+import { formatTime } from "@/src/lib/utils";
 
 const game: Game = {
   id: "1",
@@ -94,16 +96,16 @@ const generateProblem = (game: Game): Problem => {
   };
 };
 
-type GameStatus = "start" | "running" | "paused" | "finished";
+type GameStatus = "idle" | "starting" | "running" | "paused" | "finished";
 
 type Props = {};
 
 const ClassicGame = ({}: Props) => {
-  const [status, setStatus] = useState<GameStatus>("start");
+  const [status, setStatus] = useState<GameStatus>("idle");
   const [problemList, setProblemList] = useState<Problem[] | null>(null);
   const [problem, setProblem] = useState<Problem | null>(null);
   const oneSecond = 1000;
-  const initialTime = 60 * oneSecond;
+  const initialTime = 600 * oneSecond;
   const [score, setScore] = useState<Score>({
     correct: 0,
     incorrect: 0,
@@ -121,9 +123,15 @@ const ClassicGame = ({}: Props) => {
     resume,
   } = useGameTimer(initialTime);
 
+  const {
+    timer: initialCountDown,
+    start: initialStart,
+    reset: initialReset,
+  } = useGameTimer(4 * oneSecond);
+
   const handleGameStart = () => {
-    start();
-    setStatus("running");
+    initialStart();
+    setStatus("starting");
     setProblem(generateProblem(game));
   };
 
@@ -163,28 +171,22 @@ const ClassicGame = ({}: Props) => {
     }
   }, [timer]);
 
+  useEffect(() => {
+    if (formatTime(initialCountDown.value).seconds === 0) {
+      setStatus("running");
+      start();
+    }
+  }, [initialCountDown]);
+
   return (
     <GameLayout>
-      {status === "start" && <ClassicStartScreen />}
+      {status === "starting" && (
+        <GameStartingCountdown countdownTimer={initialCountDown.value} />
+      )}
+      {status === "idle" && <ClassicStartScreen />}
       {status === "running" && (
         <GameHeader>
-          <div className="flex  gap-2">
-            <Text>Correct: {score.correct}</Text>
-            <Text>Incorrect: {score.incorrect}</Text>
-          </div>
-
           <GameTimer timer={timer} />
-          {/* {history.length > 0 &&
-          history.map((item, index) => {
-            return (
-              <div key={index}>
-                <Text>
-                  {item.action} - {item.time} - {item.lapDifference || 0} -{" "}
-                  {item.added || 0} - {item.reduced || 0}
-                </Text>
-              </div>
-            );
-          })} */}
         </GameHeader>
       )}
 
@@ -198,7 +200,7 @@ const ClassicGame = ({}: Props) => {
         </div>
       )}
 
-      {status === "start" && (
+      {status === "idle" && (
         <Button className="flex-none" onClick={handleGameStart}>
           Start
         </Button>
