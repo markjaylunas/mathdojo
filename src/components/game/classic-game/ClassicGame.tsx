@@ -230,11 +230,14 @@ const ClassicGame = ({}: Props) => {
       {status === "running" && (
         <div className="flex h-full flex-1 flex-col justify-between gap-4">
           {problem && <GameView problem={problem} />}
-          <GameChoices
-            onAnswer={handleAnswer}
-            choices={problem?.choices || []}
-            disabled={problem?.status !== "unanswered"}
-          />
+          {problem && (
+            <GameChoices
+              problemId={problem.id}
+              onAnswer={handleAnswer}
+              choices={problem?.choices || []}
+              disabled={problem?.status !== "unanswered"}
+            />
+          )}
         </div>
       )}
 
