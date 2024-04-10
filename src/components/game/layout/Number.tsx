@@ -23,9 +23,9 @@ const Number = ({
 
   const color =
     status === "correct"
-      ? "text-green-500"
+      ? "text-green-600 dark:text-green-700"
       : status === "incorrect"
-        ? "text-red-500 dark:text-red-400"
+        ? "text-red-600 dark:text-red-700"
         : "text-gray-600 dark:text-gray-300";
 
   return (
