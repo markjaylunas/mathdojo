@@ -6,16 +6,18 @@ import { Button } from "../../ui/button";
 type Props = {
   choices: Problem["choices"];
   onAnswer: (answer: number) => void;
+  disabled: boolean;
 };
-const GameChoices = ({ choices, onAnswer }: Props) => {
+const GameChoices = ({ choices, onAnswer, disabled }: Props) => {
   return (
     <div className="grid grid-flow-row auto-rows-fr  grid-cols-2 gap-5">
       {choices.map((choice, index) => (
         <Button
           variant="secondary"
           size="icon"
-          className=" size-full min-h-20 text-4xl font-bold text-gray-600 dark:text-gray-300"
+          className="size-full min-h-20 text-4xl  font-bold text-gray-600 transition-all duration-150 ease-in-out dark:text-gray-300"
           onClick={() => onAnswer(choice)}
+          disabled={disabled}
           key={index}
         >
           <p className="px-2">{choice}</p>

@@ -82,7 +82,7 @@ const generateProblem = (game: Game): Problem => {
   };
 
   const choices = generateChoices(answer);
-  const id = uuidV4();
+  const id = uuidV4().toString();
   return {
     id,
     numberList,
@@ -104,8 +104,9 @@ const ClassicGame = ({}: Props) => {
   const [status, setStatus] = useState<GameStatus>("idle");
   const [problemList, setProblemList] = useState<Problem[] | null>(null);
   const [problem, setProblem] = useState<Problem | null>(null);
-  const oneSecond = 1000;
-  const initialTime = 600 * oneSecond;
+  const second = 1000;
+  const minute = 60;
+  const initialTime = 3 * minute * second;
   const [score, setScore] = useState<Score>({
     correct: 0,
     incorrect: 0,
@@ -127,7 +128,7 @@ const ClassicGame = ({}: Props) => {
     timer: initialCountDown,
     start: initialStart,
     reset: initialReset,
-  } = useGameTimer(4 * oneSecond);
+  } = useGameTimer(4 * second);
 
   const handleGameStart = () => {
     initialStart();
@@ -137,13 +138,13 @@ const ClassicGame = ({}: Props) => {
 
   const handleAnswer = (answer: number) => {
     if (!problem) return;
+    if (problem.status !== "unanswered") return;
     const isCorrect = answer === problem.answer;
-    lap();
     if (isCorrect) {
-      addTimer(3000);
+      addTimer(7000);
       setScore({ ...score, correct: score.correct + 1 });
     } else {
-      reduceTimer(3000);
+      reduceTimer(1000);
       setScore({ ...score, incorrect: score.incorrect + 1 });
     }
 
@@ -152,6 +153,7 @@ const ClassicGame = ({}: Props) => {
       userAnswer: answer,
       status: isCorrect ? "correct" : "incorrect",
     };
+    setProblem(problemAnswered);
 
     setProblemList([...(problemList || []), problemAnswered]);
 
@@ -161,7 +163,9 @@ const ClassicGame = ({}: Props) => {
       incorrect: !isCorrect ? score.incorrect + 1 : score.incorrect,
     });
 
-    setProblem(generateProblem(game));
+    setTimeout(() => {
+      setProblem(generateProblem(game));
+    }, 2000);
   };
 
   useEffect(() => {
@@ -186,7 +190,7 @@ const ClassicGame = ({}: Props) => {
       {status === "idle" && <ClassicStartScreen />}
       {status === "running" && (
         <GameHeader>
-          <GameTimer timer={timer} />
+          <GameTimer status={problem?.status || "unanswered"} timer={timer} />
         </GameHeader>
       )}
 
@@ -196,6 +200,7 @@ const ClassicGame = ({}: Props) => {
           <GameChoices
             onAnswer={handleAnswer}
             choices={problem?.choices || []}
+            disabled={problem?.status !== "unanswered"}
           />
         </div>
       )}

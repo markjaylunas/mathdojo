@@ -19,10 +19,10 @@ const GameView = ({ problem }: Props) => {
     userAnswerLength,
     ...problem.numberList.map((num) => num.toString().length)
   );
-  const answer = problem.answer;
+  const { userAnswer, status } = problem;
 
   return (
-    <div className="mx-auto flex max-w-fit flex-auto flex-col justify-center gap-1 p-3">
+    <div className="mx-auto flex max-w-fit flex-auto flex-col justify-center gap-1 p-3 transition-all duration-150 ease-in-out">
       <div className="flex items-end justify-between gap-5">
         <Text className="text-right text-5xl font-bold">{operationSymbol}</Text>
         <div>
@@ -30,16 +30,27 @@ const GameView = ({ problem }: Props) => {
             <Number
               key={index}
               maxDigitLength={maxDigitLength}
-              value={firstNumber}
+              numberFullValue={firstNumber}
             />
           ))}
-          <Number value={lastNumber} maxDigitLength={maxDigitLength} />
+          <Number
+            numberFullValue={lastNumber}
+            maxDigitLength={maxDigitLength}
+          />
         </div>
       </div>
       <div className="border-[3px] border-gray-600 dark:border-gray-300" />
       <div className="flex items-end justify-between gap-5">
         <Text className="text-right text-5xl font-bold">=</Text>
-        <Number value={answer} maxDigitLength={maxDigitLength} />
+        {userAnswer !== null ? (
+          <Number
+            numberFullValue={userAnswer}
+            maxDigitLength={maxDigitLength}
+            status={status}
+          />
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );

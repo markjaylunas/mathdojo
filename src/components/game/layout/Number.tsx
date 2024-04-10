@@ -1,24 +1,52 @@
-import Text from "../../ui/text";
+import { Problem } from "@/src/lib/types";
+import { cn } from "@/src/lib/utils";
+import React from "react";
 
 type Props = {
-  value: number;
+  numberFullValue: number;
   maxDigitLength: number;
-};
-const Number = ({ value, maxDigitLength }: Props) => {
-  const valueLength = value.toString().length;
+  status?: Problem["status"];
+} & React.HTMLAttributes<HTMLParagraphElement>;
+
+const Number = ({
+  children,
+  className,
+  numberFullValue,
+  maxDigitLength,
+  status,
+  ...props
+}: Props) => {
+  const valueLength = numberFullValue.toString().length;
   const spaceCount =
     maxDigitLength > valueLength ? maxDigitLength - valueLength : 0;
-  const numberValue = `${" ".repeat(spaceCount)}${value}`;
+  const numberValue = `${" ".repeat(spaceCount)}${numberFullValue}`;
+
+  const color =
+    status === "correct"
+      ? "text-green-500"
+      : status === "incorrect"
+        ? "text-red-500 dark:text-red-400"
+        : "text-gray-600 dark:text-gray-300";
 
   return (
-    <div className={`grid grid-flow-col grid-cols-${value.toString().length}`}>
+    <div
+      className={`grid grid-flow-col grid-cols-${numberFullValue.toString().length}`}
+    >
       {numberValue
         .toString()
         .split("")
         .map((digit, index) => (
-          <Text key={index} className="w-8 text-center text-5xl font-bold">
+          <p
+            key={index}
+            className={cn(
+              "w-8 text-center text-5xl font-bold",
+              className,
+              color
+            )}
+            {...props}
+          >
             {digit}
-          </Text>
+          </p>
         ))}
     </div>
   );
