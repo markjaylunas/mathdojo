@@ -15,7 +15,7 @@ const GameChoices = ({ choices, onAnswer, disabled }: Props) => {
         <Button
           variant="secondary"
           size="icon"
-          className="size-full min-h-20 text-4xl  font-bold text-gray-600 transition-all duration-150 ease-in-out dark:text-gray-300"
+          className="size-full min-h-20 text-4xl font-bold text-gray-600 transition-all duration-150  ease-in-out hover:scale-105 hover:bg-primary hover:text-white dark:text-gray-300 hover:dark:text-black"
           onClick={() => onAnswer(choice)}
           disabled={disabled}
           key={index}
