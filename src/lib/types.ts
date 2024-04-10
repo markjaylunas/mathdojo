@@ -79,3 +79,10 @@ export type Score = {
   correct: number;
   incorrect: number;
 };
+
+export type GameStatus =
+  | "idle"
+  | "starting"
+  | "running"
+  | "paused"
+  | "finished";
