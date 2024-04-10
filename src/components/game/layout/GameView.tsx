@@ -1,13 +1,14 @@
 import { Problem } from "@/src/lib/types";
 import Number from "./Number";
-import { Separator } from "../../ui/separator";
 import Text from "../../ui/text";
-import { cn } from "@/src/lib/utils";
+import { useFocusTrap } from "@mantine/hooks";
 
 type Props = {
   problem: Problem;
 };
 const GameView = ({ problem }: Props) => {
+  const focusTrapRef = useFocusTrap(true);
+
   const { operationSymbol } = problem;
   const topNumbers = problem.numberList.slice(0, -1);
   const lastNumber = problem.numberList[problem.numberList.length - 1];
@@ -22,7 +23,10 @@ const GameView = ({ problem }: Props) => {
   const { userAnswer, status } = problem;
 
   return (
-    <div className="mx-auto flex max-w-fit flex-auto flex-col justify-center gap-1 p-3 transition-all duration-150 ease-in-out">
+    <div
+      ref={focusTrapRef}
+      className="mx-auto flex max-w-fit flex-auto flex-col justify-center gap-1 p-3 transition-all duration-150 ease-in-out"
+    >
       <div className="flex items-end justify-between gap-5">
         <Text className="text-right text-5xl font-bold">{operationSymbol}</Text>
         <div>

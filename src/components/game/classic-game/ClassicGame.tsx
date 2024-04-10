@@ -107,7 +107,6 @@ const ClassicGame = ({}: Props) => {
   const [problem, setProblem] = useState<Problem | null>(null);
   const { toggle: toggleFullscreen, fullscreen: isFullscreen } =
     useFullscreen();
-  const focusTrapRef = useFocusTrap(true);
 
   const second = 1000;
   const minute = 60;
@@ -230,11 +229,7 @@ const ClassicGame = ({}: Props) => {
 
       {status === "running" && (
         <div className="flex h-full flex-1 flex-col justify-between gap-4">
-          {problem && (
-            <div ref={focusTrapRef}>
-              <GameView problem={problem} />
-            </div>
-          )}
+          {problem && <GameView problem={problem} />}
           <GameChoices
             onAnswer={handleAnswer}
             choices={problem?.choices || []}
