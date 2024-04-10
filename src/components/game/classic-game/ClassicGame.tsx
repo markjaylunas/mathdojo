@@ -108,7 +108,7 @@ const ClassicGame = ({}: Props) => {
   const { toggle: toggleFullscreen } = useFullscreen();
   const second = 1000;
   const minute = 60;
-  const initialTime = 3 * minute * second;
+  const initialTime = 2 * minute * second;
   const [score, setScore] = useState<Score>({
     correct: 0,
     incorrect: 0,
@@ -147,7 +147,7 @@ const ClassicGame = ({}: Props) => {
       addTimer(7000);
       setScore({ ...score, correct: score.correct + 1 });
     } else {
-      reduceTimer(3000);
+      reduceTimer(5000);
       setScore({ ...score, incorrect: score.incorrect + 1 });
     }
 
