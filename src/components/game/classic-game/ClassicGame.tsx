@@ -14,6 +14,7 @@ import Text from "../../ui/text";
 import ClassicStartScreen from "./ClassicStartScreen";
 import GameStartingCountdown from "../layout/GameStartingCountdown";
 import { formatTime } from "@/src/lib/utils";
+import GameFinished from "../layout/GameFinished";
 
 const game: Game = {
   id: "1",
@@ -165,7 +166,15 @@ const ClassicGame = ({}: Props) => {
 
     setTimeout(() => {
       setProblem(generateProblem(game));
-    }, 2000);
+    }, 1500);
+  };
+
+  const handleRetry = () => {
+    setProblemList(null);
+    setScore({ correct: 0, incorrect: 0 });
+    initialReset();
+    reset();
+    setStatus("idle");
   };
 
   useEffect(() => {
@@ -186,6 +195,9 @@ const ClassicGame = ({}: Props) => {
     <GameLayout>
       {status === "starting" && (
         <GameStartingCountdown countdownTimer={initialCountDown.value} />
+      )}
+      {status === "finished" && (
+        <GameFinished onRetry={handleRetry} score={score} />
       )}
       {status === "idle" && <ClassicStartScreen />}
       {status === "running" && (
