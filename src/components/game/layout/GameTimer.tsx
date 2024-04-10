@@ -17,7 +17,7 @@ const GameTimer: React.FC<GameTimerProps> = ({ timer }) => {
   return (
     <div>
       <div className="relative">
-        <p className="absolute left-1/2  top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 transform text-sm text-gray-100">
+        <p className="absolute left-1/2  top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 transform text-sm text-gray-100 mix-blend-exclusion">
           {formattedTime}
         </p>
         <Progress size="lg" value={percentage} />
