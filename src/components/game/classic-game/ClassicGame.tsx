@@ -194,6 +194,22 @@ const ClassicGame = ({}: Props) => {
     }
   }, [initialCountDown]);
 
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      if (status === "running") {
+        event.preventDefault();
+        event.returnValue =
+          "Are you sure you want to leave? Your game progress will be lost.";
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [status]);
+
   return (
     <GameLayout>
       {status === "starting" && (
