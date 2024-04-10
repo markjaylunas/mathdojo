@@ -3,7 +3,7 @@
 import GameLayout from "../layout/GameLayout";
 import { useEffect, useState } from "react";
 import { Button } from "../../ui/button";
-import { Game, GameStatus, Problem, Score } from "@/src/lib/types";
+import { GameInfo, GameStatus, Problem } from "@/src/lib/types";
 import GameView from "../layout/GameView";
 import GameChoices from "../layout/GameChoices";
 import GameHeader from "../layout/GameHeader";
@@ -14,7 +14,8 @@ import ClassicStartScreen from "./ClassicStartScreen";
 import GameStartingCountdown from "../layout/GameStartingCountdown";
 import { formatTime } from "@/src/lib/utils";
 import GameFinished from "../layout/GameFinished";
-import { game, generateProblem } from "@/src/lib/game";
+import { game, generateProblem, INITIAL_GAME_INFO } from "@/src/lib/game";
+import Text from "../../ui/text";
 
 type Props = {};
 
@@ -28,10 +29,9 @@ const ClassicGame = ({}: Props) => {
   const second = 1000;
   const minute = 60;
   const initialTime = 2 * minute * second;
-  const [score, setScore] = useState<Score>({
-    correct: 0,
-    incorrect: 0,
-  });
+  const [level, setLevel] = useState<number>(1);
+  const [combo, setCombo] = useState<number>(0);
+  const [gameInfo, setGameInfo] = useState<GameInfo>(INITIAL_GAME_INFO);
 
   const {
     timer,
@@ -61,13 +61,25 @@ const ClassicGame = ({}: Props) => {
   const handleAnswer = (answer: number) => {
     if (!problem) return;
     if (problem.status !== "unanswered") return;
+    lap();
+
     const isCorrect = answer === problem.answer;
+    setGameInfo((info) => ({
+      correct: isCorrect ? info.correct + 1 : info.correct,
+      incorrect: !isCorrect ? info.incorrect + 1 : info.incorrect,
+      highestCombo: combo > info.highestCombo ? combo : info.highestCombo,
+      totalCombo: combo > 0 ? info.totalCombo + 1 : info.totalCombo,
+      totalQuestion: info.totalQuestion + 1,
+      score: isCorrect ? info.score + 1 + combo : info.score,
+      duration: timer.totalAddedTime + timer.initialValue,
+    }));
+
     if (isCorrect) {
       addTimer(7000);
-      setScore({ ...score, correct: score.correct + 1 });
+      setCombo((combo) => combo + 1);
     } else {
       reduceTimer(5000);
-      setScore({ ...score, incorrect: score.incorrect + 1 });
+      setCombo(0);
     }
 
     const problemAnswered: Problem = {
@@ -75,15 +87,10 @@ const ClassicGame = ({}: Props) => {
       userAnswer: answer,
       status: isCorrect ? "correct" : "incorrect",
     };
+
     setProblem(problemAnswered);
-
-    setProblemList([...(problemList || []), problemAnswered]);
-
-    setScore({
-      ...score,
-      correct: isCorrect ? score.correct + 1 : score.correct,
-      incorrect: !isCorrect ? score.incorrect + 1 : score.incorrect,
-    });
+    const newProblemList = [...(problemList || []), problemAnswered];
+    setProblemList(newProblemList);
 
     setTimeout(() => {
       setProblem(generateProblem(game));
@@ -92,7 +99,8 @@ const ClassicGame = ({}: Props) => {
 
   const handleRetry = () => {
     setProblemList(null);
-    setScore({ correct: 0, incorrect: 0 });
+    setGameInfo(INITIAL_GAME_INFO);
+    setLevel(1);
     initialReset();
     reset();
     setStatus("idle");
@@ -135,12 +143,39 @@ const ClassicGame = ({}: Props) => {
         <GameStartingCountdown countdownTimer={initialCountDown.value} />
       )}
       {status === "finished" && (
-        <GameFinished onRetry={handleRetry} score={score} />
+        <GameFinished onRetry={handleRetry} gameInfo={gameInfo} />
       )}
       {status === "idle" && <ClassicStartScreen />}
       {status === "running" && (
         <GameHeader>
           <GameTimer status={problem?.status || "unanswered"} timer={timer} />
+          <div className="flex justify-between">
+            <div>
+              <Text className="mt-2">
+                <span className="text-gray-500 dark:text-gray-400">
+                  Level:{" "}
+                </span>
+                <span className="text-2xl font-bold">{level}</span>
+              </Text>
+              {combo > 1 && (
+                <Text className="mt-2 text-2xl font-extrabold">
+                  Combo {combo}x
+                </Text>
+              )}
+            </div>
+            <div>
+              <Text className="mt-2">
+                <span className="text-gray-500 dark:text-gray-400">
+                  Score:{" "}
+                </span>
+                <span className="text-2xl font-bold">{gameInfo.score}</span>
+              </Text>
+
+              {/* <Button onClick={toggleFullscreen}>
+                {isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
+              </Button> */}
+            </div>
+          </div>
         </GameHeader>
       )}
 

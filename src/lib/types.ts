@@ -75,9 +75,14 @@ export type Game = {
   operationSymbol: OperationSymbol;
 };
 
-export type Score = {
+export type GameInfo = {
+  highestCombo: number;
+  totalCombo: number;
+  totalQuestion: number;
   correct: number;
   incorrect: number;
+  score: number;
+  duration: number;
 };
 
 export type GameStatus =

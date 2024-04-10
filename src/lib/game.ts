@@ -1,5 +1,15 @@
-import { Game, Problem } from "./types";
+import { Game, GameInfo, Problem } from "./types";
 import { v4 as uuidV4 } from "uuid";
+
+export const INITIAL_GAME_INFO: GameInfo = {
+  highestCombo: 0,
+  totalCombo: 0,
+  totalQuestion: 0,
+  correct: 0,
+  incorrect: 0,
+  score: 0,
+  duration: 0,
+};
 
 export const game: Game = {
   id: "1",
