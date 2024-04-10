@@ -1,6 +1,8 @@
 import BackButton from "@components/ui/back-button";
 import { Button } from "@components/ui/button";
 import { IconArrowBack, IconHome } from "@tabler/icons-react";
+import Link from "next/link";
+import { DEFAULT_HOME_PATH } from "../lib/routes";
 
 export default async function NotFound() {
   return (
@@ -18,9 +20,11 @@ export default async function NotFound() {
         <BackButton className="flex gap-1">
           <IconArrowBack height={20} /> Get back
         </BackButton>
-        <Button className="flex gap-1">
-          <IconHome size={18} /> Get to home page
-        </Button>
+        <Link href={DEFAULT_HOME_PATH}>
+          <Button className="flex gap-1">
+            <IconHome size={18} /> Get to home page
+          </Button>
+        </Link>
       </div>
     </div>
   );
