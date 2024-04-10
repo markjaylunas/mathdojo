@@ -62,16 +62,19 @@ const ClassicGame = ({}: Props) => {
     if (!problem) return;
     if (problem.status !== "unanswered") return;
     lap();
+    console.log(timer);
 
     const isCorrect = answer === problem.answer;
     setGameInfo((info) => ({
+      ...info,
       correct: isCorrect ? info.correct + 1 : info.correct,
       incorrect: !isCorrect ? info.incorrect + 1 : info.incorrect,
       highestCombo: combo > info.highestCombo ? combo : info.highestCombo,
       totalCombo: combo > 0 ? info.totalCombo + 1 : info.totalCombo,
       totalQuestion: info.totalQuestion + 1,
       score: isCorrect ? info.score + 1 + combo : info.score,
-      duration: timer.totalAddedTime + timer.initialValue,
+      // todo: add total duration
+      // duration: timer.totalAddedTime + timer.initialValue,
     }));
 
     if (isCorrect) {
