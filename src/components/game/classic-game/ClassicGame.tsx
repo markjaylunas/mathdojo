@@ -105,7 +105,8 @@ const ClassicGame = ({}: Props) => {
   const [status, setStatus] = useState<GameStatus>("idle");
   const [problemList, setProblemList] = useState<Problem[] | null>(null);
   const [problem, setProblem] = useState<Problem | null>(null);
-  const { toggle: toggleFullscreen } = useFullscreen();
+  const { toggle: toggleFullscreen, fullscreen: isFullscreen } =
+    useFullscreen();
   const second = 1000;
   const minute = 60;
   const initialTime = 2 * minute * second;
@@ -183,7 +184,7 @@ const ClassicGame = ({}: Props) => {
     if (timer.value === 0) {
       setStatus("finished");
       setProblem(null);
-      toggleFullscreen();
+      if (isFullscreen) toggleFullscreen();
     }
   }, [timer]);
 
