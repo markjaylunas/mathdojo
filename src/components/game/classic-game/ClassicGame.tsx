@@ -10,7 +10,7 @@ import GameChoices from "../layout/GameChoices";
 import GameHeader from "../layout/GameHeader";
 import GameTimer from "../layout/GameTimer";
 import useGameTimer from "@/src/hooks/use-game-timer";
-import { useFullscreen } from "@mantine/hooks";
+import { useFocusTrap, useFullscreen } from "@mantine/hooks";
 import ClassicStartScreen from "./ClassicStartScreen";
 import GameStartingCountdown from "../layout/GameStartingCountdown";
 import { formatTime } from "@/src/lib/utils";
@@ -107,6 +107,8 @@ const ClassicGame = ({}: Props) => {
   const [problem, setProblem] = useState<Problem | null>(null);
   const { toggle: toggleFullscreen, fullscreen: isFullscreen } =
     useFullscreen();
+  const focusTrapRef = useFocusTrap(true);
+
   const second = 1000;
   const minute = 60;
   const initialTime = 2 * minute * second;
@@ -228,7 +230,11 @@ const ClassicGame = ({}: Props) => {
 
       {status === "running" && (
         <div className="flex h-full flex-1 flex-col justify-between gap-4">
-          {problem && <GameView problem={problem} />}
+          {problem && (
+            <div ref={focusTrapRef}>
+              <GameView problem={problem} />
+            </div>
+          )}
           <GameChoices
             onAnswer={handleAnswer}
             choices={problem?.choices || []}
