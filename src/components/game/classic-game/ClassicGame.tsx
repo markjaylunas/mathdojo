@@ -9,17 +9,12 @@ import GameChoices from "../layout/GameChoices";
 import GameHeader from "../layout/GameHeader";
 import GameTimer from "../layout/GameTimer";
 import useGameTimer from "@/src/hooks/use-game-timer";
-import { useFocusTrap, useFullscreen } from "@mantine/hooks";
+import { useFullscreen } from "@mantine/hooks";
 import ClassicStartScreen from "./ClassicStartScreen";
 import GameStartingCountdown from "../layout/GameStartingCountdown";
 import { formatTime } from "@/src/lib/utils";
 import GameFinished from "../layout/GameFinished";
-import {
-  convertTimeToMilliseconds,
-  game,
-  generateProblem,
-  INITIAL_GAME_INFO,
-} from "@/src/lib/game";
+import { game, generateProblem, INITIAL_GAME_INFO } from "@/src/lib/game";
 import Text from "../../ui/text";
 import {
   CLASSIC_ANSWER_DELAY_TIME,
