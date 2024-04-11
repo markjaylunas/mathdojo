@@ -133,9 +133,11 @@ const useGameTimer = (initialValue: number): UseGameTimer => {
 
     if (isActive && value > 0) {
       interval = setInterval(() => {
-        setValue((prevMilliseconds) => prevMilliseconds - 10);
+        if (isActive) {
+          setValue((prevMilliseconds) => prevMilliseconds - 10);
+        }
       }, 10);
-    } else if (interval) {
+    } else if (!isActive && interval) {
       clearInterval(interval);
     }
 
