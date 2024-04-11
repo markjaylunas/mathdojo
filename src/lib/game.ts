@@ -38,6 +38,16 @@ export const game: Game = {
   operationSymbol: "+",
 };
 
+export const convertTimeToMilliseconds = (time: {
+  hours: number;
+  minutes: number;
+  seconds: number;
+  milliseconds: number;
+}) => {
+  const { hours, minutes, seconds, milliseconds } = time;
+  return hours * 3600000 + minutes * 60000 + seconds * 1000 + milliseconds;
+};
+
 export const generateProblem = (game: Game): Problem => {
   const { digit_range, operation, operationSymbol, id: game_id } = game;
   const sortedDigitRange = digit_range.sort((a, b) => a.order - b.order);

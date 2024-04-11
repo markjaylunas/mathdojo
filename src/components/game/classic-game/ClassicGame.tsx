@@ -14,8 +14,20 @@ import ClassicStartScreen from "./ClassicStartScreen";
 import GameStartingCountdown from "../layout/GameStartingCountdown";
 import { formatTime } from "@/src/lib/utils";
 import GameFinished from "../layout/GameFinished";
-import { game, generateProblem, INITIAL_GAME_INFO } from "@/src/lib/game";
+import {
+  convertTimeToMilliseconds,
+  game,
+  generateProblem,
+  INITIAL_GAME_INFO,
+} from "@/src/lib/game";
 import Text from "../../ui/text";
+import {
+  CLASSIC_ANSWER_DELAY_TIME,
+  CLASSIC_CORRECT_ADD_TIME,
+  CLASSIC_INCORRECT_REDUCE_TIME,
+  CLASSIC_TIME,
+  GAME_START_TIME,
+} from "@/src/lib/game.config";
 
 type Props = {};
 
@@ -26,9 +38,6 @@ const ClassicGame = ({}: Props) => {
   const { toggle: toggleFullscreen, fullscreen: isFullscreen } =
     useFullscreen();
 
-  const second = 1000;
-  const minute = 60;
-  const initialTime = 2 * minute * second;
   const [level, setLevel] = useState<number>(1);
   const [combo, setCombo] = useState<number>(0);
   const [gameInfo, setGameInfo] = useState<GameInfo>(INITIAL_GAME_INFO);
@@ -43,13 +52,13 @@ const ClassicGame = ({}: Props) => {
     lap,
     history,
     resume,
-  } = useGameTimer(initialTime);
+  } = useGameTimer(CLASSIC_TIME);
 
   const {
     timer: initialCountDown,
     start: initialStart,
     reset: initialReset,
-  } = useGameTimer(4 * second);
+  } = useGameTimer(GAME_START_TIME);
 
   const handleGameStart = () => {
     initialStart();
@@ -62,7 +71,6 @@ const ClassicGame = ({}: Props) => {
     if (!problem) return;
     if (problem.status !== "unanswered") return;
     lap();
-    console.log(timer);
 
     const isCorrect = answer === problem.answer;
     setGameInfo((info) => ({
@@ -78,10 +86,10 @@ const ClassicGame = ({}: Props) => {
     }));
 
     if (isCorrect) {
-      addTimer(7000);
+      addTimer(CLASSIC_CORRECT_ADD_TIME);
       setCombo((combo) => combo + 1);
     } else {
-      reduceTimer(5000);
+      reduceTimer(CLASSIC_INCORRECT_REDUCE_TIME);
       setCombo(0);
     }
 
@@ -97,7 +105,7 @@ const ClassicGame = ({}: Props) => {
 
     setTimeout(() => {
       setProblem(generateProblem(game));
-    }, 1500);
+    }, CLASSIC_ANSWER_DELAY_TIME);
   };
 
   const handleRetry = () => {
@@ -109,25 +117,32 @@ const ClassicGame = ({}: Props) => {
     setStatus("idle");
   };
 
+  const handleFinish = () => {
+    setStatus("finished");
+    setProblem(null);
+    if (isFullscreen) toggleFullscreen();
+  };
+
+  const handleGameRun = () => {
+    setStatus("running");
+    start();
+  };
+
   useEffect(() => {
     if (timer.value === 0) {
-      setStatus("finished");
-      setProblem(null);
-      if (isFullscreen) toggleFullscreen();
+      handleFinish();
     }
   }, [timer]);
 
   useEffect(() => {
     if (formatTime(initialCountDown.value).seconds === 0) {
-      setStatus("running");
-      start();
+      handleGameRun();
     }
   }, [initialCountDown]);
 
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       if (status === "running") {
-        event.preventDefault();
         event.returnValue =
           "Are you sure you want to leave? Your game progress will be lost.";
       }
