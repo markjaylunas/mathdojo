@@ -28,13 +28,17 @@ export const game: Game = {
   operationSymbol: "+",
 };
 
-export const convertTimeToMilliseconds = (time: {
-  hours: number;
-  minutes: number;
-  seconds: number;
-  milliseconds: number;
+export const convertTimeToMilliseconds = ({
+  hours = 0,
+  minutes = 0,
+  seconds = 0,
+  milliseconds = 0,
+}: {
+  hours?: number;
+  minutes?: number;
+  seconds?: number;
+  milliseconds?: number;
 }) => {
-  const { hours, minutes, seconds, milliseconds } = time;
   return hours * 3600000 + minutes * 60000 + seconds * 1000 + milliseconds;
 };
 

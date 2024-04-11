@@ -82,7 +82,6 @@ export type GameInfo = {
   correct: number;
   incorrect: number;
   score: number;
-  duration: number;
 };
 
 export type GameStatus =

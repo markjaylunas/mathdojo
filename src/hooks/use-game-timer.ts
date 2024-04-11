@@ -3,8 +3,11 @@ import { useState, useEffect, Dispatch, SetStateAction } from "react";
 export type GameTimerState = {
   value: number;
   initialValue: number;
-  totalAddedTime: number;
   isActive: boolean;
+  history: TimerAction[];
+  duration: number;
+  totalAddedTime: number;
+  totalReducedTime: number;
 };
 
 export type TimerAction = {
@@ -25,15 +28,19 @@ export type UseGameTimer = {
   add: (milliseconds: number) => void;
   reduce: (milliseconds: number) => void;
   resume: () => void;
-  history: TimerAction[];
 };
 
 const useGameTimer = (initialValue: number): UseGameTimer => {
-  const [status, setStatus] = useState<"idle" | "running" | "paused">("idle");
+  const [status, setStatus] = useState<
+    "idle" | "running" | "paused" | "finished"
+  >("idle");
   const [value, setValue] = useState(initialValue);
   const [isActive, setIsActive] = useState(false);
   const [history, setHistory] = useState<TimerAction[]>([]);
   const [lastLapTime, setLastLapTime] = useState(0);
+  const [totalAdded, setTotalAdded] = useState(0);
+  const [totalReduced, setTotalReduced] = useState(0);
+  const [duration, setDuration] = useState(0);
   const [totalAddedTime, setTotalAddedTime] = useState(0);
   const [totalReducedTime, setTotalReducedTime] = useState(0);
 
@@ -63,7 +70,7 @@ const useGameTimer = (initialValue: number): UseGameTimer => {
     setStatus("idle");
     setValue(initialValue);
     setLastLapTime(0);
-    setTotalAddedTime(0);
+    setTotalAdded(0);
     setHistory([{ action: "Reset", time: initialValue }]);
   };
 
@@ -76,10 +83,10 @@ const useGameTimer = (initialValue: number): UseGameTimer => {
       history.find((action) => action.action === "Start")?.time || 0;
     const lastLapTime = lastLapAction ? lastLapAction.time : startTime;
     const lapDifference = Math.abs(
-      value - totalAddedTime + totalReducedTime - lastLapTime
+      value - totalAdded + totalReduced - lastLapTime
     );
-    setTotalAddedTime(0);
-    setTotalReducedTime(0);
+    setTotalAdded(0);
+    setTotalReduced(0);
     setHistory((prevHistory) => [
       ...prevHistory,
       { action: "Lap", time: value, lapDifference },
@@ -89,6 +96,9 @@ const useGameTimer = (initialValue: number): UseGameTimer => {
   const add = (addedMilliseconds: number) => {
     if (status !== "running") return;
     setValue((prevMilliseconds) => prevMilliseconds + addedMilliseconds);
+    setTotalAdded(
+      (prevTotalAddedTime) => prevTotalAddedTime + addedMilliseconds
+    );
     setTotalAddedTime(
       (prevTotalAddedTime) => prevTotalAddedTime + addedMilliseconds
     );
@@ -96,7 +106,7 @@ const useGameTimer = (initialValue: number): UseGameTimer => {
       ...prevHistory,
       {
         action: `Add`,
-        time: value + addedMilliseconds,
+        time: value,
         added: addedMilliseconds,
       },
     ]);
@@ -105,6 +115,9 @@ const useGameTimer = (initialValue: number): UseGameTimer => {
   const reduce = (reducedMilliseconds: number) => {
     if (status !== "running" || value - reducedMilliseconds < 0) return;
     setValue((prevMilliseconds) => prevMilliseconds - reducedMilliseconds);
+    setTotalReduced(
+      (prevTotalReducedTime) => prevTotalReducedTime + reducedMilliseconds
+    );
     setTotalReducedTime(
       (prevTotalReducedTime) => prevTotalReducedTime + reducedMilliseconds
     );
@@ -112,7 +125,7 @@ const useGameTimer = (initialValue: number): UseGameTimer => {
       ...prevHistory,
       {
         action: `Reduce`,
-        time: value - reducedMilliseconds,
+        time: value,
         reduced: reducedMilliseconds,
       },
     ]);
@@ -128,6 +141,15 @@ const useGameTimer = (initialValue: number): UseGameTimer => {
     ]);
   };
 
+  const finish = () => {
+    setHistory((prevHistory) => [
+      ...prevHistory,
+      { action: "Finish", time: value },
+    ]);
+    setIsActive(false);
+    setStatus("finished");
+  };
+
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
 
@@ -135,6 +157,7 @@ const useGameTimer = (initialValue: number): UseGameTimer => {
       interval = setInterval(() => {
         if (isActive) {
           setValue((prevMilliseconds) => prevMilliseconds - 10);
+          setDuration((prevDuration) => prevDuration + 10);
         }
       }, 10);
     } else if (!isActive && interval) {
@@ -142,6 +165,7 @@ const useGameTimer = (initialValue: number): UseGameTimer => {
     }
 
     if (value === 0) {
+      finish();
       reset();
     }
 
@@ -153,7 +177,15 @@ const useGameTimer = (initialValue: number): UseGameTimer => {
   }, [isActive, value]);
 
   return {
-    timer: { value, initialValue, totalAddedTime, isActive },
+    timer: {
+      value,
+      initialValue,
+      isActive,
+      history,
+      duration,
+      totalAddedTime,
+      totalReducedTime,
+    },
     setValue,
     start,
     pause,
@@ -162,7 +194,6 @@ const useGameTimer = (initialValue: number): UseGameTimer => {
     add,
     reduce,
     resume,
-    history,
   };
 };
 

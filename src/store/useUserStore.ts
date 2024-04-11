@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { createJSONStorage, persist } from "zustand/middleware";
 import { Role } from "../lib/types";
 
 type User = {
@@ -27,7 +27,11 @@ const useUserStore = create<UseUserState & UseUserActions>()(
       setUser: (user) => set({ user }),
       clearUser: () => set({ user: null }),
     }),
-    { name: "user", skipHydration: true }
+    {
+      name: "user",
+      skipHydration: true,
+      storage: createJSONStorage(() => sessionStorage),
+    }
   )
 );
 

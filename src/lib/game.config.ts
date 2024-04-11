@@ -1,4 +1,5 @@
-import { convertTimeToMilliseconds } from "./game";
+import { GameSession } from "../store/useGameSessionStore";
+import { convertTimeToMilliseconds, game } from "./game";
 import { GameInfo } from "./types";
 
 export const INITIAL_CLASSIC_GAME_INFO: GameInfo = {
@@ -8,40 +9,44 @@ export const INITIAL_CLASSIC_GAME_INFO: GameInfo = {
   correct: 0,
   incorrect: 0,
   score: 0,
-  duration: 0,
+};
+
+export const GAME_SESSION_STORE_INITIAL_STATE: GameSession = {
+  gameSetting: null,
+  status: "idle",
+  problem: null,
+  problemList: null,
+  level: 1,
+  combo: 0,
+  gameInfo: INITIAL_CLASSIC_GAME_INFO,
+  timer: {
+    value: 0,
+    initialValue: 0,
+    isActive: false,
+    history: [],
+    duration: 0,
+    totalAddedTime: 0,
+    totalReducedTime: 0,
+  },
 };
 
 export const GAME_START_TIME = convertTimeToMilliseconds({
-  hours: 0,
-  minutes: 0,
   seconds: 4,
-  milliseconds: 0,
 });
 
 export const CLASSIC_ANSWER_DELAY_TIME = convertTimeToMilliseconds({
-  hours: 0,
-  minutes: 0,
   seconds: 1,
   milliseconds: 500,
 });
 
 export const CLASSIC_TIME = convertTimeToMilliseconds({
-  hours: 0,
-  minutes: 2,
-  seconds: 0,
-  milliseconds: 0,
+  seconds: 10,
 });
 
 export const CLASSIC_CORRECT_ADD_TIME = convertTimeToMilliseconds({
-  hours: 0,
-  minutes: 0,
   seconds: 7,
-  milliseconds: 0,
 });
 
 export const CLASSIC_INCORRECT_REDUCE_TIME = convertTimeToMilliseconds({
-  hours: 0,
-  minutes: 0,
   seconds: 5,
-  milliseconds: 0,
 });
