@@ -13,7 +13,7 @@ export const INITIAL_CLASSIC_GAME_INFO: GameInfo = {
 
 export const GAME_START_TIME = convertTimeToMilliseconds({
   hours: 0,
-  minutes: 10,
+  minutes: 0,
   seconds: 4,
   milliseconds: 0,
 });

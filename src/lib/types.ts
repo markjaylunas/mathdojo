@@ -90,4 +90,5 @@ export type GameStatus =
   | "starting"
   | "running"
   | "paused"
+  | "resuming"
   | "finished";

@@ -56,4 +56,4 @@ export const DEFAULT_FORGOT_PASSWORD_PATH = "/forgot-password";
  * @type {string}
  */
 
-export const DEFAULT_HOME_PATH = "/";
+export const DEFAULT_HOME_PATH = "/home";

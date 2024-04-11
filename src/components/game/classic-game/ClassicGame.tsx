@@ -19,16 +19,19 @@ import ClassicLobbyScreen from "./ClassicLobbyScreen";
 import ClassicRunningScreen from "./ClassicRunningScreen";
 import ClassicPausedScreen from "./ClassicPausedScreen";
 import useGameTimer from "@/src/hooks/use-game-timer";
+import { useRouter } from "next/navigation";
+import { DEFAULT_HOME_PATH } from "@/src/lib/routes";
 
 type Props = {};
 
 const ClassicGame = ({}: Props) => {
+  const router = useRouter();
+
   const [status, setStatus] = useState<GameStatus>("idle");
   const [problemList, setProblemList] = useState<Problem[] | null>(null);
   const [problem, setProblem] = useState<Problem | null>(null);
   const { toggle: toggleFullscreen, fullscreen: isFullscreen } =
     useFullscreen();
-
   const [level, setLevel] = useState<number>(1);
   const [combo, setCombo] = useState<number>(0);
   const [gameInfo, setGameInfo] = useState<GameInfo>(INITIAL_CLASSIC_GAME_INFO);
@@ -100,9 +103,11 @@ const ClassicGame = ({}: Props) => {
     }, CLASSIC_ANSWER_DELAY_TIME);
   };
 
-  const handleRetry = () => {
+  const handleReset = () => {
     setProblemList(null);
+    setProblem(null);
     setGameInfo(INITIAL_CLASSIC_GAME_INFO);
+    setCombo(0);
     setLevel(1);
     initialReset();
     timerReset();
@@ -116,22 +121,33 @@ const ClassicGame = ({}: Props) => {
   };
 
   const handleGameRun = () => {
-    setStatus("running");
-    timerStart();
+    if (status === "resuming") {
+      setStatus("running");
+      timerResume();
+    } else if (status === "starting") {
+      setStatus("running");
+      timerStart();
+    }
   };
 
   const handlePause = () => {
     if (status !== "running") return;
     timerPause();
     setStatus("paused");
-    if (isFullscreen) toggleFullscreen();
   };
 
   const handleResume = () => {
     if (status !== "paused") return;
-    timerResume();
-    setStatus("running");
+    initialStart();
+    setStatus("resuming");
+    setProblem(generateProblem(game));
     if (!isFullscreen) toggleFullscreen();
+  };
+
+  const handleHome = () => {
+    handleReset();
+    if (isFullscreen) toggleFullscreen();
+    router.push(DEFAULT_HOME_PATH);
   };
 
   useEffect(() => {
@@ -183,9 +199,19 @@ const ClassicGame = ({}: Props) => {
           />
         );
       case "paused":
-        return <ClassicPausedScreen />;
+        return (
+          <ClassicPausedScreen
+            onResume={handleResume}
+            onRestart={handleReset}
+            onHome={handleHome}
+          />
+        );
+      case "resuming":
+        return (
+          <GameStartingCountdown countdownTimer={initialCountDown.value} />
+        );
       case "finished":
-        return <GameFinished gameInfo={gameInfo} onRetry={handleRetry} />;
+        return <GameFinished gameInfo={gameInfo} onRetry={handleReset} />;
       default:
         return <ClassicLobbyScreen onGameStart={handleGameStart} />;
     }
