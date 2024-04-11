@@ -25,8 +25,7 @@ export const game: Game = {
       gameId: 1,
     },
   ],
-  // operationList: ["ADDITION", "SUBTRACTION", "MULTIPLICATION", "DIVISION"],
-  operationList: ["DIVISION"],
+  operationList: ["ADDITION", "SUBTRACTION", "MULTIPLICATION", "DIVISION"],
 };
 
 export const convertTimeToMilliseconds = ({
