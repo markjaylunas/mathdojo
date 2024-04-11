@@ -13,7 +13,7 @@ export const INITIAL_CLASSIC_GAME_INFO: GameInfo = {
 
 export const GAME_SESSION_STORE_INITIAL_STATE: GameSession = {
   gameSetting: null,
-  status: "idle",
+  status: "IDLE",
   problem: null,
   problemList: null,
   level: 1,

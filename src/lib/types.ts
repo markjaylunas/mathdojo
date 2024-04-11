@@ -29,6 +29,8 @@ export type Role = "ADMIN" | "USER";
 
 export type TUser = (User & { role: Role }) | null | undefined;
 
+export type OperationSymbol = "+" | "-" | "x" | "÷";
+
 export type Problem = {
   id: string;
   game_id: string;
@@ -38,7 +40,7 @@ export type Problem = {
   answer: number;
   userAnswer: number | null;
   choices: number[];
-  status: "correct" | "incorrect" | "unanswered";
+  status: "CORRECT" | "WRONG" | "UNANSWERED";
 };
 
 export type Operation =
@@ -47,32 +49,29 @@ export type Operation =
   | "MULTIPLICATION"
   | "DIVISION";
 
-export type OperationSymbol = "+" | "-" | "x" | "÷";
-
 export type Difficulty =
-  | "easy"
-  | "medium"
-  | "hard"
-  | "expert"
-  | "insane"
-  | "impossible"
-  | "godlike";
+  | "DYNAMIC"
+  | "EASY"
+  | "MEDIUM"
+  | "HARD"
+  | "EXTREME"
+  | "INSANE"
+  | "IMPOSSIBLE";
 
 export type Game = {
   id: string;
   title: string;
   description: string;
   difficulty: Difficulty;
-  digit_range: {
+  digitRange: {
     id: string;
     order: number;
     digit: number;
     minRange: number;
     maxRange: number;
-    game_id: number;
+    gameId: number;
   }[];
-  operation: Operation;
-  operationSymbol: OperationSymbol;
+  operationList: Operation[];
 };
 
 export type GameInfo = {
@@ -85,9 +84,9 @@ export type GameInfo = {
 };
 
 export type GameStatus =
-  | "idle"
-  | "starting"
-  | "running"
-  | "paused"
-  | "resuming"
-  | "finished";
+  | "IDLE"
+  | "STARTING"
+  | "RUNNING"
+  | "PAUSED"
+  | "RESUMING"
+  | "FINISHED";

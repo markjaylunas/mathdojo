@@ -68,7 +68,7 @@ const ClassicRunningScreen = ({
           problemId={problem.id}
           onAnswer={onAnswer}
           choices={problem?.choices || []}
-          disabled={problem?.status !== "unanswered"}
+          disabled={problem?.status !== "UNANSWERED"}
         />
       </div>
     </GameLayout>

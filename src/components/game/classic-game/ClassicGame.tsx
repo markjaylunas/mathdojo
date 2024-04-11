@@ -61,12 +61,12 @@ const ClassicGame = ({}: Props) => {
   } = useGameTimer(CLASSIC_ANSWER_DELAY_TIME);
 
   const handleGameStart = () => {
-    if (status !== "starting") {
+    if (status !== "STARTING") {
       initialStart();
       setGameSession({
         ...gameSession,
-        status: "starting",
-        problem: generateProblem(game),
+        status: "STARTING",
+        problem: generateProblem({ game, level }),
       });
       toggleFullscreen();
     }
@@ -74,7 +74,7 @@ const ClassicGame = ({}: Props) => {
 
   const handleAnswer = (answer: number) => {
     if (!problem) return;
-    if (problem.status !== "unanswered") return;
+    if (problem.status !== "UNANSWERED") return;
 
     timerLap();
 
@@ -89,7 +89,7 @@ const ClassicGame = ({}: Props) => {
     const problemAnswered: Problem = {
       ...problem,
       userAnswer: answer,
-      status: isCorrect ? "correct" : "incorrect",
+      status: isCorrect ? "CORRECT" : "WRONG",
     };
 
     const newProblemList = [...(problemList || []), problemAnswered];
@@ -118,14 +118,14 @@ const ClassicGame = ({}: Props) => {
     resetGameSession();
     initialReset();
     timerReset();
-    if (status !== "idle") setGameSession({ ...gameSession, status: "idle" });
+    if (status !== "IDLE") setGameSession({ ...gameSession, status: "IDLE" });
   };
 
   const handleFinish = () => {
-    if (status !== "running") return;
+    if (status !== "RUNNING") return;
     setGameSession({
       ...gameSession,
-      status: "finished",
+      status: "FINISHED",
       problem: null,
       timer: timer,
     });
@@ -133,27 +133,27 @@ const ClassicGame = ({}: Props) => {
   };
 
   const handleGameRun = () => {
-    if (status === "resuming") {
+    if (status === "RESUMING") {
       timerResume();
-    } else if (status === "starting") {
+    } else if (status === "STARTING") {
       timerStart();
     }
-    if (status !== "running")
-      setGameSession({ ...gameSession, status: "running" });
+    if (status !== "RUNNING")
+      setGameSession({ ...gameSession, status: "RUNNING" });
   };
 
   const handlePause = () => {
-    if (status !== "paused") {
+    if (status !== "PAUSED") {
       timerPause();
-      setGameSession({ ...gameSession, status: "paused" });
+      setGameSession({ ...gameSession, status: "PAUSED" });
     }
   };
 
   const handleResume = () => {
-    if (status !== "paused") return;
+    if (status !== "PAUSED") return;
     initialStart();
-    const newProblem = generateProblem(game);
-    setGameSession({ ...gameSession, status: "resuming", problem: newProblem });
+    const newProblem = generateProblem({ game, level });
+    setGameSession({ ...gameSession, status: "RESUMING", problem: newProblem });
     if (!isFullscreen) toggleFullscreen();
   };
 
@@ -164,8 +164,9 @@ const ClassicGame = ({}: Props) => {
   };
 
   const handleCooldownFinish = () => {
-    if (status === "running") {
-      const newProblem = generateProblem(game);
+    if (status === "RUNNING") {
+      const newProblem = generateProblem({ game, level });
+      console.log({ newProblem });
       setGameSession({ ...gameSession, problem: newProblem });
     }
   };
@@ -190,7 +191,7 @@ const ClassicGame = ({}: Props) => {
 
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      if (status === "running") {
+      if (status === "RUNNING") {
         event.returnValue =
           "Are you sure you want to leave? Your game progress will be lost.";
       }
@@ -210,13 +211,13 @@ const ClassicGame = ({}: Props) => {
 
   const getGameScreen = (status: GameStatus) => {
     switch (status) {
-      case "idle":
+      case "IDLE":
         return <ClassicLobbyScreen onGameStart={handleGameStart} />;
-      case "starting":
+      case "STARTING":
         return (
           <GameStartingCountdown countdownTimer={initialCountDown.value} />
         );
-      case "running":
+      case "RUNNING":
         if (!problem) return null;
         return (
           <ClassicRunningScreen
@@ -229,7 +230,7 @@ const ClassicGame = ({}: Props) => {
             onPause={handlePause}
           />
         );
-      case "paused":
+      case "PAUSED":
         return (
           <ClassicPausedScreen
             onResume={handleResume}
@@ -237,11 +238,11 @@ const ClassicGame = ({}: Props) => {
             onHome={handleHome}
           />
         );
-      case "resuming":
+      case "RESUMING":
         return (
           <GameStartingCountdown countdownTimer={initialCountDown.value} />
         );
-      case "finished":
+      case "FINISHED":
         return (
           <GameFinished
             gameInfo={gameInfo}

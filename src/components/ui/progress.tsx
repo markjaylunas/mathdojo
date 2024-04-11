@@ -9,9 +9,9 @@ import { cva, VariantProps } from "class-variance-authority";
 const progressVariants = cva("h-full w-full flex-1 bg-primary transition-all", {
   variants: {
     status: {
-      unanswered: "",
-      correct: "bg-green-600 dark:bg-green-700",
-      incorrect: "bg-red-600 dark:bg-red-700",
+      UNANSWERED: "",
+      CORRECT: "bg-green-600 dark:bg-green-700",
+      WRONG: "bg-red-600 dark:bg-red-700",
     },
     size: {
       default: "h-2",
@@ -22,7 +22,7 @@ const progressVariants = cva("h-full w-full flex-1 bg-primary transition-all", {
   },
   defaultVariants: {
     size: "default",
-    status: "unanswered",
+    status: "UNANSWERED",
   },
 });
 

@@ -22,9 +22,9 @@ const Number = ({
   const numberValue = `${" ".repeat(spaceCount)}${numberFullValue}`;
 
   const color =
-    status === "correct"
+    status === "CORRECT"
       ? "text-green-600 dark:text-green-700"
-      : status === "incorrect"
+      : status === "WRONG"
         ? "text-red-600 dark:text-red-700"
         : "text-gray-600 dark:text-gray-300";
 
