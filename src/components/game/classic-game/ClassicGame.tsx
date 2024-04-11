@@ -155,10 +155,13 @@ const ClassicGame = ({}: Props) => {
       {status === "starting" && (
         <GameStartingCountdown countdownTimer={initialCountDown.value} />
       )}
+
       {status === "finished" && (
         <GameFinished onRetry={handleRetry} gameInfo={gameInfo} />
       )}
+
       {status === "idle" && <ClassicStartScreen />}
+
       {status === "running" && (
         <GameHeader>
           <GameTimer status={problem?.status || "unanswered"} timer={timer} />
@@ -192,17 +195,16 @@ const ClassicGame = ({}: Props) => {
         </GameHeader>
       )}
 
-      {status === "running" && (
+      {status === "running" && problem && (
         <div className="flex h-full flex-1 flex-col justify-between gap-4">
-          {problem && <GameView problem={problem} />}
-          {problem && (
-            <GameChoices
-              problemId={problem.id}
-              onAnswer={handleAnswer}
-              choices={problem?.choices || []}
-              disabled={problem?.status !== "unanswered"}
-            />
-          )}
+          <GameView problem={problem} />
+
+          <GameChoices
+            problemId={problem.id}
+            onAnswer={handleAnswer}
+            choices={problem?.choices || []}
+            disabled={problem?.status !== "unanswered"}
+          />
         </div>
       )}
 
