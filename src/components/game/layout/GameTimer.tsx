@@ -1,13 +1,13 @@
-import { TimerAction, TimerProps } from "@/src/hooks/use-game-timer";
+import { GameTimerState } from "@/src/hooks/use-game-timer";
 import { formatTime } from "@/src/lib/utils";
 import React from "react";
 import { Progress } from "../../ui/progress";
 import { Problem } from "@/src/lib/types";
 
-interface GameTimerProps {
-  timer: TimerProps;
+type GameTimerProps = {
+  timer: GameTimerState;
   status: Problem["status"];
-}
+};
 
 const GameTimer: React.FC<GameTimerProps> = ({ timer, status }) => {
   const { formattedTime } = formatTime(timer.value);

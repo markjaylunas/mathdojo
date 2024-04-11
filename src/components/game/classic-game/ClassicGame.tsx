@@ -1,28 +1,24 @@
 "use client";
 
-import GameLayout from "../layout/GameLayout";
 import { useEffect, useState } from "react";
-import { Button } from "../../ui/button";
 import { GameInfo, GameStatus, Problem } from "@/src/lib/types";
-import GameView from "../layout/GameView";
-import GameChoices from "../layout/GameChoices";
-import GameHeader from "../layout/GameHeader";
-import GameTimer from "../layout/GameTimer";
-import useGameTimer from "@/src/hooks/use-game-timer";
 import { useFullscreen } from "@mantine/hooks";
-import ClassicStartScreen from "./ClassicStartScreen";
 import GameStartingCountdown from "../layout/GameStartingCountdown";
 import { formatTime } from "@/src/lib/utils";
 import GameFinished from "../layout/GameFinished";
-import { game, generateProblem, INITIAL_GAME_INFO } from "@/src/lib/game";
-import Text from "../../ui/text";
+import { game, generateProblem } from "@/src/lib/game";
 import {
   CLASSIC_ANSWER_DELAY_TIME,
   CLASSIC_CORRECT_ADD_TIME,
   CLASSIC_INCORRECT_REDUCE_TIME,
   CLASSIC_TIME,
   GAME_START_TIME,
+  INITIAL_CLASSIC_GAME_INFO,
 } from "@/src/lib/game.config";
+import ClassicLobbyScreen from "./ClassicLobbyScreen";
+import ClassicRunningScreen from "./ClassicRunningScreen";
+import ClassicPausedScreen from "./ClassicPausedScreen";
+import useGameTimer from "@/src/hooks/use-game-timer";
 
 type Props = {};
 
@@ -35,18 +31,18 @@ const ClassicGame = ({}: Props) => {
 
   const [level, setLevel] = useState<number>(1);
   const [combo, setCombo] = useState<number>(0);
-  const [gameInfo, setGameInfo] = useState<GameInfo>(INITIAL_GAME_INFO);
+  const [gameInfo, setGameInfo] = useState<GameInfo>(INITIAL_CLASSIC_GAME_INFO);
 
   const {
     timer,
-    start,
-    pause,
-    reset,
+    start: timerStart,
+    pause: timerPause,
+    reset: timerReset,
     add: addTimer,
     reduce: reduceTimer,
-    lap,
+    lap: timerLap,
     history,
-    resume,
+    resume: timerResume,
   } = useGameTimer(CLASSIC_TIME);
 
   const {
@@ -65,7 +61,8 @@ const ClassicGame = ({}: Props) => {
   const handleAnswer = (answer: number) => {
     if (!problem) return;
     if (problem.status !== "unanswered") return;
-    lap();
+
+    timerLap();
 
     const isCorrect = answer === problem.answer;
     setGameInfo((info) => ({
@@ -105,10 +102,10 @@ const ClassicGame = ({}: Props) => {
 
   const handleRetry = () => {
     setProblemList(null);
-    setGameInfo(INITIAL_GAME_INFO);
+    setGameInfo(INITIAL_CLASSIC_GAME_INFO);
     setLevel(1);
     initialReset();
-    reset();
+    timerReset();
     setStatus("idle");
   };
 
@@ -120,7 +117,21 @@ const ClassicGame = ({}: Props) => {
 
   const handleGameRun = () => {
     setStatus("running");
-    start();
+    timerStart();
+  };
+
+  const handlePause = () => {
+    if (status !== "running") return;
+    timerPause();
+    setStatus("paused");
+    if (isFullscreen) toggleFullscreen();
+  };
+
+  const handleResume = () => {
+    if (status !== "paused") return;
+    timerResume();
+    setStatus("running");
+    if (!isFullscreen) toggleFullscreen();
   };
 
   useEffect(() => {
@@ -150,71 +161,37 @@ const ClassicGame = ({}: Props) => {
     };
   }, [status]);
 
-  return (
-    <GameLayout>
-      {status === "starting" && (
-        <GameStartingCountdown countdownTimer={initialCountDown.value} />
-      )}
-
-      {status === "finished" && (
-        <GameFinished onRetry={handleRetry} gameInfo={gameInfo} />
-      )}
-
-      {status === "idle" && <ClassicStartScreen />}
-
-      {status === "running" && (
-        <GameHeader>
-          <GameTimer status={problem?.status || "unanswered"} timer={timer} />
-          <div className="flex justify-between">
-            <div>
-              <Text className="mt-2">
-                <span className="text-gray-500 dark:text-gray-400">
-                  Level:{" "}
-                </span>
-                <span className="text-2xl font-bold">{level}</span>
-              </Text>
-              {combo > 1 && (
-                <Text className="mt-2 text-2xl font-extrabold">
-                  Combo {combo}x
-                </Text>
-              )}
-            </div>
-            <div>
-              <Text className="mt-2">
-                <span className="text-gray-500 dark:text-gray-400">
-                  Score:{" "}
-                </span>
-                <span className="text-2xl font-bold">{gameInfo.score}</span>
-              </Text>
-
-              {/* <Button onClick={toggleFullscreen}>
-                {isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
-              </Button> */}
-            </div>
-          </div>
-        </GameHeader>
-      )}
-
-      {status === "running" && problem && (
-        <div className="flex h-full flex-1 flex-col justify-between gap-4">
-          <GameView problem={problem} />
-
-          <GameChoices
-            problemId={problem.id}
+  const getGameScreen = (status: GameStatus) => {
+    switch (status) {
+      case "idle":
+        return <ClassicLobbyScreen onGameStart={handleGameStart} />;
+      case "starting":
+        return (
+          <GameStartingCountdown countdownTimer={initialCountDown.value} />
+        );
+      case "running":
+        if (!problem) return null;
+        return (
+          <ClassicRunningScreen
+            gameInfo={gameInfo}
+            timer={timer}
+            level={level}
+            combo={combo}
+            problem={problem}
             onAnswer={handleAnswer}
-            choices={problem?.choices || []}
-            disabled={problem?.status !== "unanswered"}
+            onPause={handlePause}
           />
-        </div>
-      )}
+        );
+      case "paused":
+        return <ClassicPausedScreen />;
+      case "finished":
+        return <GameFinished gameInfo={gameInfo} onRetry={handleRetry} />;
+      default:
+        return <ClassicLobbyScreen onGameStart={handleGameStart} />;
+    }
+  };
 
-      {status === "idle" && (
-        <Button className="flex-none" onClick={handleGameStart}>
-          Start
-        </Button>
-      )}
-    </GameLayout>
-  );
+  return getGameScreen(status);
 };
 
 export default ClassicGame;

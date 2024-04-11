@@ -1,6 +1,6 @@
 import { useState, useEffect, Dispatch, SetStateAction } from "react";
 
-export type TimerProps = {
+export type GameTimerState = {
   value: number;
   initialValue: number;
   totalAddedTime: number;
@@ -15,8 +15,8 @@ export type TimerAction = {
   reduced?: number;
 };
 
-type ReturnType = {
-  timer: TimerProps;
+export type UseGameTimer = {
+  timer: GameTimerState;
   setValue: Dispatch<SetStateAction<number>>;
   start: () => void;
   pause: () => void;
@@ -28,7 +28,7 @@ type ReturnType = {
   history: TimerAction[];
 };
 
-const useGameTimer = (initialValue: number): ReturnType => {
+const useGameTimer = (initialValue: number): UseGameTimer => {
   const [status, setStatus] = useState<"idle" | "running" | "paused">("idle");
   const [value, setValue] = useState(initialValue);
   const [isActive, setIsActive] = useState(false);
