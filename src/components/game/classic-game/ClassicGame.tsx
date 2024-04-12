@@ -74,14 +74,6 @@ const ClassicGame = ({}: Props) => {
     if (!problem) return;
     if (problem.status !== "UNANSWERED") return;
 
-    const timerLapTime = timerLap();
-    const isFirstProblem = problemList === null;
-    const lapTime =
-      timerLapTime &&
-      (isFirstProblem
-        ? timerLapTime
-        : timerLapTime - CLASSIC_ANSWER_DELAY_TIME);
-
     const isCorrect = answer === problem.answer;
 
     if (isCorrect) {
@@ -89,6 +81,14 @@ const ClassicGame = ({}: Props) => {
     } else {
       reduceTimer(CLASSIC_INCORRECT_REDUCE_TIME);
     }
+
+    const timerLapTime = timerLap();
+    const isFirstProblem = problemList === null;
+    const lapTime =
+      timerLapTime &&
+      (isFirstProblem
+        ? timerLapTime
+        : timerLapTime - CLASSIC_ANSWER_DELAY_TIME);
 
     const problemAnswered: Problem = {
       ...problem,
