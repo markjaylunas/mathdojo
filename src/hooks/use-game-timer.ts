@@ -24,7 +24,7 @@ export type UseGameTimer = {
   start: () => void;
   pause: () => void;
   reset: () => void;
-  lap: () => void;
+  lap: () => number | null;
   add: (milliseconds: number) => void;
   reduce: (milliseconds: number) => void;
   resume: () => void;
@@ -71,11 +71,15 @@ const useGameTimer = (initialValue: number): UseGameTimer => {
     setValue(initialValue);
     setLastLapTime(0);
     setTotalAdded(0);
+    setTotalReduced(0);
+    setDuration(0);
+    setTotalAddedTime(0);
+    setTotalReducedTime(0);
     setHistory([{ action: "Reset", time: initialValue }]);
   };
 
   const lap = () => {
-    if (status !== "running") return;
+    if (status !== "running") return null;
     const lastLapAction = history
       .filter((action) => action.action === "Lap")
       .pop();
@@ -91,6 +95,7 @@ const useGameTimer = (initialValue: number): UseGameTimer => {
       ...prevHistory,
       { action: "Lap", time: value, lapDifference },
     ]);
+    return lapDifference;
   };
 
   const add = (addedMilliseconds: number) => {

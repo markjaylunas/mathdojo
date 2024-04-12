@@ -41,6 +41,7 @@ export type Problem = {
   userAnswer: number | null;
   choices: number[];
   status: "CORRECT" | "WRONG" | "UNANSWERED";
+  lapTime: number | null;
 };
 
 export type Operation =

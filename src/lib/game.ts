@@ -125,6 +125,7 @@ export const generateProblem = ({
     choices,
     game_id: game_id,
     status: "UNANSWERED",
+    lapTime: null,
   };
 };
 

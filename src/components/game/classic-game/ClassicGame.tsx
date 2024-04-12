@@ -54,11 +54,9 @@ const ClassicGame = ({}: Props) => {
     reset: initialReset,
   } = useGameTimer(GAME_START_TIME);
 
-  const {
-    timer: cooldownCountDown,
-    start: cooldownStart,
-    reset: cooldownReset,
-  } = useGameTimer(CLASSIC_ANSWER_DELAY_TIME);
+  const { timer: cooldownCountDown, start: cooldownStart } = useGameTimer(
+    CLASSIC_ANSWER_DELAY_TIME
+  );
 
   const handleGameStart = () => {
     if (status !== "STARTING") {
@@ -76,7 +74,13 @@ const ClassicGame = ({}: Props) => {
     if (!problem) return;
     if (problem.status !== "UNANSWERED") return;
 
-    timerLap();
+    const timerLapTime = timerLap();
+    const isFirstProblem = problemList === null;
+    const lapTime =
+      timerLapTime &&
+      (isFirstProblem
+        ? timerLapTime
+        : timerLapTime - CLASSIC_ANSWER_DELAY_TIME);
 
     const isCorrect = answer === problem.answer;
 
@@ -90,6 +94,7 @@ const ClassicGame = ({}: Props) => {
       ...problem,
       userAnswer: answer,
       status: isCorrect ? "CORRECT" : "WRONG",
+      lapTime: lapTime,
     };
 
     const newProblemList = [...(problemList || []), problemAnswered];
@@ -118,7 +123,6 @@ const ClassicGame = ({}: Props) => {
     resetGameSession();
     initialReset();
     timerReset();
-    if (status !== "IDLE") setGameSession({ ...gameSession, status: "IDLE" });
   };
 
   const handleFinish = () => {
