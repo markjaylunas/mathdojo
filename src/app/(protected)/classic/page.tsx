@@ -1,8 +1,8 @@
 import ClassicGame from "@/src/components/game/classic-game/ClassicGame";
-import Heading from "@/src/components/ui/heading";
+import { gameSetting } from "@/src/lib/game.config";
 
 const ClassicPage = () => {
-  return <ClassicGame />;
+  return <ClassicGame gameSetting={gameSetting} />;
 };
 
 export default ClassicPage;

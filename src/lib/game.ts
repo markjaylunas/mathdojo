@@ -1,32 +1,12 @@
-import { GameSetting, OperationSymbol, Problem } from "./types";
+import {
+  Difficulty,
+  GameSetting,
+  OperationName,
+  OperationSymbol,
+  Problem,
+} from "./types";
 import { v4 as uuidV4 } from "uuid";
-import { evaluate } from "mathjs";
-
-export const game: GameSetting = {
-  id: "1",
-  title: "Classic Math",
-  description: "Basic math operations",
-  difficulty: "DYNAMIC",
-  digitRange: [
-    {
-      id: "1",
-      order: 1,
-      digit: 1,
-      minRange: 1,
-      maxRange: 9,
-      gameId: 1,
-    },
-    {
-      id: "2",
-      order: 2,
-      digit: 1,
-      minRange: 1,
-      maxRange: 9,
-      gameId: 1,
-    },
-  ],
-  operationList: ["ADDITION", "SUBTRACTION", "MULTIPLICATION", "DIVISION"],
-};
+import { evaluate, re } from "mathjs";
 
 export const convertTimeToMilliseconds = ({
   hours = 0,
@@ -70,8 +50,9 @@ export const generateProblem = ({
   gameSetting: GameSetting | null;
   level?: number;
 }): Problem => {
-  if (gameSetting === null) throw new Error("Game setting is null");
-  const { digitRange, operationList, id: game_id } = game;
+  if (gameSetting === null)
+    throw new Error("Game setting is null, cannot generate problem");
+  const { operationList, id: game_id } = gameSetting;
   const operation =
     operationList[Math.floor(Math.random() * operationList.length)];
 
@@ -79,11 +60,11 @@ export const generateProblem = ({
   let operationSymbol: OperationSymbol;
   let numberList: number[] = [];
 
-  numberList = digitRange.map((range) =>
+  numberList = operation.digitRange.map((range) =>
     generateNumberFromRange(range.minRange, range.maxRange)
   );
 
-  switch (operation) {
+  switch (operation.operation) {
     case "ADDITION":
       answer = evaluate(numberList.join(" + "));
       operationSymbol = "+";
@@ -115,8 +96,8 @@ export const generateProblem = ({
 
   return {
     id,
+    operation: operation.operation,
     numberList,
-    operation,
     operationSymbol,
     answer,
     userAnswer: null,
@@ -129,4 +110,86 @@ export const generateProblem = ({
 
 export const formatNumber = (num: number) => {
   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
+
+export const DIFFICULTY_HEIRARCHY: Difficulty[] = [
+  "EASY",
+  "MEDIUM",
+  "HARD",
+  "EXPERT",
+];
+
+export const adjustGameSettingDifficulty = ({
+  gameSetting,
+}: {
+  gameSetting: GameSetting | null;
+}) => {
+  if (gameSetting === null)
+    throw new Error("Game setting is null, cannot adjust difficulty");
+
+  const lowestDifficultyIndex = gameSetting.operationList.reduce(
+    (acc, operation, index) => {
+      const difficultyIndex = DIFFICULTY_HEIRARCHY.indexOf(
+        operation.difficulty
+      );
+      if (acc === -1) return index;
+      return difficultyIndex <
+        DIFFICULTY_HEIRARCHY.indexOf(gameSetting.operationList[acc].difficulty)
+        ? index
+        : acc;
+    },
+    -1
+  );
+
+  const newOperationList = gameSetting.operationList.map((operation, index) => {
+    if (index === lowestDifficultyIndex) {
+      const newDigitRange = operation.digitRange.map((digitRange) => {
+        const newDigit = Math.min(digitRange.digit + 1, 9);
+        let newMinRange = Math.pow(10, newDigit - 1);
+        let newMaxRange = Math.pow(10, newDigit) - 1;
+
+        // Restrictions for each operation
+        switch (operation.operation) {
+          case "ADDITION":
+            break;
+          case "SUBTRACTION":
+            if (operation.difficulty === "EXPERT") {
+              newMinRange = Math.min(newMinRange, newMaxRange - 1);
+            }
+            break;
+          case "MULTIPLICATION":
+            newMaxRange = Math.min(newMaxRange, 9);
+            break;
+          case "DIVISION":
+            newMinRange = Math.max(newMinRange, 1);
+            break;
+          default:
+            break;
+        }
+
+        return {
+          ...digitRange,
+          digit: newDigit,
+          minRange: newMinRange,
+          maxRange: newMaxRange,
+        };
+      });
+
+      return {
+        ...operation,
+        difficulty:
+          DIFFICULTY_HEIRARCHY[
+            DIFFICULTY_HEIRARCHY.indexOf(operation.difficulty) + 1
+          ],
+        digitRange: newDigitRange,
+      };
+    }
+    return operation;
+  });
+
+  const newGameSetting: GameSetting = {
+    ...gameSetting,
+    operationList: newOperationList,
+  };
+  return newGameSetting;
 };

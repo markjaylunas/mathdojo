@@ -17,11 +17,15 @@ export type GameSession = {
 
 export type UseGameSessionState = {
   gameSession: GameSession;
+  initialGameSetting: GameSetting | null;
 };
 
 export type UseGameSessionActions = {
   setGameSession: (gameSession: GameSession) => void;
+  setInitialGameSetting: (gameSetting: GameSetting) => void;
   resetGameSession: () => void;
+  clearGameSession: () => void;
+  resetInitialGameSetting: () => void;
 };
 
 const useGameSessionStore = create<
@@ -32,7 +36,21 @@ const useGameSessionStore = create<
       gameSession: GAME_SESSION_STORE_INITIAL_STATE,
       setGameSession: (gameSession) => set({ gameSession }),
       resetGameSession: () =>
+        set((state) => ({
+          gameSession: state.initialGameSetting
+            ? {
+                ...GAME_SESSION_STORE_INITIAL_STATE,
+                gameSetting: state.initialGameSetting,
+              }
+            : GAME_SESSION_STORE_INITIAL_STATE,
+        })),
+      clearGameSession: () =>
         set({ gameSession: GAME_SESSION_STORE_INITIAL_STATE }),
+
+      initialGameSetting: null,
+      setInitialGameSetting: (gameSetting) =>
+        set({ initialGameSetting: gameSetting }),
+      resetInitialGameSetting: () => set({ initialGameSetting: null }),
     }),
     {
       name: "game-session",

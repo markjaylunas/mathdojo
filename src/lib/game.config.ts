@@ -1,6 +1,6 @@
 import { GameSession } from "../store/useGameSessionStore";
-import { convertTimeToMilliseconds, game } from "./game";
-import { GameInfo } from "./types";
+import { convertTimeToMilliseconds } from "./game";
+import { GameInfo, GameSetting } from "./types";
 
 export const CLASSIC_LEVEL_UP_THRESHOLD = 2;
 
@@ -52,3 +52,109 @@ export const CLASSIC_CORRECT_ADD_TIME = convertTimeToMilliseconds({
 export const CLASSIC_INCORRECT_REDUCE_TIME = convertTimeToMilliseconds({
   seconds: 5,
 });
+
+export const gameSetting: GameSetting = {
+  id: "1",
+  title: "Classic Math",
+  description: "Basic math operations",
+  difficulty: "CUSTOM",
+
+  operationList: [
+    {
+      id: "1",
+      operation: "ADDITION",
+      symbol: "+",
+      difficulty: "EASY",
+      digitRange: [
+        {
+          id: "1",
+          order: 1,
+          digit: 1,
+          minRange: 1,
+          maxRange: 9,
+          gameId: 1,
+        },
+        {
+          id: "2",
+          order: 2,
+          digit: 1,
+          minRange: 1,
+          maxRange: 9,
+          gameId: 1,
+        },
+      ],
+    },
+    {
+      id: "2",
+      operation: "SUBTRACTION",
+      symbol: "-",
+      difficulty: "EASY",
+      digitRange: [
+        {
+          id: "3",
+          order: 1,
+          digit: 1,
+          minRange: 1,
+          maxRange: 9,
+          gameId: 1,
+        },
+        {
+          id: "4",
+          order: 2,
+          digit: 1,
+          minRange: 1,
+          maxRange: 9,
+          gameId: 1,
+        },
+      ],
+    },
+    {
+      id: "3",
+      operation: "MULTIPLICATION",
+      symbol: "x",
+      difficulty: "EASY",
+      digitRange: [
+        {
+          id: "5",
+          order: 1,
+          digit: 1,
+          minRange: 1,
+          maxRange: 9,
+          gameId: 1,
+        },
+        {
+          id: "6",
+          order: 2,
+          digit: 1,
+          minRange: 1,
+          maxRange: 9,
+          gameId: 1,
+        },
+      ],
+    },
+    {
+      id: "4",
+      operation: "DIVISION",
+      symbol: "÷",
+      difficulty: "EASY",
+      digitRange: [
+        {
+          id: "7",
+          order: 1,
+          digit: 1,
+          minRange: 1,
+          maxRange: 9,
+          gameId: 1,
+        },
+        {
+          id: "8",
+          order: 2,
+          digit: 1,
+          minRange: 1,
+          maxRange: 9,
+          gameId: 1,
+        },
+      ],
+    },
+  ],
+};

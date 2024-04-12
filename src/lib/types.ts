@@ -35,7 +35,7 @@ export type Problem = {
   id: string;
   game_id: string;
   numberList: number[];
-  operation: Operation;
+  operation: OperationName;
   operationSymbol: OperationSymbol;
   answer: number;
   userAnswer: number | null;
@@ -44,25 +44,19 @@ export type Problem = {
   lapTime: number | null;
 };
 
-export type Operation =
+export type OperationName =
   | "ADDITION"
   | "SUBTRACTION"
   | "MULTIPLICATION"
   | "DIVISION";
 
-export type Difficulty =
-  | "DYNAMIC"
-  | "EASY"
-  | "MEDIUM"
-  | "HARD"
-  | "EXTREME"
-  | "INSANE"
-  | "IMPOSSIBLE";
+export type Difficulty = "EASY" | "MEDIUM" | "HARD" | "EXPERT" | "CUSTOM";
+// | "INFINITE";
 
-export type GameSetting = {
+export type GameOperation = {
   id: string;
-  title: string;
-  description: string;
+  operation: OperationName;
+  symbol: OperationSymbol;
   difficulty: Difficulty;
   digitRange: {
     id: string;
@@ -72,7 +66,14 @@ export type GameSetting = {
     maxRange: number;
     gameId: number;
   }[];
-  operationList: Operation[];
+};
+
+export type GameSetting = {
+  id: string;
+  title: string;
+  description: string;
+  difficulty: Difficulty;
+  operationList: GameOperation[];
 };
 
 export type GameInfo = {

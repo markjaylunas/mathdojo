@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect } from "react";
-import { GameStatus, Problem } from "@/src/lib/types";
+import { GameSetting, GameStatus, Problem } from "@/src/lib/types";
 import { useFullscreen } from "@mantine/hooks";
 import GameStartingCountdown from "../layout/GameStartingCountdown";
 import { formatTime } from "@/src/lib/utils";
 import GameFinished from "../layout/GameFinished";
-import { game, generateProblem } from "@/src/lib/game";
+import { adjustGameSettingDifficulty, generateProblem } from "@/src/lib/game";
 import {
   CLASSIC_ANSWER_DELAY_TIME,
   CLASSIC_CORRECT_ADD_TIME,
@@ -25,14 +25,19 @@ import { useStore } from "zustand";
 import useGameSessionStore from "@/src/store/useGameSessionStore";
 import { chain } from "mathjs";
 
-type Props = {};
+type Props = {
+  gameSetting: GameSetting;
+};
 
-const ClassicGame = ({}: Props) => {
+const ClassicGame = ({ gameSetting: fetchedGameSetting }: Props) => {
   const router = useRouter();
-  const { gameSession, setGameSession, resetGameSession } = useStore(
-    useGameSessionStore,
-    (state) => state
-  );
+  const {
+    gameSession,
+    setGameSession,
+    resetGameSession,
+    initialGameSetting,
+    setInitialGameSetting,
+  } = useStore(useGameSessionStore, (state) => state);
 
   const { gameSetting, status, problemList, problem, level, combo, gameInfo } =
     gameSession;
@@ -106,23 +111,28 @@ const ClassicGame = ({}: Props) => {
       (problem) => problem.status === "CORRECT"
     ).length;
 
-    const gameOperationCount = game.operationList.length;
+    const gameOperationCount = gameSetting?.operationList.length;
+
     const combinedLevelUpThreshold = chain(gameOperationCount)
       .multiply(CLASSIC_LEVEL_UP_THRESHOLD)
       .done();
 
-    const addedGameLevel = chain(correctAnswerCount)
-      .divide(combinedLevelUpThreshold)
-      .round()
-      .add(1)
-      .done();
+    const doLevelUp = correctAnswerCount % combinedLevelUpThreshold === 0;
+
+    let adjustedGameSetting = gameSetting;
+    if (doLevelUp) {
+      adjustedGameSetting = adjustGameSettingDifficulty({
+        gameSetting: adjustedGameSetting,
+      });
+    }
 
     setGameSession({
       ...gameSession,
+      gameSetting: adjustedGameSetting,
       problemList: newProblemList,
       problem: problemAnswered,
       combo: isCorrect ? combo + 1 : 0,
-      level: addedGameLevel,
+      level: doLevelUp ? level + 1 : level,
       gameInfo: {
         correct: isCorrect ? gameInfo.correct + 1 : gameInfo.correct,
         incorrect: !isCorrect ? gameInfo.incorrect + 1 : gameInfo.incorrect,
@@ -228,7 +238,11 @@ const ClassicGame = ({}: Props) => {
 
   useEffect(() => {
     resetGameSession();
-    setGameSession({ ...gameSession, gameSetting: game });
+    setInitialGameSetting(fetchedGameSetting);
+    setGameSession({
+      ...gameSession,
+      gameSetting: fetchedGameSetting || initialGameSetting,
+    });
   }, []);
 
   const getGameScreen = (status: GameStatus) => {
