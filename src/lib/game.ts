@@ -100,10 +100,7 @@ export const generateProblem = ({
 
     case "DIVISION":
       const [firstNumber, secondNumber] = numberList.sort((a, b) => b - a);
-      console.log(`${firstNumber} / ${secondNumber}`);
-
       answer = evaluate(`${firstNumber} / ${secondNumber}`);
-      console.log({ answer });
       operationSymbol = "÷";
       break;
 
