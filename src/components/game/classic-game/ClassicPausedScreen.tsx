@@ -1,3 +1,4 @@
+import { IconArrowRight, IconHome, IconReload } from "@tabler/icons-react";
 import { Button } from "../../ui/button";
 import Heading from "../../ui/heading";
 import GameLayout from "../layout/GameLayout";
@@ -15,11 +16,16 @@ const ClassicPausedScreen = ({ onResume, onRestart, onHome }: Props) => {
         <Heading className="text-center">Game Paused</Heading>
 
         <div className="flex w-full max-w-sm flex-col gap-5">
-          <Button onClick={onResume}>Resume</Button>
+          <Button onClick={onResume}>
+            <IconArrowRight size={16} className="mr-2" />
+            Continue
+          </Button>
           <Button onClick={onRestart} variant="secondary">
+            <IconReload size={16} className="mr-2" />
             Restart
           </Button>
           <Button onClick={onHome} variant="destructive">
+            <IconHome size={16} className="mr-2" />
             Go to Home
           </Button>
         </div>
