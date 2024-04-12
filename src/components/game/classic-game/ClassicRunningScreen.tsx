@@ -32,25 +32,13 @@ const ClassicRunningScreen = ({
   return (
     <GameLayout>
       <GameHeader>
-        <GameTimer status={problem.status} timer={timer} />
-        <div className="mt-4 flex justify-between">
-          <div>
+        <div className="flex justify-between">
+          <div className="flex gap-10">
             <Text>
               <span className="text-gray-500 dark:text-gray-400">Level: </span>
               <span className="text-2xl font-bold">{level}</span>
             </Text>
-            {combo > 1 && (
-              <Text className="text-2xl font-extrabold">Combo {combo}x</Text>
-            )}
-          </div>
 
-          <div>
-            <Button size="icon" onClick={onPause}>
-              <IconPlayerPauseFilled size={20} />
-            </Button>
-          </div>
-
-          <div>
             <Text>
               <span className="text-gray-500 dark:text-gray-400">Score: </span>
               <span className="text-2xl font-bold">
@@ -58,6 +46,17 @@ const ClassicRunningScreen = ({
               </span>
             </Text>
           </div>
+          <Button size="icon" className="scale-90" onClick={onPause}>
+            <IconPlayerPauseFilled size={20} />
+          </Button>
+        </div>
+        <div className="mt-2 space-y-2">
+          <GameTimer status={problem.status} timer={timer} />
+          {combo > 1 && (
+            <Text className="text-right text-2xl font-extrabold">
+              Combo {combo}x
+            </Text>
+          )}
         </div>
       </GameHeader>
 
