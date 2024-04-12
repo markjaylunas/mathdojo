@@ -22,7 +22,9 @@ const GameView = ({ problem }: Props) => {
   return (
     <div className="mx-auto flex max-w-fit flex-auto flex-col justify-center gap-1 p-3 transition-all duration-150 ease-in-out">
       <div className="flex items-end justify-between gap-5">
-        <Text className="text-right text-5xl font-bold">{operationSymbol}</Text>
+        <Text className="text-right text-5xl font-medium">
+          {operationSymbol}
+        </Text>
         <div>
           {topNumbers.map((firstNumber, index) => (
             <Number
@@ -39,7 +41,7 @@ const GameView = ({ problem }: Props) => {
       </div>
       <div className="border-[3px] border-gray-600 dark:border-gray-300" />
       <div className="flex items-end justify-between gap-5">
-        <Text className="text-right text-5xl font-bold">=</Text>
+        <Text className="text-right text-5xl font-medium">=</Text>
         {userAnswer !== null ? (
           <Number
             numberFullValue={userAnswer}
