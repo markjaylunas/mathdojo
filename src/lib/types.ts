@@ -59,7 +59,7 @@ export type Difficulty =
   | "INSANE"
   | "IMPOSSIBLE";
 
-export type Game = {
+export type GameSetting = {
   id: string;
   title: string;
   description: string;

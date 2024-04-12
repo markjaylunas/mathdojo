@@ -1,11 +1,11 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import { Game, GameInfo, GameStatus, Problem } from "../lib/types";
+import { GameSetting, GameInfo, GameStatus, Problem } from "../lib/types";
 import { GameTimerState } from "../hooks/use-game-timer";
 import { GAME_SESSION_STORE_INITIAL_STATE } from "../lib/game.config";
 
 export type GameSession = {
-  gameSetting: Game | null;
+  gameSetting: GameSetting | null;
   status: GameStatus;
   problemList: Problem[] | null;
   problem: Problem | null;

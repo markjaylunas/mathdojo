@@ -34,7 +34,8 @@ const ClassicGame = ({}: Props) => {
     (state) => state
   );
 
-  const { status, problemList, problem, level, combo, gameInfo } = gameSession;
+  const { gameSetting, status, problemList, problem, level, combo, gameInfo } =
+    gameSession;
 
   const { toggle: toggleFullscreen, fullscreen: isFullscreen } =
     useFullscreen();
@@ -66,7 +67,7 @@ const ClassicGame = ({}: Props) => {
       setGameSession({
         ...gameSession,
         status: "STARTING",
-        problem: generateProblem({ game, level }),
+        problem: generateProblem({ gameSetting, level }),
       });
       toggleFullscreen();
     }
@@ -174,7 +175,7 @@ const ClassicGame = ({}: Props) => {
   const handleResume = () => {
     if (status !== "PAUSED") return;
     initialStart();
-    const newProblem = generateProblem({ game, level });
+    const newProblem = generateProblem({ gameSetting, level });
     setGameSession({ ...gameSession, status: "RESUMING", problem: newProblem });
     if (!isFullscreen) toggleFullscreen();
   };
@@ -187,7 +188,7 @@ const ClassicGame = ({}: Props) => {
 
   const handleCooldownFinish = () => {
     if (status === "RUNNING") {
-      const newProblem = generateProblem({ game, level });
+      const newProblem = generateProblem({ gameSetting, level });
       setGameSession({ ...gameSession, problem: newProblem });
     }
   };

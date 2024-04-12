@@ -1,8 +1,8 @@
-import { Game, OperationSymbol, Problem } from "./types";
+import { GameSetting, OperationSymbol, Problem } from "./types";
 import { v4 as uuidV4 } from "uuid";
 import { evaluate } from "mathjs";
 
-export const game: Game = {
+export const game: GameSetting = {
   id: "1",
   title: "Classic Math",
   description: "Basic math operations",
@@ -64,12 +64,13 @@ export const toTwoDecimalNumber = (num: number) => {
 };
 
 export const generateProblem = ({
-  game,
+  gameSetting,
   level = 0,
 }: {
-  game: Game;
+  gameSetting: GameSetting | null;
   level?: number;
 }): Problem => {
+  if (gameSetting === null) throw new Error("Game setting is null");
   const { digitRange, operationList, id: game_id } = game;
   const operation =
     operationList[Math.floor(Math.random() * operationList.length)];
