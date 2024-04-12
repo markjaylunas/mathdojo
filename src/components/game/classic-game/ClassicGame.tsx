@@ -11,6 +11,7 @@ import {
   CLASSIC_ANSWER_DELAY_TIME,
   CLASSIC_CORRECT_ADD_TIME,
   CLASSIC_INCORRECT_REDUCE_TIME,
+  CLASSIC_LEVEL_UP_THRESHOLD,
   CLASSIC_TIME,
   GAME_START_TIME,
 } from "@/src/lib/game.config";
@@ -22,6 +23,7 @@ import { useRouter } from "next/navigation";
 import { DEFAULT_HOME_PATH } from "@/src/lib/routes";
 import { useStore } from "zustand";
 import useGameSessionStore from "@/src/store/useGameSessionStore";
+import { chain } from "mathjs";
 
 type Props = {};
 
@@ -99,11 +101,27 @@ const ClassicGame = ({}: Props) => {
 
     const newProblemList = [...(problemList || []), problemAnswered];
 
+    const correctAnswerCount = newProblemList.filter(
+      (problem) => problem.status === "CORRECT"
+    ).length;
+
+    const gameOperationCount = game.operationList.length;
+    const combinedLevelUpThreshold = chain(gameOperationCount)
+      .multiply(CLASSIC_LEVEL_UP_THRESHOLD)
+      .done();
+
+    const addedGameLevel = chain(correctAnswerCount)
+      .divide(combinedLevelUpThreshold)
+      .round()
+      .add(1)
+      .done();
+
     setGameSession({
       ...gameSession,
       problemList: newProblemList,
       problem: problemAnswered,
       combo: isCorrect ? combo + 1 : 0,
+      level: addedGameLevel,
       gameInfo: {
         correct: isCorrect ? gameInfo.correct + 1 : gameInfo.correct,
         incorrect: !isCorrect ? gameInfo.incorrect + 1 : gameInfo.incorrect,
@@ -170,7 +188,6 @@ const ClassicGame = ({}: Props) => {
   const handleCooldownFinish = () => {
     if (status === "RUNNING") {
       const newProblem = generateProblem({ game, level });
-      console.log({ newProblem });
       setGameSession({ ...gameSession, problem: newProblem });
     }
   };

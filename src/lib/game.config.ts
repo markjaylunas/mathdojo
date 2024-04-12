@@ -2,7 +2,7 @@ import { GameSession } from "../store/useGameSessionStore";
 import { convertTimeToMilliseconds, game } from "./game";
 import { GameInfo } from "./types";
 
-export const CLASSIC_LEVEL_THRESHOLD = 10;
+export const CLASSIC_LEVEL_UP_THRESHOLD = 2;
 
 export const INITIAL_CLASSIC_GAME_INFO: GameInfo = {
   highestCombo: 0,
