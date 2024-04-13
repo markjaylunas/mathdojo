@@ -64,7 +64,7 @@ export type GameOperation = {
     digit: number;
     minRange: number;
     maxRange: number;
-    gameId: number;
+    operationId: string;
   }[];
 };
 
@@ -84,11 +84,3 @@ export type GameInfo = {
   incorrect: number;
   score: number;
 };
-
-export type GameStatus =
-  | "IDLE"
-  | "STARTING"
-  | "RUNNING"
-  | "PAUSED"
-  | "RESUMING"
-  | "FINISHED";

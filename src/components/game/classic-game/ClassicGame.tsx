@@ -1,29 +1,20 @@
 "use client";
 
 import { useEffect } from "react";
-import { GameSetting, GameStatus, Problem } from "@/src/lib/types";
+import { GameSetting } from "@/src/lib/types";
 import { useFullscreen } from "@mantine/hooks";
-import GameStartingCountdown from "../layout/GameStartingCountdown";
-import { formatTime } from "@/src/lib/utils";
 import GameFinished from "../layout/GameFinished";
-import { adjustGameSettingDifficulty, generateProblem } from "@/src/lib/game";
-import {
-  CLASSIC_ANSWER_DELAY_TIME,
-  CLASSIC_CORRECT_ADD_TIME,
-  CLASSIC_INCORRECT_REDUCE_TIME,
-  CLASSIC_LEVEL_UP_THRESHOLD,
-  CLASSIC_TIME,
-  GAME_START_TIME,
-} from "@/src/lib/game.config";
 import ClassicLobbyScreen from "./ClassicLobbyScreen";
 import ClassicRunningScreen from "./ClassicRunningScreen";
 import ClassicPausedScreen from "./ClassicPausedScreen";
-import useGameTimer from "@/src/hooks/use-game-timer";
 import { useRouter } from "next/navigation";
 import { DEFAULT_HOME_PATH } from "@/src/lib/routes";
 import { useStore } from "zustand";
-import useGameSessionStore from "@/src/store/useGameSessionStore";
-import { chain } from "mathjs";
+import useGameSessionStore, {
+  GameTimerStatus,
+} from "@/src/store/useGameSessionStore";
+import GameStartingCountdown from "../layout/GameStartingCountdown";
+import { set } from "lodash";
 
 type Props = {
   gameSetting: GameSetting;
@@ -33,160 +24,58 @@ const ClassicGame = ({ gameSetting: fetchedGameSetting }: Props) => {
   const router = useRouter();
   const {
     gameSession,
-    setGameSession,
-    resetGameSession,
-    initialGameSetting,
-    setInitialGameSetting,
+    setStatus,
+    setTimerValue,
+    gameStart,
+    gamePause,
+    gameContinue,
+    gameAnswer,
+    gameFinish,
+    gameReset,
   } = useStore(useGameSessionStore, (state) => state);
 
-  const { gameSetting, status, problemList, problem, level, combo, gameInfo } =
+  const { gameSetting, timer, problemList, problem, level, combo, gameInfo } =
     gameSession;
+
+  const { status } = timer;
 
   const { toggle: toggleFullscreen, fullscreen: isFullscreen } =
     useFullscreen();
 
-  const {
-    timer,
-    start: timerStart,
-    pause: timerPause,
-    reset: timerReset,
-    add: addTimer,
-    reduce: reduceTimer,
-    lap: timerLap,
-    resume: timerResume,
-  } = useGameTimer(CLASSIC_TIME);
-
-  const {
-    timer: initialCountDown,
-    start: initialStart,
-    reset: initialReset,
-  } = useGameTimer(GAME_START_TIME);
-
-  const { timer: cooldownCountDown, start: cooldownStart } = useGameTimer(
-    CLASSIC_ANSWER_DELAY_TIME
-  );
+  const handleCountDownGameStart = () => {
+    setStatus("STARTING");
+    if (!isFullscreen) toggleFullscreen();
+  };
 
   const handleGameStart = () => {
-    if (status !== "STARTING") {
-      initialStart();
-      setGameSession({
-        ...gameSession,
-        status: "STARTING",
-        problem: generateProblem({ gameSetting, level }),
-      });
-      toggleFullscreen();
-    }
+    gameStart();
+    if (!isFullscreen) toggleFullscreen();
   };
 
   const handleAnswer = (answer: number) => {
-    if (!problem) return;
-    if (problem.status !== "UNANSWERED") return;
-
-    const isCorrect = answer === problem.answer;
-
-    if (isCorrect) {
-      addTimer(CLASSIC_CORRECT_ADD_TIME);
-    } else {
-      reduceTimer(CLASSIC_INCORRECT_REDUCE_TIME);
-    }
-
-    const timerLapTime = timerLap();
-    const isFirstProblem = problemList === null;
-    const lapTime =
-      timerLapTime &&
-      (isFirstProblem
-        ? timerLapTime
-        : timerLapTime - CLASSIC_ANSWER_DELAY_TIME);
-
-    const problemAnswered: Problem = {
-      ...problem,
-      userAnswer: answer,
-      status: isCorrect ? "CORRECT" : "WRONG",
-      lapTime: lapTime,
-    };
-
-    const newProblemList = [...(problemList || []), problemAnswered];
-
-    const correctAnswerCount = newProblemList.filter(
-      (problem) => problem.status === "CORRECT"
-    ).length;
-
-    const gameOperationCount = gameSetting?.operationList.length;
-
-    const combinedLevelUpThreshold = chain(gameOperationCount)
-      .multiply(CLASSIC_LEVEL_UP_THRESHOLD)
-      .done();
-
-    const doLevelUp = correctAnswerCount % combinedLevelUpThreshold === 0;
-
-    let adjustedGameSetting = gameSetting;
-    if (doLevelUp) {
-      adjustedGameSetting = adjustGameSettingDifficulty({
-        gameSetting: adjustedGameSetting,
-      });
-    }
-
-    setGameSession({
-      ...gameSession,
-      gameSetting: adjustedGameSetting,
-      problemList: newProblemList,
-      problem: problemAnswered,
-      combo: isCorrect ? combo + 1 : 0,
-      level: doLevelUp ? level + 1 : level,
-      gameInfo: {
-        correct: isCorrect ? gameInfo.correct + 1 : gameInfo.correct,
-        incorrect: !isCorrect ? gameInfo.incorrect + 1 : gameInfo.incorrect,
-        highestCombo:
-          combo > gameInfo.highestCombo ? combo : gameInfo.highestCombo,
-        totalCombo: combo > 0 ? gameInfo.totalCombo + 1 : gameInfo.totalCombo,
-        totalQuestion: gameInfo.totalQuestion + 1,
-        score: isCorrect ? gameInfo.score + 1 + combo : gameInfo.score,
-      },
-      timer: timer,
-    });
-
-    cooldownStart();
+    gameAnswer(answer);
   };
 
   const handleReset = () => {
-    resetGameSession();
-    initialReset();
-    timerReset();
+    gameReset();
   };
 
   const handleFinish = () => {
-    if (status !== "RUNNING") return;
-    setGameSession({
-      ...gameSession,
-      status: "FINISHED",
-      problem: null,
-      timer: timer,
-    });
+    gameFinish();
     if (isFullscreen) toggleFullscreen();
   };
 
-  const handleGameRun = () => {
-    if (status === "RESUMING") {
-      timerResume();
-    } else if (status === "STARTING") {
-      timerStart();
-    }
-    if (status !== "RUNNING")
-      setGameSession({ ...gameSession, status: "RUNNING" });
+  const handlePause = () => {
+    gamePause();
   };
 
-  const handlePause = () => {
-    if (status !== "PAUSED") {
-      timerPause();
-      setGameSession({ ...gameSession, status: "PAUSED" });
-    }
+  const handleCountdownResume = () => {
+    setStatus("CONTINUING");
+    if (!isFullscreen) toggleFullscreen();
   };
 
   const handleResume = () => {
-    if (status !== "PAUSED") return;
-    initialStart();
-    const newProblem = generateProblem({ gameSetting, level });
-    setGameSession({ ...gameSession, status: "RESUMING", problem: newProblem });
+    gameContinue();
     if (!isFullscreen) toggleFullscreen();
   };
 
@@ -195,31 +84,6 @@ const ClassicGame = ({ gameSetting: fetchedGameSetting }: Props) => {
     if (isFullscreen) toggleFullscreen();
     router.push(DEFAULT_HOME_PATH);
   };
-
-  const handleCooldownFinish = () => {
-    if (status === "RUNNING") {
-      const newProblem = generateProblem({ gameSetting, level });
-      setGameSession({ ...gameSession, problem: newProblem });
-    }
-  };
-
-  useEffect(() => {
-    if (timer.value === 0) {
-      handleFinish();
-    }
-  }, [timer]);
-
-  useEffect(() => {
-    if (formatTime(initialCountDown.value).seconds === 0) {
-      handleGameRun();
-    }
-  }, [initialCountDown]);
-
-  useEffect(() => {
-    if (cooldownCountDown.value === 0) {
-      handleCooldownFinish();
-    }
-  }, [cooldownCountDown]);
 
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -236,56 +100,46 @@ const ClassicGame = ({ gameSetting: fetchedGameSetting }: Props) => {
     };
   }, [status]);
 
-  useEffect(() => {
-    resetGameSession();
-    setInitialGameSetting(fetchedGameSetting);
-    setGameSession({
-      ...gameSession,
-      gameSetting: fetchedGameSetting || initialGameSetting,
-    });
-  }, []);
-
-  const getGameScreen = (status: GameStatus) => {
+  const getGameScreen = (status: GameTimerStatus) => {
     switch (status) {
       case "IDLE":
-        return <ClassicLobbyScreen onGameStart={handleGameStart} />;
+        return <ClassicLobbyScreen onGameStart={handleCountDownGameStart} />;
       case "STARTING":
         return (
-          <GameStartingCountdown countdownTimer={initialCountDown.value} />
+          <GameStartingCountdown
+            action="Starting"
+            onComplete={handleGameStart}
+          />
         );
       case "RUNNING":
         if (!problem) return null;
         return (
           <ClassicRunningScreen
-            gameInfo={gameInfo}
-            timer={timer}
-            level={level}
-            combo={combo}
-            problem={problem}
+            gameSession={gameSession}
             onAnswer={handleAnswer}
             onPause={handlePause}
+            setTimerValue={setTimerValue}
+            gameFinish={handleFinish}
           />
         );
       case "PAUSED":
         return (
           <ClassicPausedScreen
-            onResume={handleResume}
+            onResume={handleCountdownResume}
             onRestart={handleReset}
             onHome={handleHome}
           />
         );
-      case "RESUMING":
+      case "CONTINUING":
         return (
-          <GameStartingCountdown countdownTimer={initialCountDown.value} />
-        );
-      case "FINISHED":
-        return (
-          <GameFinished
-            gameInfo={gameInfo}
-            gameTimer={timer}
-            onRetry={handleReset}
+          <GameStartingCountdown
+            action="Continuing"
+            onComplete={handleResume}
           />
         );
+
+      case "FINISHED":
+        return <GameFinished gameSession={gameSession} onRetry={handleReset} />;
       default:
         return <ClassicLobbyScreen onGameStart={handleGameStart} />;
     }

@@ -1,10 +1,4 @@
-import {
-  Difficulty,
-  GameSetting,
-  OperationName,
-  OperationSymbol,
-  Problem,
-} from "./types";
+import { Difficulty, GameSetting, OperationSymbol, Problem } from "./types";
 import { v4 as uuidV4 } from "uuid";
 import { evaluate, re } from "mathjs";
 

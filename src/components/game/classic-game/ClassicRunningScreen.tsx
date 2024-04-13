@@ -8,50 +8,59 @@ import { formatNumber } from "@/src/lib/game";
 import GameView from "../layout/GameView";
 import GameChoices from "../layout/GameChoices";
 import { GameInfo, Problem } from "@/src/lib/types";
-import { GameTimerState } from "@/src/hooks/use-game-timer";
+import { GameSessionState, TimerState } from "@/src/store/useGameSessionStore";
 
 type Props = {
-  gameInfo: GameInfo;
-  timer: GameTimerState;
-  level: number;
-  combo: number;
-  problem: Problem;
+  gameSession: GameSessionState;
   onPause: () => void;
   onAnswer: (answer: number) => void;
+  setTimerValue: (value: number) => void;
+  gameFinish: () => void;
 };
 
 const ClassicRunningScreen = ({
-  gameInfo,
-  problem,
-  timer,
-  combo,
-  level,
+  gameSession,
   onAnswer,
   onPause,
+  gameFinish,
+  setTimerValue,
 }: Props) => {
+  const { level, gameInfo, problem, timer, combo, isCooldown } = gameSession;
+
+  if (!problem) return null;
   return (
     <GameLayout>
       <GameHeader>
-        <div className="flex justify-between">
-          <div className="flex gap-10">
-            <Text>
-              <span className="text-gray-500 dark:text-gray-400">Level: </span>
-              <span className="text-2xl font-bold">{level}</span>
-            </Text>
+        <GameTimer
+          status={problem.status}
+          timer={timer}
+          gameFinish={gameFinish}
+          setTimerValue={setTimerValue}
+        />
 
-            <Text>
-              <span className="text-gray-500 dark:text-gray-400">Score: </span>
-              <span className="text-2xl font-bold">
-                {formatNumber(gameInfo.score)}
-              </span>
-            </Text>
-          </div>
-          <Button size="icon" className="scale-90" onClick={onPause}>
-            <IconPlayerPauseFilled size={20} />
-          </Button>
-        </div>
         <div className="mt-2 space-y-2">
-          <GameTimer status={problem.status} timer={timer} />
+          <div className="flex justify-between">
+            <div className="flex gap-10">
+              <Text>
+                <span className="text-gray-500 dark:text-gray-400">
+                  Level:{" "}
+                </span>
+                <span className="text-2xl font-bold">{level}</span>
+              </Text>
+
+              <Text>
+                <span className="text-gray-500 dark:text-gray-400">
+                  Score:{" "}
+                </span>
+                <span className="text-2xl font-bold">
+                  {formatNumber(gameInfo.score)}
+                </span>
+              </Text>
+            </div>
+            <Button size="icon" className="scale-90" onClick={onPause}>
+              <IconPlayerPauseFilled size={20} />
+            </Button>
+          </div>
           {combo > 1 && (
             <Text className="text-right text-2xl font-extrabold">
               Combo {combo}x
@@ -67,7 +76,7 @@ const ClassicRunningScreen = ({
           problemId={problem.id}
           onAnswer={onAnswer}
           choices={problem?.choices || []}
-          disabled={problem?.status !== "UNANSWERED"}
+          disabled={isCooldown}
         />
       </div>
     </GameLayout>

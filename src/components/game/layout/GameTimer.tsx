@@ -1,18 +1,44 @@
-import { GameTimerState } from "@/src/hooks/use-game-timer";
+"use client";
+
 import { formatTime } from "@/src/lib/utils";
-import React from "react";
+import React, { useEffect } from "react";
 import { Progress } from "../../ui/progress";
 import { Problem } from "@/src/lib/types";
+import { TimerState } from "@/src/store/useGameSessionStore";
 
 type GameTimerProps = {
-  timer: GameTimerState;
+  timer: TimerState;
   status: Problem["status"];
+  setTimerValue: (value: number) => void;
+  gameFinish: () => void;
 };
 
-const GameTimer: React.FC<GameTimerProps> = ({ timer, status }) => {
-  const { formattedTime } = formatTime(timer.value);
-  const percentage =
-    (timer.value / (timer.initialValue + timer.totalAddedTime)) * 100;
+const GameTimer: React.FC<GameTimerProps> = ({
+  timer,
+  status,
+  setTimerValue,
+  gameFinish,
+}) => {
+  const { value, initialValue, totalAddedTime, isActive } = timer;
+  const { formattedTime } = formatTime(value);
+  const percentage = (timer.value / (initialValue + totalAddedTime)) * 100;
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (isActive) {
+        const newValue = value - 1000;
+        if (newValue <= 0) {
+          gameFinish();
+        } else {
+          setTimerValue(newValue);
+        }
+      }
+    }, 1000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [isActive, value]);
 
   return (
     <div>

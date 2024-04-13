@@ -3,17 +3,16 @@ import { Button } from "../../ui/button";
 import { IconHome, IconReload } from "@tabler/icons-react";
 import Link from "next/link";
 import { DEFAULT_HOME_PATH } from "@/src/lib/routes";
-import { GameInfo } from "@/src/lib/types";
 import GameLayout from "./GameLayout";
-import { GameTimerState } from "@/src/hooks/use-game-timer";
 import { formatTime } from "@/src/lib/utils";
+import { GameSessionState } from "@/src/store/useGameSessionStore";
 
 type Props = {
-  gameInfo: GameInfo;
-  gameTimer: GameTimerState;
+  gameSession: GameSessionState;
   onRetry: () => void;
 };
-const GameFinished = ({ gameInfo, gameTimer, onRetry }: Props) => {
+const GameFinished = ({ gameSession, onRetry }: Props) => {
+  const { totalRunningTime, gameInfo } = gameSession;
   return (
     <GameLayout>
       <div className="flex flex-1 flex-col justify-around">
@@ -26,7 +25,7 @@ const GameFinished = ({ gameInfo, gameTimer, onRetry }: Props) => {
           <h2 className=" text-xl">Total Combo: {gameInfo.totalCombo}</h2>
           <h2 className=" text-xl">Total Question: {gameInfo.totalQuestion}</h2>
           <h2 className=" text-xl">
-            Duration: {formatTime(gameTimer.duration).formattedTime}
+            Duration: {formatTime(totalRunningTime).formattedTime}
           </h2>
           {/* todo: add total duration */}
           {/* <h2 className=" text-2xl">
