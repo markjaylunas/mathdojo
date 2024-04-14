@@ -3,7 +3,9 @@
 - [ ] Create the home page
 - [x] Implement user authentication
 - [x] Implement classic game
-- [ ] Implement game level system
-- [ ] Make game global state to have conditional view on game mode
-- [ ] Add user's best score on game start
-- [ ] Add time for each problem on answer
+- [x] Implement game level system
+- [x] Make game global state to have conditional view on game mode
+- [x] Add user's best score on game start
+- [x] Add time for each problem on answer
+- [ ] Game view toggle for division
+- [ ] Add correct and wrong
