@@ -1,5 +1,8 @@
-import { IconPlayerPauseFilled } from "@tabler/icons-react";
-import { Button } from "../../ui/button";
+import {
+  IconPlayerPauseFilled,
+  IconSquareCheckFilled,
+  IconSquareXFilled,
+} from "@tabler/icons-react";
 import Text from "../../ui/text";
 import GameHeader from "../layout/GameHeader";
 import GameLayout from "../layout/GameLayout";
@@ -7,9 +10,7 @@ import GameTimer from "../layout/GameTimer";
 import { formatNumber } from "@/src/lib/game";
 import GameView from "../layout/GameView";
 import GameChoices from "../layout/GameChoices";
-import { GameInfo, Problem } from "@/src/lib/types";
-import { GameSessionState, TimerState } from "@/src/store/useGameSessionStore";
-import GameDetails from "../layout/GameDetails";
+import { GameSessionState } from "@/src/store/useGameSessionStore";
 
 type Props = {
   gameSession: GameSessionState;
@@ -26,12 +27,29 @@ const ClassicRunningScreen = ({
   gameFinish,
   setTimerValue,
 }: Props) => {
-  const { problem, timer, isCooldown } = gameSession;
+  const { problem, timer, isCooldown, combo, gameInfo, level } = gameSession;
 
   if (!problem) return null;
   return (
     <GameLayout>
       <GameHeader>
+        <div className="flex items-center justify-evenly gap-10">
+          <Text className="text-xl font-bold">{`Lv${level}`}</Text>
+
+          <div className="flex items-center justify-center gap-3">
+            <div className="flex items-center justify-center gap-1">
+              <IconSquareXFilled size={24} className="text-red-600" />
+              <Text className="text-xl font-bold">{gameInfo.wrong}</Text>
+            </div>
+            <div className="flex items-center justify-center gap-1">
+              <IconSquareCheckFilled size={24} className="text-green-600" />
+              <Text className="text-xl font-bold">{gameInfo.correct}</Text>
+            </div>
+          </div>
+
+          <IconPlayerPauseFilled size={26} onClick={onPause} />
+        </div>
+
         <GameTimer
           status={problem.status}
           timer={timer}
@@ -39,7 +57,23 @@ const ClassicRunningScreen = ({
           setTimerValue={setTimerValue}
         />
 
-        <GameDetails gameSession={gameSession} onPause={onPause} />
+        <div className="flex items-center justify-between">
+          <div className="flex justify-between">
+            <div className="flex items-center justify-evenly gap-10">
+              <div className="flex items-center justify-center gap-1">
+                <Text className="text-gray-500 dark:text-gray-400">Score:</Text>
+                <Text className="text-xl font-bold">
+                  {formatNumber(gameInfo.score)}
+                </Text>
+              </div>
+            </div>
+          </div>
+          {combo > 1 && (
+            <Text className="text-right text-xl font-extrabold">
+              Combo {combo}x
+            </Text>
+          )}
+        </div>
       </GameHeader>
 
       <div className="flex h-full flex-1 flex-col justify-between gap-4">

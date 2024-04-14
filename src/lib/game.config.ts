@@ -9,7 +9,7 @@ export const INITIAL_CLASSIC_GAME_INFO: GameInfo = {
   totalCombo: 0,
   totalQuestion: 0,
   correct: 0,
-  incorrect: 0,
+  wrong: 0,
   score: 0,
 };
 
@@ -23,14 +23,15 @@ export const CLASSIC_ANSWER_DELAY_TIME = convertTimeToMilliseconds({
 });
 
 export const CLASSIC_TIME = convertTimeToMilliseconds({
-  minutes: 2,
+  minutes: 1,
+  seconds: 30,
 });
 
 export const CLASSIC_CORRECT_ADD_TIME = convertTimeToMilliseconds({
   seconds: 7,
 });
 
-export const CLASSIC_INCORRECT_REDUCE_TIME = convertTimeToMilliseconds({
+export const CLASSIC_WRONG_REDUCE_TIME = convertTimeToMilliseconds({
   seconds: 5,
 });
 
@@ -144,7 +145,7 @@ export const INITIAL_GAME_SESSION_STATE: GameSessionState = {
   combo: 0,
   gameInfo: {
     correct: 0,
-    incorrect: 0,
+    wrong: 0,
     score: 0,
     highestCombo: 0,
     totalCombo: 0,

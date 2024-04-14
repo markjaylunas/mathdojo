@@ -81,6 +81,6 @@ export type GameInfo = {
   totalCombo: number;
   totalQuestion: number;
   correct: number;
-  incorrect: number;
+  wrong: number;
   score: number;
 };

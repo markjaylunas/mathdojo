@@ -2,7 +2,7 @@ import { create } from "zustand";
 import {
   CLASSIC_ANSWER_DELAY_TIME,
   CLASSIC_CORRECT_ADD_TIME,
-  CLASSIC_INCORRECT_REDUCE_TIME,
+  CLASSIC_WRONG_REDUCE_TIME,
   CLASSIC_LEVEL_UP_THRESHOLD,
   CLASSIC_TIME,
   gameSetting,
@@ -187,9 +187,9 @@ const useGameSessionStore = create<UseGameSession & UseGameSessionActions>()(
                 correct: isCorrect
                   ? state.gameSession.gameInfo.correct + 1
                   : state.gameSession.gameInfo.correct,
-                incorrect: !isCorrect
-                  ? state.gameSession.gameInfo.incorrect + 1
-                  : state.gameSession.gameInfo.incorrect,
+                wrong: !isCorrect
+                  ? state.gameSession.gameInfo.wrong + 1
+                  : state.gameSession.gameInfo.wrong,
                 score: state.gameSession.gameInfo.score + scoreIncrement,
                 highestCombo:
                   isCorrect &&
@@ -212,7 +212,7 @@ const useGameSessionStore = create<UseGameSession & UseGameSessionActions>()(
                 ...timer,
                 value: isCorrect
                   ? timer.value + CLASSIC_CORRECT_ADD_TIME
-                  : timer.value - CLASSIC_INCORRECT_REDUCE_TIME,
+                  : timer.value - CLASSIC_WRONG_REDUCE_TIME,
                 lap: currentLapTime,
                 lapHistory: [...timer.lapHistory, currentLapTime - timer.lap],
                 history: [
@@ -223,7 +223,7 @@ const useGameSessionStore = create<UseGameSession & UseGameSessionActions>()(
                   ? timer.totalAddedTime + CLASSIC_CORRECT_ADD_TIME
                   : timer.totalAddedTime,
                 totalReducedTime: !isCorrect
-                  ? timer.totalReducedTime + CLASSIC_INCORRECT_REDUCE_TIME
+                  ? timer.totalReducedTime + CLASSIC_WRONG_REDUCE_TIME
                   : timer.totalReducedTime,
               },
             },
@@ -313,7 +313,7 @@ const useGameSessionStore = create<UseGameSession & UseGameSessionActions>()(
               combo: 0,
               gameInfo: {
                 correct: 0,
-                incorrect: 0,
+                wrong: 0,
                 score: 0,
                 highestCombo: 0,
                 totalCombo: 0,

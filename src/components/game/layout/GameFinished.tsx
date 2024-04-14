@@ -20,17 +20,13 @@ const GameFinished = ({ gameSession, onRetry }: Props) => {
           <Heading className="text-5xl">Game Over</Heading>
           <h2 className=" text-xl">Score: {gameInfo.score}</h2>
           <h2 className=" text-xl">Correct: {gameInfo.correct}</h2>
-          <h2 className=" text-xl">Incorrect: {gameInfo.incorrect}</h2>
+          <h2 className=" text-xl">Wrong: {gameInfo.wrong}</h2>
           <h2 className=" text-xl">Highest Combo: {gameInfo.highestCombo}</h2>
           <h2 className=" text-xl">Total Combo: {gameInfo.totalCombo}</h2>
-          <h2 className=" text-xl">Total Question: {gameInfo.totalQuestion}</h2>
+          <h2 className=" text-xl">Total Answered: {gameInfo.totalQuestion}</h2>
           <h2 className=" text-xl">
-            Duration: {formatTime(totalRunningTime).formattedTime}
+            Game Time: {formatTime(totalRunningTime).formattedTime}
           </h2>
-          {/* todo: add total duration */}
-          {/* <h2 className=" text-2xl">
-          Duration: {formatTime(gameInfo.duration).formattedTime}
-        </h2> */}
         </div>
 
         <div className="flex justify-center gap-4 ">
