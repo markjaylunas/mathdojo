@@ -2,7 +2,7 @@ import { GameSessionState } from "../store/useGameSessionStore";
 import { convertTimeToMilliseconds } from "./game";
 import { GameInfo, GameSetting } from "./types";
 
-export const CLASSIC_LEVEL_UP_THRESHOLD = 20;
+export const CLASSIC_LEVEL_UP_THRESHOLD = 2;
 
 export const INITIAL_CLASSIC_GAME_INFO: GameInfo = {
   highestCombo: 0,
@@ -155,6 +155,7 @@ export const INITIAL_GAME_SESSION_STATE: GameSessionState = {
   problemList: null,
   gameSetting: gameSetting,
   level: 1,
+  levelCounter: 1,
   timer: {
     value: CLASSIC_TIME,
     isActive: false,

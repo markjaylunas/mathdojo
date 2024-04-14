@@ -48,6 +48,7 @@ export type GameSessionState = {
   problemList: Problem[] | null;
   problem: Problem | null;
   level: number;
+  levelCounter: number;
   combo: number;
   gameInfo: GameInfo;
   timer: TimerState;
@@ -139,11 +140,18 @@ const useGameSessionStore = create<UseGameSession & UseGameSessionActions>()(
 
       gameAnswer: (answer) => {
         set((state) => {
-          const { timer, problemList, problem, gameSetting, level } =
-            state.gameSession;
+          const {
+            timer,
+            problemList,
+            problem,
+            gameSetting,
+            level,
+            levelCounter,
+          } = state.gameSession;
           if (timer.status !== "RUNNING") return state;
           if (!problem) return state;
           const isCorrect = answer === problem.answer;
+          let newLevelCounter = isCorrect ? levelCounter + 1 : 1;
           const currentLapTime = Date.now();
           const problemAnswered: Problem = {
             ...problem,
@@ -154,17 +162,13 @@ const useGameSessionStore = create<UseGameSession & UseGameSessionActions>()(
 
           const newProblemList = [...(problemList || []), problemAnswered];
 
-          const correctAnswerCount = newProblemList.filter(
-            (problem) => problem.status === "CORRECT"
-          ).length;
-
-          const doLevelUp =
-            correctAnswerCount % CLASSIC_LEVEL_UP_THRESHOLD === 0;
+          const doLevelUp = levelCounter === CLASSIC_LEVEL_UP_THRESHOLD;
 
           const newLevel = doLevelUp ? level + 1 : level;
 
           let adjustedGameSetting = gameSetting;
           if (doLevelUp) {
+            newLevelCounter = 1;
             adjustedGameSetting = adjustGameSettingDifficulty({
               gameSetting: adjustedGameSetting,
             });
@@ -206,6 +210,7 @@ const useGameSessionStore = create<UseGameSession & UseGameSessionActions>()(
               isCooldown: true,
               combo: combo,
               level: newLevel,
+              levelCounter: newLevelCounter,
               problem: problemAnswered,
               problemList: newProblemList,
               timer: {
@@ -310,6 +315,7 @@ const useGameSessionStore = create<UseGameSession & UseGameSessionActions>()(
               problemList: null,
               problem: null,
               level: 1,
+              levelCounter: 1,
               combo: 0,
               gameInfo: {
                 correct: 0,
