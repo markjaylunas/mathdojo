@@ -80,9 +80,8 @@ const ClassicRunningScreen = ({
         <GameView problem={problem} />
 
         <GameChoices
-          problemId={problem.id}
+          problem={problem}
           onAnswer={onAnswer}
-          choices={problem?.choices || []}
           disabled={isCooldown}
         />
       </div>
