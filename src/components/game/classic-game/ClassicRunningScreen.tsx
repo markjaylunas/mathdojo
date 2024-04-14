@@ -9,6 +9,7 @@ import GameView from "../layout/GameView";
 import GameChoices from "../layout/GameChoices";
 import { GameInfo, Problem } from "@/src/lib/types";
 import { GameSessionState, TimerState } from "@/src/store/useGameSessionStore";
+import GameDetails from "../layout/GameDetails";
 
 type Props = {
   gameSession: GameSessionState;
@@ -25,7 +26,7 @@ const ClassicRunningScreen = ({
   gameFinish,
   setTimerValue,
 }: Props) => {
-  const { level, gameInfo, problem, timer, combo, isCooldown } = gameSession;
+  const { problem, timer, isCooldown } = gameSession;
 
   if (!problem) return null;
   return (
@@ -38,35 +39,7 @@ const ClassicRunningScreen = ({
           setTimerValue={setTimerValue}
         />
 
-        <div className="mt-2 space-y-2">
-          <div className="flex justify-between">
-            <div className="flex gap-10">
-              <Text>
-                <span className="text-gray-500 dark:text-gray-400">
-                  Level:{" "}
-                </span>
-                <span className="text-2xl font-bold">{level}</span>
-              </Text>
-
-              <Text>
-                <span className="text-gray-500 dark:text-gray-400">
-                  Score:{" "}
-                </span>
-                <span className="text-2xl font-bold">
-                  {formatNumber(gameInfo.score)}
-                </span>
-              </Text>
-            </div>
-            <Button size="icon" className="scale-90" onClick={onPause}>
-              <IconPlayerPauseFilled size={20} />
-            </Button>
-          </div>
-          {combo > 1 && (
-            <Text className="text-right text-2xl font-extrabold">
-              Combo {combo}x
-            </Text>
-          )}
-        </div>
+        <GameDetails gameSession={gameSession} onPause={onPause} />
       </GameHeader>
 
       <div className="flex h-full flex-1 flex-col justify-between gap-4">
