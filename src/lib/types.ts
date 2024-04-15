@@ -1,6 +1,10 @@
 import { Icons } from "@components/ui/icons";
 import { User } from "next-auth";
-import React from "react";
+import {
+  GameMode as Prisma__GameMode,
+  GameOperation as Prisma__GameOperation,
+  GameDigitRange as Prisma__GameDigitRangeClient,
+} from "@prisma/client";
 
 export type NavItem = {
   title: string;
@@ -54,28 +58,20 @@ export type OperationName =
 export type Difficulty = "EASY" | "MEDIUM" | "HARD" | "EXPERT" | "CUSTOM";
 // | "INFINITE";
 
-export type GameOperation = {
-  id: string;
-  operation: OperationName;
-  symbol: OperationSymbol;
-  difficulty: Difficulty;
-  digitRange: {
-    id: string;
-    order: number;
-    digit: number;
-    minRange: number;
-    maxRange: number;
-    operationId: string;
-  }[];
-};
-
-export type GameMode = {
-  id: string;
-  title: string;
-  description: string;
-  difficulty: Difficulty;
-  operationList: GameOperation[];
-};
+// export type GameOperation = {
+//   id: string;
+//   operation: OperationName;
+//   symbol: OperationSymbol;
+//   difficulty: Difficulty;
+//   digitRange: {
+//     id: string;
+//     order: number;
+//     digit: number;
+//     minRange: number;
+//     maxRange: number;
+//     operationId: string;
+//   }[];
+// };
 
 export type GameInfo = {
   highestCombo: number;
@@ -84,4 +80,12 @@ export type GameInfo = {
   correct: number;
   wrong: number;
   score: number;
+};
+
+export type GameOperation = Prisma__GameOperation & {
+  digitRange: Prisma__GameDigitRangeClient[];
+};
+
+export type GameMode = Prisma__GameMode & {
+  gameOperations: GameOperation[];
 };

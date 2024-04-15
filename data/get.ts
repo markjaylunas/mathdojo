@@ -1,5 +1,6 @@
+import { GameMode } from "@/src/lib/types";
 import prisma from "@lib/prisma";
-import { GameMode, Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
 export const getUserByEmail = async (params: { email: string }) => {
   const { email } = params;
@@ -59,5 +60,5 @@ export const getGameMode = async (
       },
     },
   });
-  return gameMode;
+  return gameMode as GameMode;
 };

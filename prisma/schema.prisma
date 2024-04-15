@@ -107,12 +107,11 @@ model GameOperation {
 }
 
 model GameDigitRange {
-  id         String     @id @default(uuid())
-  digit      Int        @default(1)
-  minRange   Int        @default(1)
-  maxRange   Int        @default(9)
-  difficulty Difficulty @default(EASY)
-  order      Int        @default(1)
+  id       String @id @default(uuid())
+  digit    Int    @default(1)
+  minRange Int    @default(1)
+  maxRange Int    @default(9)
+  order    Int    @default(1)
 
   gameOperationId String
 

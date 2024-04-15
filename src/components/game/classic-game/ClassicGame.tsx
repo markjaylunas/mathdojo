@@ -13,13 +13,13 @@ import useGameSessionStore, {
   GameTimerStatus,
 } from "@/src/store/useGameSessionStore";
 import GameStartingCountdown from "../layout/GameStartingCountdown";
-import { GameMode } from "@prisma/client";
+import { GameMode } from "@/src/lib/types";
 
 type Props = {
   gameMode: GameMode;
 };
 
-const ClassicGame = ({ gameMode: fetchedGameSetting }: Props) => {
+const ClassicGame = ({ gameMode: initialGameMode }: Props) => {
   const router = useRouter();
   const {
     gameSession,
@@ -102,7 +102,12 @@ const ClassicGame = ({ gameMode: fetchedGameSetting }: Props) => {
   const getGameScreen = (status: GameTimerStatus) => {
     switch (status) {
       case "IDLE":
-        return <ClassicLobbyScreen onGameStart={handleCountDownGameStart} />;
+        return (
+          <ClassicLobbyScreen
+            onGameStart={handleCountDownGameStart}
+            initialGameMode={initialGameMode}
+          />
+        );
       case "STARTING":
         return (
           <GameStartingCountdown
@@ -140,7 +145,12 @@ const ClassicGame = ({ gameMode: fetchedGameSetting }: Props) => {
       case "FINISHED":
         return <GameFinished gameSession={gameSession} onRetry={handleReset} />;
       default:
-        return <ClassicLobbyScreen onGameStart={handleGameStart} />;
+        return (
+          <ClassicLobbyScreen
+            onGameStart={handleGameStart}
+            initialGameMode={initialGameMode}
+          />
+        );
     }
   };
 

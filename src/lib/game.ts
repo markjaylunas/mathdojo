@@ -46,9 +46,9 @@ export const generateProblem = ({
 }): Problem => {
   if (gameMode === null)
     throw new Error("Game setting is null, cannot generate problem");
-  const { operationList, id: game_id } = gameMode;
+  const { gameOperations, id: game_id } = gameMode;
   const operation =
-    operationList[Math.floor(Math.random() * operationList.length)];
+    gameOperations[Math.floor(Math.random() * gameOperations.length)];
 
   let answer: number;
   let operationSymbol: OperationSymbol;
@@ -121,21 +121,21 @@ export const adjustGameSettingDifficulty = ({
   if (gameMode === null)
     throw new Error("Game setting is null, cannot adjust difficulty");
 
-  const lowestDifficultyIndex = gameMode.operationList.reduce(
+  const lowestDifficultyIndex = gameMode.gameOperations.reduce(
     (acc, operation, index) => {
       const difficultyIndex = DIFFICULTY_HEIRARCHY.indexOf(
         operation.difficulty
       );
       if (acc === -1) return index;
       return difficultyIndex <
-        DIFFICULTY_HEIRARCHY.indexOf(gameMode.operationList[acc].difficulty)
+        DIFFICULTY_HEIRARCHY.indexOf(gameMode.gameOperations[acc].difficulty)
         ? index
         : acc;
     },
     -1
   );
 
-  const newOperationList = gameMode.operationList.map((operation, index) => {
+  const newOperationList = gameMode.gameOperations.map((operation, index) => {
     if (index === lowestDifficultyIndex) {
       const newDigitRange = operation.digitRange.map((digitRange) => {
         const newDigit = Math.min(digitRange.digit + 1, 9);
@@ -183,7 +183,7 @@ export const adjustGameSettingDifficulty = ({
 
   const newGameSetting: GameMode = {
     ...gameMode,
-    operationList: newOperationList,
+    gameOperations: newOperationList,
   };
   return newGameSetting;
 };

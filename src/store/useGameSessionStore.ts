@@ -5,7 +5,6 @@ import {
   CLASSIC_WRONG_REDUCE_TIME,
   CLASSIC_LEVEL_UP_THRESHOLD,
   CLASSIC_TIME,
-  gameMode,
   INITIAL_GAME_SESSION_STATE,
 } from "../lib/game.config";
 import { createJSONStorage, persist } from "zustand/middleware";
@@ -44,6 +43,7 @@ export type TimerState = {
 };
 
 export type GameSessionState = {
+  initialGameMode: GameMode | null;
   gameMode: GameMode | null;
   problemList: Problem[] | null;
   problem: Problem | null;
@@ -305,7 +305,8 @@ const useGameSessionStore = create<UseGameSession & UseGameSessionActions>()(
         set((state) => {
           return {
             gameSession: {
-              gameMode: gameMode,
+              initialGameMode: state.gameSession.initialGameMode,
+              gameMode: state.gameSession.initialGameMode,
               problemList: null,
               problem: null,
               level: 1,
