@@ -33,7 +33,7 @@ const ClassicRunningScreen = ({
   return (
     <GameLayout>
       <GameHeader>
-        <div className="flex items-center justify-evenly gap-10">
+        <div className="flex items-center justify-between gap-10">
           <Text className="text-xl font-bold">{`Lv${level}`}</Text>
 
           <div className="flex items-center justify-center gap-3">
@@ -47,7 +47,10 @@ const ClassicRunningScreen = ({
             </div>
           </div>
 
-          <IconPlayerPauseFilled size={26} onClick={onPause} />
+          <div>
+            <IconPlayerPauseFilled size={26} onClick={onPause} />
+            <span className="sr-only">Pause Game</span>
+          </div>
         </div>
 
         <GameTimer

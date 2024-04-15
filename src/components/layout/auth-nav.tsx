@@ -4,11 +4,17 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import { IconLogin2 } from "@tabler/icons-react";
 import { usePathname } from "next/navigation";
-import { DEFAULT_SIGNIN_PATH, publicRoutes } from "@/src/lib/routes";
+import {
+  CLASSIC_GAME_PATH,
+  DEFAULT_SIGNIN_PATH,
+  gameRoutes,
+  publicRoutes,
+} from "@/src/lib/routes";
 import UserDropdown from "./user-dropdown";
 import useUserStore from "@/src/store/useUserStore";
 import { useEffect } from "react";
 import useCurrentUser from "@/src/hooks/use-current-user";
+import { Icons } from "../ui/icons";
 
 const AuthNav = () => {
   const pathname = usePathname();
@@ -53,6 +59,14 @@ const AuthNav = () => {
       )}
 
       {/* {!userStore && <ModeToggle />} */}
+      {userStore && !gameRoutes.includes(pathname) && (
+        <Link href={CLASSIC_GAME_PATH}>
+          <Button variant="outline" className="px-3">
+            <Icons.mathSymbols className="mr-1 h-4" />
+            Play
+          </Button>
+        </Link>
+      )}
       {userStore && (
         <UserDropdown name={userStore?.name} avatar={`${userStore?.image}`} />
       )}

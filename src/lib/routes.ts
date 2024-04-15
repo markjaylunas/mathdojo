@@ -57,3 +57,17 @@ export const DEFAULT_FORGOT_PASSWORD_PATH = "/forgot-password";
  */
 
 export const DEFAULT_HOME_PATH = "/home";
+
+/**
+ * The default classic game path
+ * @type {string}
+ */
+
+export const CLASSIC_GAME_PATH = "/classic";
+
+/**
+ * An array of routes of games
+ * @type {string[]}
+ */
+
+export const gameRoutes = [CLASSIC_GAME_PATH];

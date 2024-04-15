@@ -14,7 +14,6 @@ import useGameSessionStore, {
   GameTimerStatus,
 } from "@/src/store/useGameSessionStore";
 import GameStartingCountdown from "../layout/GameStartingCountdown";
-import { set } from "lodash";
 
 type Props = {
   gameSetting: GameSetting;
@@ -34,8 +33,7 @@ const ClassicGame = ({ gameSetting: fetchedGameSetting }: Props) => {
     gameReset,
   } = useStore(useGameSessionStore, (state) => state);
 
-  const { gameSetting, timer, problemList, problem, level, combo, gameInfo } =
-    gameSession;
+  const { timer, problem } = gameSession;
 
   const { status } = timer;
 
