@@ -119,15 +119,16 @@ model GameDigitRange {
 }
 
 model Game {
-  id               String   @id @default(uuid())
-  score            Int
-  correctAnswers   Int
-  incorrectAnswers Int
-  totalAnswered    Int
-  gameTime         Int
-  highestCombo     Int?
-  totalCombo       Int?
-  createdAt        DateTime
+  id            String   @id @default(uuid())
+  score         Int
+  correct       Int
+  wrong         Int
+  totalAnswered Int
+  gameTime      Int
+  level         Int      @default(1)
+  highestCombo  Int      @default(0)
+  totalCombo    Int      @default(0)
+  createdAt     DateTime @default(now())
 
   userId String
 

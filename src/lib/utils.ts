@@ -20,11 +20,34 @@ export function calculateAspectRatio(width: number) {
   return { aspectRatio: aspectRatio, newHeight: newHeight };
 }
 
-export const formatTime = (timeInMilliseconds: number) => {
-  const hours = Math.floor(timeInMilliseconds / 3600000);
-  const minutes = Math.floor((timeInMilliseconds % 3600000) / 60000);
-  const seconds = Math.floor((timeInMilliseconds % 60000) / 1000);
-  const milliseconds = Math.floor(timeInMilliseconds % 1000);
-  const formattedTime = `${hours ? `${hours}h ` : ""} ${minutes ? `${minutes}m` : ""} ${seconds}s`;
-  return { hours, minutes, seconds, milliseconds, formattedTime };
+export const formatTime = (milliseconds: number) => {
+  // Convert milliseconds to hours, minutes, seconds, and milliseconds
+  const hours = Math.floor(milliseconds / (1000 * 60 * 60));
+  const minutes = Math.floor((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((milliseconds % (1000 * 60)) / 1000);
+  const remainingMilliseconds = milliseconds % 1000;
+
+  // Format the time components
+  const hoursStr = String(hours);
+  const minutesStr = String(minutes);
+  const secondsStr = String(seconds);
+
+  // Construct the time string
+  let formattedTime = "";
+  if (hours > 0) {
+    formattedTime += `${hoursStr}h`;
+  }
+
+  if (minutes > 0) {
+    formattedTime += `${minutesStr}m`;
+  }
+  formattedTime += `${secondsStr}s`;
+
+  return {
+    formattedTime,
+    hours,
+    minutes,
+    seconds,
+    milliseconds: remainingMilliseconds,
+  };
 };

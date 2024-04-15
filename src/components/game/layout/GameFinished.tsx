@@ -6,13 +6,15 @@ import { DEFAULT_HOME_PATH } from "@/src/lib/routes";
 import GameLayout from "./GameLayout";
 import { formatTime } from "@/src/lib/utils";
 import { GameSessionState } from "@/src/store/useGameSessionStore";
+import { Icons } from "../../ui/icons";
 
 type Props = {
   gameSession: GameSessionState;
   onRetry: () => void;
+  isSaving: boolean;
 };
-const GameFinished = ({ gameSession, onRetry }: Props) => {
-  const { totalRunningTime, gameInfo } = gameSession;
+const GameFinished = ({ gameSession, onRetry, isSaving }: Props) => {
+  const { gameInfo } = gameSession;
   return (
     <GameLayout>
       <div className="flex flex-1 flex-col justify-around">
@@ -23,29 +25,35 @@ const GameFinished = ({ gameSession, onRetry }: Props) => {
           <h2 className=" text-xl">Wrong: {gameInfo.wrong}</h2>
           <h2 className=" text-xl">Highest Combo: {gameInfo.highestCombo}</h2>
           <h2 className=" text-xl">Total Combo: {gameInfo.totalCombo}</h2>
-          <h2 className=" text-xl">Total Answered: {gameInfo.totalQuestion}</h2>
+          <h2 className=" text-xl">Total Answered: {gameInfo.totalAnswered}</h2>
           <h2 className=" text-xl">
-            Game Time: {formatTime(totalRunningTime).formattedTime}
+            Game Time: {formatTime(gameInfo.gameTime).formattedTime}
           </h2>
         </div>
 
-        <div className="flex justify-center gap-4 ">
-          <Link href={DEFAULT_HOME_PATH}>
-            <Button className="w-full max-w-40">
-              <IconHome className="mr-2" size={16} />
-              Home
-            </Button>
-          </Link>
+        {isSaving ? (
+          <div className="flex justify-center">
+            <Icons.spinner className="size-10 animate-spin" />
+          </div>
+        ) : (
+          <div className="flex justify-center gap-4 ">
+            <Link href={DEFAULT_HOME_PATH}>
+              <Button className="w-full max-w-40">
+                <IconHome className="mr-2" size={16} />
+                Home
+              </Button>
+            </Link>
 
-          <Button
-            onClick={onRetry}
-            className="w-full max-w-40"
-            variant="secondary"
-          >
-            <IconReload className="mr-2" size={16} />
-            Retry
-          </Button>
-        </div>
+            <Button
+              onClick={onRetry}
+              className="w-full max-w-40"
+              variant="secondary"
+            >
+              <IconReload className="mr-2" size={16} />
+              Retry
+            </Button>
+          </div>
+        )}
       </div>
     </GameLayout>
   );

@@ -11,6 +11,7 @@ import { createJSONStorage, persist } from "zustand/middleware";
 import { GameInfo, GameMode, Problem } from "../lib/types";
 import { adjustGameSettingDifficulty, generateProblem } from "../lib/game";
 import { chain } from "mathjs";
+import { Game } from "@prisma/client";
 
 export type GameTimerStatus =
   | "IDLE"
@@ -47,13 +48,12 @@ export type GameSessionState = {
   gameMode: GameMode | null;
   problemList: Problem[] | null;
   problem: Problem | null;
-  level: number;
   levelCounter: number;
   combo: number;
   gameInfo: GameInfo;
   timer: TimerState;
-  totalRunningTime: number;
   isCooldown: boolean;
+  gameCreatedAt: Date | null;
 };
 
 type UseGameSession = {
@@ -118,7 +118,7 @@ const useGameSessionStore = create<UseGameSession & UseGameSessionActions>()(
               ...state.gameSession,
               problem: generateProblem({
                 gameMode: state.gameSession.gameMode,
-                level: state.gameSession.level,
+                level: state.gameSession.gameInfo.level,
               }),
               timer: {
                 ...timer,
@@ -140,8 +140,14 @@ const useGameSessionStore = create<UseGameSession & UseGameSessionActions>()(
 
       gameAnswer: (answer) => {
         set((state) => {
-          const { timer, problemList, problem, gameMode, level, levelCounter } =
-            state.gameSession;
+          const {
+            timer,
+            problemList,
+            problem,
+            gameMode,
+            gameInfo: { level },
+            levelCounter,
+          } = state.gameSession;
           if (timer.status !== "RUNNING") return state;
           if (!problem) return state;
           const isCorrect = answer === problem.answer;
@@ -198,12 +204,12 @@ const useGameSessionStore = create<UseGameSession & UseGameSessionActions>()(
                 totalCombo: isCorrect
                   ? state.gameSession.gameInfo.totalCombo + 1
                   : state.gameSession.gameInfo.totalCombo,
-                totalQuestion: state.gameSession.gameInfo.totalQuestion + 1,
+                totalAnswered: state.gameSession.gameInfo.totalAnswered + 1,
+                level: newLevel,
               },
               gameMode: adjustedGameSetting,
               isCooldown: true,
               combo: combo,
-              level: newLevel,
               levelCounter: newLevelCounter,
               problem: problemAnswered,
               problemList: newProblemList,
@@ -247,20 +253,25 @@ const useGameSessionStore = create<UseGameSession & UseGameSessionActions>()(
 
       gamePause: () => {
         set((state) => {
-          const { timer, totalRunningTime } = state.gameSession;
+          const {
+            timer,
+            gameInfo: { gameTime },
+          } = state.gameSession;
           if (timer.status !== "RUNNING") return state;
           const runningTime = Date.now() - timer.startRunningTime;
 
           return {
             gameSession: {
               ...state.gameSession,
-              totalRunningTime: totalRunningTime + runningTime,
+              gameInfo: {
+                ...state.gameSession.gameInfo,
+                gameTime: gameTime + runningTime,
+              },
               timer: {
                 ...timer,
                 isActive: false,
                 status: "PAUSED",
                 pauseTime: Date.now(),
-                totalRunningTime: totalRunningTime + runningTime,
                 history: [
                   ...timer.history,
                   { action: "PAUSE", time: Date.now() },
@@ -282,7 +293,7 @@ const useGameSessionStore = create<UseGameSession & UseGameSessionActions>()(
               ...state.gameSession,
               problem: generateProblem({
                 gameMode: state.gameSession.gameMode,
-                level: state.gameSession.level,
+                level: state.gameSession.gameInfo.level,
               }),
               timer: {
                 ...timer,
@@ -309,19 +320,21 @@ const useGameSessionStore = create<UseGameSession & UseGameSessionActions>()(
               gameMode: state.gameSession.initialGameMode,
               problemList: null,
               problem: null,
-              level: 1,
               levelCounter: 1,
               combo: 0,
+              gameCreatedAt: null,
               gameInfo: {
                 correct: 0,
                 wrong: 0,
                 score: 0,
                 highestCombo: 0,
                 totalCombo: 0,
-                totalQuestion: 0,
+                totalAnswered: 0,
+                gameTime: 0,
+                level: 1,
               },
-              totalRunningTime: 0,
               isCooldown: false,
+
               timer: {
                 value: CLASSIC_TIME,
                 status: "IDLE",
@@ -343,7 +356,10 @@ const useGameSessionStore = create<UseGameSession & UseGameSessionActions>()(
 
       gameFinish: () => {
         set((state) => {
-          const { timer, totalRunningTime } = state.gameSession;
+          const {
+            timer,
+            gameInfo: { gameTime },
+          } = state.gameSession;
           if (timer.status !== "RUNNING") return state;
           const runningTime = Date.now() - timer.startRunningTime;
 
@@ -351,7 +367,10 @@ const useGameSessionStore = create<UseGameSession & UseGameSessionActions>()(
             gameSession: {
               ...state.gameSession,
               problem: null,
-              totalRunningTime: totalRunningTime + runningTime,
+              gameInfo: {
+                ...state.gameSession.gameInfo,
+                gameTime: gameTime + runningTime,
+              },
               timer: {
                 ...timer,
                 status: "FINISHED",

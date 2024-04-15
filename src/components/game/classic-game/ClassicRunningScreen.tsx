@@ -27,14 +27,14 @@ const ClassicRunningScreen = ({
   gameFinish,
   setTimerValue,
 }: Props) => {
-  const { problem, timer, isCooldown, combo, gameInfo, level } = gameSession;
+  const { problem, timer, isCooldown, combo, gameInfo } = gameSession;
 
   if (!problem) return null;
   return (
     <GameLayout>
       <GameHeader>
         <div className="flex items-center justify-between gap-10">
-          <Text className="text-xl font-bold">{`Lv${level}`}</Text>
+          <Text className="text-xl font-bold">{`Lv${gameInfo.level}`}</Text>
 
           <div className="flex items-center justify-center gap-3">
             <div className="flex items-center justify-center gap-1">

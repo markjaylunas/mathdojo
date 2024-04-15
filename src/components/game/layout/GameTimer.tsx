@@ -26,14 +26,14 @@ const GameTimer: React.FC<GameTimerProps> = ({
   useEffect(() => {
     const intervalId = setInterval(() => {
       if (isActive) {
-        const newValue = value - 1000;
+        const newValue = value - 100;
         if (newValue <= 0) {
           gameFinish();
         } else {
           setTimerValue(newValue);
         }
       }
-    }, 1000);
+    }, 100);
 
     return () => {
       clearInterval(intervalId);

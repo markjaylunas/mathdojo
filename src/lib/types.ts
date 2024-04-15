@@ -76,10 +76,12 @@ export type Difficulty = "EASY" | "MEDIUM" | "HARD" | "EXPERT" | "CUSTOM";
 export type GameInfo = {
   highestCombo: number;
   totalCombo: number;
-  totalQuestion: number;
+  totalAnswered: number;
   correct: number;
   wrong: number;
   score: number;
+  gameTime: number;
+  level: number;
 };
 
 export type GameOperation = Prisma__GameOperation & {

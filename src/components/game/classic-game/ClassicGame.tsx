@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useFullscreen } from "@mantine/hooks";
 import GameFinished from "../layout/GameFinished";
 import ClassicLobbyScreen from "./ClassicLobbyScreen";
@@ -14,12 +14,18 @@ import useGameSessionStore, {
 } from "@/src/store/useGameSessionStore";
 import GameStartingCountdown from "../layout/GameStartingCountdown";
 import { GameMode } from "@/src/lib/types";
+import { createGame } from "@/data/post";
+import { toast } from "../../ui/use-toast";
+import { actionCreateGame } from "@/src/actions/game";
+import useUserStore from "@/src/store/useUserStore";
 
 type Props = {
   gameMode: GameMode;
 };
 
 const ClassicGame = ({ gameMode: initialGameMode }: Props) => {
+  const user = useStore(useUserStore, (state) => state.user);
+  const [isSaving, setIsSaving] = useState(false);
   const router = useRouter();
   const {
     gameSession,
@@ -28,9 +34,10 @@ const ClassicGame = ({ gameMode: initialGameMode }: Props) => {
     gameStart,
     gamePause,
     gameContinue,
-    gameAnswer,
     gameFinish,
+    gameAnswer,
     gameReset,
+    setGameSession,
   } = useStore(useGameSessionStore, (state) => state);
 
   const { timer, problem } = gameSession;
@@ -60,7 +67,6 @@ const ClassicGame = ({ gameMode: initialGameMode }: Props) => {
 
   const handleFinish = () => {
     gameFinish();
-    console.log({ gameSession });
     if (isFullscreen) toggleFullscreen();
   };
 
@@ -84,6 +90,39 @@ const ClassicGame = ({ gameMode: initialGameMode }: Props) => {
     router.push(DEFAULT_HOME_PATH);
   };
 
+  const handleCreateGame = async () => {
+    try {
+      setIsSaving(true);
+      const { gameInfo } = gameSession;
+      const { status, message, data } = await actionCreateGame({
+        ...gameInfo,
+        user: {
+          connect: {
+            id: user?.id,
+          },
+        },
+      });
+
+      const isError = status === "error";
+      if (isError) throw new Error(message);
+
+      if (data) {
+        setGameSession({
+          ...gameSession,
+          gameCreatedAt: data.createdAt,
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      toast({
+        description: "Something went wrong, please try again",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       if (status === "RUNNING") {
@@ -98,6 +137,16 @@ const ClassicGame = ({ gameMode: initialGameMode }: Props) => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, [status]);
+
+  useEffect(() => {
+    if (
+      gameSession.gameCreatedAt === null &&
+      gameSession.gameInfo.gameTime !== 0 &&
+      gameSession.timer.status === "FINISHED"
+    ) {
+      handleCreateGame();
+    }
+  }, [gameSession]);
 
   const getGameScreen = (status: GameTimerStatus) => {
     switch (status) {
@@ -143,7 +192,13 @@ const ClassicGame = ({ gameMode: initialGameMode }: Props) => {
         );
 
       case "FINISHED":
-        return <GameFinished gameSession={gameSession} onRetry={handleReset} />;
+        return (
+          <GameFinished
+            gameSession={gameSession}
+            onRetry={handleReset}
+            isSaving={isSaving}
+          />
+        );
       default:
         return (
           <ClassicLobbyScreen
