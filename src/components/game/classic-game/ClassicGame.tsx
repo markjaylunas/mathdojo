@@ -60,6 +60,7 @@ const ClassicGame = ({ gameSetting: fetchedGameSetting }: Props) => {
 
   const handleFinish = () => {
     gameFinish();
+    console.log({ gameSession });
     if (isFullscreen) toggleFullscreen();
   };
 
