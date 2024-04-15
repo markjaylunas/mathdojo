@@ -1,6 +1,10 @@
+"use client";
+
 import { Problem } from "@/src/lib/types";
 import { Button } from "../../ui/button";
 import { cn } from "@/src/lib/utils";
+import { useStore } from "zustand";
+import useGameSessionStore from "@/src/store/useGameSessionStore";
 
 type Props = {
   problem: Problem;
@@ -8,10 +12,11 @@ type Props = {
   disabled: boolean;
 };
 const GameChoices = ({ problem, onAnswer, disabled }: Props) => {
+  const { revealAnswer } = useStore(useGameSessionStore, (state) => state);
   return (
     <div className="grid grid-flow-row auto-rows-fr  grid-cols-2 gap-5">
       {problem.choices.map((choice, index) => {
-        const showAnswer = problem.status !== "UNANSWERED";
+        const showAnswer = problem.status !== "UNANSWERED" || revealAnswer;
         const isAnswer = problem.answer === choice;
         return (
           <Button

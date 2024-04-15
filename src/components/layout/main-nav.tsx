@@ -3,7 +3,6 @@
 import * as React from "react";
 import Link, { LinkProps } from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { ViewVerticalIcon } from "@radix-ui/react-icons";
 
 import { routesConfig, siteConfig } from "@lib/config";
 import { cn } from "@lib/utils";
@@ -13,12 +12,23 @@ import { ScrollArea } from "@components/ui/scroll-area";
 import { Button } from "@components/ui/button";
 import { useStore } from "zustand";
 import useLayoutStore from "@/src/store/useLayoutStore";
+import useGameSessionStore from "@/src/store/useGameSessionStore";
+import { gameRoutes } from "@/src/lib/routes";
 
 export function MainNav() {
   const { sideNavOpen, setSideNavOpen } = useStore(
     useLayoutStore,
     (state) => state
   );
+
+  const pathname = usePathname();
+
+  const { revealAnswer, setRevealAnswer } = useStore(
+    useGameSessionStore,
+    (state) => state
+  );
+
+  const isGamePath = gameRoutes.includes(pathname);
 
   return (
     <div className="flex gap-4">
@@ -75,7 +85,11 @@ export function MainNav() {
         </SheetContent>
       </Sheet>
 
-      <Link href="/" className="mr-6 flex items-center space-x-2">
+      <Link
+        href={isGamePath ? "" : "/"}
+        className="mr-6 flex items-center space-x-2"
+        onClick={isGamePath ? () => setRevealAnswer(!revealAnswer) : undefined}
+      >
         <Icons.logo className="h-6 w-6" />
         <span className="hidden font-bold sm:inline-block ">
           {siteConfig.name}

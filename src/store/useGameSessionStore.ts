@@ -73,7 +73,17 @@ type UseGameSessionActions = {
   setStatus: (status: GameTimerStatus) => void;
 };
 
-const useGameSessionStore = create<UseGameSession & UseGameSessionActions>()(
+type GamePowers = {
+  revealAnswer: boolean;
+};
+
+type GamePowersActions = {
+  setRevealAnswer: (revealAnswer: boolean) => void;
+};
+
+const useGameSessionStore = create<
+  UseGameSession & UseGameSessionActions & GamePowers & GamePowersActions
+>()(
   persist(
     (set) => ({
       gameSession: INITIAL_GAME_SESSION_STATE,
@@ -383,6 +393,12 @@ const useGameSessionStore = create<UseGameSession & UseGameSessionActions>()(
             },
           };
         });
+      },
+
+      revealAnswer: false,
+
+      setRevealAnswer: (revealAnswer) => {
+        set({ revealAnswer });
       },
     }),
     {
