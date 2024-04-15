@@ -1,5 +1,5 @@
 import { MainNavItem, SidebarNavItem, UserNavItem } from "@lib/types";
-import { actionSignOut } from "../actions/auth";
+import { Icons } from "../components/ui/icons";
 
 export const siteConfig = {
   name: "mathwars",
@@ -55,11 +55,13 @@ export const routesConfig: RoutesConfig = {
           title: "Profile",
           href: "/user",
           items: [],
+          icon: "user",
         },
         {
           title: "Setting",
           href: "/setting",
           items: [],
+          icon: "setting",
         },
       ],
     },
@@ -70,6 +72,7 @@ export const routesConfig: RoutesConfig = {
           title: "GitHub",
           href: siteConfig.links.github,
           items: [],
+          icon: "gitHub",
         },
       ],
     },

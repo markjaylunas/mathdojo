@@ -16,6 +16,8 @@ import {
 } from "@components/ui/dropdown-menu";
 import Link from "next/link";
 import { Fragment } from "react";
+import { Icons } from "../ui/icons";
+import { useTheme } from "next-themes";
 
 type Props = {
   name: string;
@@ -31,20 +33,29 @@ const UserDropdown = ({ name, avatar }: Props) => {
           <AvatarFallback>{getUserInitials(name)}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="mr-2 mt-1 w-56 ">
+      <DropdownMenuContent className="mr-2 mt-1 min-w-40 ">
         {routesConfig.userNav.map((navItem, navItemIndex) => (
           <Fragment key={navItem.title}>
             <DropdownMenuLabel>{navItem.title}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              {navItem.items.map((item) => (
-                <Link href={`${item.href}`} key={item.title}>
-                  <DropdownMenuItem>{item.title}</DropdownMenuItem>
-                </Link>
-              ))}
+              {navItem.items.map((item) => {
+                const Icon = item.icon && Icons[item.icon];
+
+                return (
+                  <Link href={`${item.href}`} key={item.title}>
+                    <DropdownMenuItem>
+                      {Icon && <Icon className="mr-2 h-5 w-5" />}
+                      {item.title}
+                    </DropdownMenuItem>
+                  </Link>
+                );
+              })}
             </DropdownMenuGroup>
           </Fragment>
         ))}
+
+        <ThemeButton />
         <LogoutButton />
       </DropdownMenuContent>
     </DropdownMenu>
@@ -53,6 +64,25 @@ const UserDropdown = ({ name, avatar }: Props) => {
 
 export default UserDropdown;
 
+const ThemeButton = () => {
+  const { theme, setTheme } = useTheme();
+
+  if (theme === "dark") {
+    return (
+      <DropdownMenuItem onClick={() => setTheme("light")}>
+        <Icons.moon className="mr-2 h-5 w-5" />
+        Dark Mode
+      </DropdownMenuItem>
+    );
+  } else
+    return (
+      <DropdownMenuItem onClick={() => setTheme("dark")}>
+        <Icons.sun className="mr-2 h-5 w-5" />
+        Light Mode
+      </DropdownMenuItem>
+    );
+};
+
 const LogoutButton = () => {
   const clearUser = useUserStore((state) => state.clearUser);
   const handleLogout = () => {
@@ -60,5 +90,9 @@ const LogoutButton = () => {
     actionSignOut();
   };
 
-  return <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem>;
+  return (
+    <DropdownMenuItem onClick={handleLogout}>
+      <Icons.logout className="mr-2 h-5 w-5" /> Log out
+    </DropdownMenuItem>
+  );
 };

@@ -1,6 +1,5 @@
 "use client";
 
-import { ModeToggle } from "../theme/theme-toggler";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { IconLogin2 } from "@tabler/icons-react";
@@ -10,7 +9,6 @@ import UserDropdown from "./user-dropdown";
 import useUserStore from "@/src/store/useUserStore";
 import { useEffect } from "react";
 import useCurrentUser from "@/src/hooks/use-current-user";
-import { getUserById } from "@/data/user";
 
 const AuthNav = () => {
   const pathname = usePathname();
@@ -58,7 +56,6 @@ const AuthNav = () => {
       {userStore && (
         <UserDropdown name={userStore?.name} avatar={`${userStore?.image}`} />
       )}
-      <ModeToggle />
     </nav>
   );
 };
