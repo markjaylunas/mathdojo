@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import { GameSetting } from "@/src/lib/types";
 import { useFullscreen } from "@mantine/hooks";
 import GameFinished from "../layout/GameFinished";
 import ClassicLobbyScreen from "./ClassicLobbyScreen";
@@ -14,12 +13,13 @@ import useGameSessionStore, {
   GameTimerStatus,
 } from "@/src/store/useGameSessionStore";
 import GameStartingCountdown from "../layout/GameStartingCountdown";
+import { GameMode } from "@prisma/client";
 
 type Props = {
-  gameSetting: GameSetting;
+  gameMode: GameMode;
 };
 
-const ClassicGame = ({ gameSetting: fetchedGameSetting }: Props) => {
+const ClassicGame = ({ gameMode: fetchedGameSetting }: Props) => {
   const router = useRouter();
   const {
     gameSession,

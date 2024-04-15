@@ -6,7 +6,7 @@ import { DEFAULT_HOME_PATH } from "../lib/routes";
 
 export default async function NotFound() {
   return (
-    <div className="space-y-6 p-8">
+    <div className="container mx-auto flex max-w-lg flex-col items-center justify-center gap-6 p-8">
       <h2 className="mt-10 text-center text-4xl font-extrabold tracking-tight lg:text-5xl">
         404 - Not Found
       </h2>

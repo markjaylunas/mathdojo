@@ -69,7 +69,7 @@ export type GameOperation = {
   }[];
 };
 
-export type GameSetting = {
+export type GameMode = {
   id: string;
   title: string;
   description: string;

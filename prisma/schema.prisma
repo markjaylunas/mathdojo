@@ -19,16 +19,33 @@ enum UserRole {
   USER
 }
 
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+  EXPERT
+  CUSTOM
+}
+
+enum Operation {
+  ADDITION
+  SUBTRACTION
+  MULTIPLICATION
+  DIVISION
+}
+
 model User {
-  id                    String                 @id @default(uuid())
-  username              String?
-  name                  String?
-  email                 String?                @unique
-  emailVerified         DateTime?
-  image                 String?
-  password              String?
-  role                  UserRole               @default(USER)
-  accounts              Account[]
+  id            String    @id @default(uuid())
+  username      String?
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          UserRole  @default(USER)
+
+  accounts Account[]
+  games    Game[]
 }
 
 model Account {
@@ -66,4 +83,54 @@ model PasswordResetToken {
   expiresAt DateTime
 
   @@unique([email, token])
+}
+
+model GameMode {
+  id             String          @id @default(uuid())
+  title          String
+  description    String?         @db.Text
+  difficulty     Difficulty      @default(EASY)
+  order          Int             @default(1)
+  gameOperations GameOperation[]
+}
+
+model GameOperation {
+  id         String     @id @default(uuid())
+  operation  Operation  @default(ADDITION)
+  symbol     String     @default("+")
+  difficulty Difficulty @default(EASY)
+  gameModeId String
+
+  digitRange GameDigitRange[]
+
+  gameMode GameMode @relation(fields: [gameModeId], references: [id], onDelete: Cascade)
+}
+
+model GameDigitRange {
+  id         String     @id @default(uuid())
+  digit      Int        @default(1)
+  minRange   Int        @default(1)
+  maxRange   Int        @default(9)
+  difficulty Difficulty @default(EASY)
+  order      Int        @default(1)
+
+  gameOperationId String
+
+  gameOperation GameOperation @relation(fields: [gameOperationId], references: [id], onDelete: Cascade)
+}
+
+model Game {
+  id               String   @id @default(uuid())
+  score            Int
+  correctAnswers   Int
+  incorrectAnswers Int
+  totalAnswered    Int
+  gameTime         Int
+  highestCombo     Int?
+  totalCombo       Int?
+  createdAt        DateTime
+
+  userId String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

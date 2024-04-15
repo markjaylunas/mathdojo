@@ -21,11 +21,11 @@ import {
   generatePasswordResetToken,
   generateVerificationToken,
 } from "../lib/tokens";
-import { getUserByEmail } from "@/data/user";
 import { sendPasswordResetEmail, sendVerificationEmail } from "@lib/mail";
 import { getVerificationTokenByToken } from "@/data/token/verification-token";
 import { getPasswordResetTokenByToken } from "@/data/token/password-reset-token";
 import { User } from "@prisma/client";
+import { getUserByEmail } from "@/data/get";
 
 // sign in action
 

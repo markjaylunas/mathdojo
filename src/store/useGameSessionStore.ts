@@ -5,11 +5,11 @@ import {
   CLASSIC_WRONG_REDUCE_TIME,
   CLASSIC_LEVEL_UP_THRESHOLD,
   CLASSIC_TIME,
-  gameSetting,
+  gameMode,
   INITIAL_GAME_SESSION_STATE,
 } from "../lib/game.config";
 import { createJSONStorage, persist } from "zustand/middleware";
-import { GameInfo, GameSetting, Problem } from "../lib/types";
+import { GameInfo, GameMode, Problem } from "../lib/types";
 import { adjustGameSettingDifficulty, generateProblem } from "../lib/game";
 import { chain } from "mathjs";
 
@@ -44,7 +44,7 @@ export type TimerState = {
 };
 
 export type GameSessionState = {
-  gameSetting: GameSetting | null;
+  gameMode: GameMode | null;
   problemList: Problem[] | null;
   problem: Problem | null;
   level: number;
@@ -69,7 +69,7 @@ type UseGameSessionActions = {
   gameAnswer: (answer: number) => void;
   gameFinish: () => void;
   gameReset: () => void;
-  gameDoneCooldown: (adjustedGameSetting: GameSetting | null) => void;
+  gameDoneCooldown: (adjustedGameSetting: GameMode | null) => void;
   setStatus: (status: GameTimerStatus) => void;
 };
 
@@ -117,7 +117,7 @@ const useGameSessionStore = create<UseGameSession & UseGameSessionActions>()(
             gameSession: {
               ...state.gameSession,
               problem: generateProblem({
-                gameSetting: state.gameSession.gameSetting,
+                gameMode: state.gameSession.gameMode,
                 level: state.gameSession.level,
               }),
               timer: {
@@ -140,14 +140,8 @@ const useGameSessionStore = create<UseGameSession & UseGameSessionActions>()(
 
       gameAnswer: (answer) => {
         set((state) => {
-          const {
-            timer,
-            problemList,
-            problem,
-            gameSetting,
-            level,
-            levelCounter,
-          } = state.gameSession;
+          const { timer, problemList, problem, gameMode, level, levelCounter } =
+            state.gameSession;
           if (timer.status !== "RUNNING") return state;
           if (!problem) return state;
           const isCorrect = answer === problem.answer;
@@ -166,11 +160,11 @@ const useGameSessionStore = create<UseGameSession & UseGameSessionActions>()(
 
           const newLevel = doLevelUp ? level + 1 : level;
 
-          let adjustedGameSetting = gameSetting;
+          let adjustedGameSetting = gameMode;
           if (doLevelUp) {
             newLevelCounter = 1;
             adjustedGameSetting = adjustGameSettingDifficulty({
-              gameSetting: adjustedGameSetting,
+              gameMode: adjustedGameSetting,
             });
           }
 
@@ -206,7 +200,7 @@ const useGameSessionStore = create<UseGameSession & UseGameSessionActions>()(
                   : state.gameSession.gameInfo.totalCombo,
                 totalQuestion: state.gameSession.gameInfo.totalQuestion + 1,
               },
-              gameSetting: adjustedGameSetting,
+              gameMode: adjustedGameSetting,
               isCooldown: true,
               combo: combo,
               level: newLevel,
@@ -236,13 +230,13 @@ const useGameSessionStore = create<UseGameSession & UseGameSessionActions>()(
         });
       },
 
-      gameDoneCooldown: (adjustedGameSetting: GameSetting | null) => {
+      gameDoneCooldown: (adjustedGameSetting: GameMode | null) => {
         set((state) => {
           return {
             gameSession: {
               ...state.gameSession,
               problem: generateProblem({
-                gameSetting: adjustedGameSetting,
+                gameMode: adjustedGameSetting,
               }),
 
               isCooldown: false,
@@ -287,7 +281,7 @@ const useGameSessionStore = create<UseGameSession & UseGameSessionActions>()(
             gameSession: {
               ...state.gameSession,
               problem: generateProblem({
-                gameSetting: state.gameSession.gameSetting,
+                gameMode: state.gameSession.gameMode,
                 level: state.gameSession.level,
               }),
               timer: {
@@ -311,7 +305,7 @@ const useGameSessionStore = create<UseGameSession & UseGameSessionActions>()(
         set((state) => {
           return {
             gameSession: {
-              gameSetting: gameSetting,
+              gameMode: gameMode,
               problemList: null,
               problem: null,
               level: 1,

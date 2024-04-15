@@ -1,4 +1,4 @@
-import { Difficulty, GameSetting, OperationSymbol, Problem } from "./types";
+import { Difficulty, OperationSymbol, Problem, GameMode } from "./types";
 import { v4 as uuidV4 } from "uuid";
 import { evaluate, re } from "mathjs";
 
@@ -38,15 +38,15 @@ export const toTwoDecimalNumber = (num: number) => {
 };
 
 export const generateProblem = ({
-  gameSetting,
+  gameMode,
   level = 0,
 }: {
-  gameSetting: GameSetting | null;
+  gameMode: GameMode | null;
   level?: number;
 }): Problem => {
-  if (gameSetting === null)
+  if (gameMode === null)
     throw new Error("Game setting is null, cannot generate problem");
-  const { operationList, id: game_id } = gameSetting;
+  const { operationList, id: game_id } = gameMode;
   const operation =
     operationList[Math.floor(Math.random() * operationList.length)];
 
@@ -114,28 +114,28 @@ export const DIFFICULTY_HEIRARCHY: Difficulty[] = [
 ];
 
 export const adjustGameSettingDifficulty = ({
-  gameSetting,
+  gameMode,
 }: {
-  gameSetting: GameSetting | null;
+  gameMode: GameMode | null;
 }) => {
-  if (gameSetting === null)
+  if (gameMode === null)
     throw new Error("Game setting is null, cannot adjust difficulty");
 
-  const lowestDifficultyIndex = gameSetting.operationList.reduce(
+  const lowestDifficultyIndex = gameMode.operationList.reduce(
     (acc, operation, index) => {
       const difficultyIndex = DIFFICULTY_HEIRARCHY.indexOf(
         operation.difficulty
       );
       if (acc === -1) return index;
       return difficultyIndex <
-        DIFFICULTY_HEIRARCHY.indexOf(gameSetting.operationList[acc].difficulty)
+        DIFFICULTY_HEIRARCHY.indexOf(gameMode.operationList[acc].difficulty)
         ? index
         : acc;
     },
     -1
   );
 
-  const newOperationList = gameSetting.operationList.map((operation, index) => {
+  const newOperationList = gameMode.operationList.map((operation, index) => {
     if (index === lowestDifficultyIndex) {
       const newDigitRange = operation.digitRange.map((digitRange) => {
         const newDigit = Math.min(digitRange.digit + 1, 9);
@@ -181,8 +181,8 @@ export const adjustGameSettingDifficulty = ({
     return operation;
   });
 
-  const newGameSetting: GameSetting = {
-    ...gameSetting,
+  const newGameSetting: GameMode = {
+    ...gameMode,
     operationList: newOperationList,
   };
   return newGameSetting;

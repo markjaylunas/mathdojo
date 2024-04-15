@@ -1,6 +1,6 @@
 import { GameSessionState } from "../store/useGameSessionStore";
 import { convertTimeToMilliseconds } from "./game";
-import { GameInfo, GameSetting } from "./types";
+import { GameInfo, GameMode } from "./types";
 
 export const CLASSIC_LEVEL_UP_THRESHOLD = 20;
 
@@ -35,7 +35,7 @@ export const CLASSIC_WRONG_REDUCE_TIME = convertTimeToMilliseconds({
   seconds: 5,
 });
 
-export const gameSetting: GameSetting = {
+export const gameMode: GameMode = {
   id: "5115284c-fb71-456f-9c5b-3eda365727c4",
   title: "Classic Math",
   description: "Basic math operations",
@@ -153,7 +153,8 @@ export const INITIAL_GAME_SESSION_STATE: GameSessionState = {
   },
   problem: null,
   problemList: null,
-  gameSetting: gameSetting,
+
+  gameMode: gameMode,
   level: 1,
   levelCounter: 1,
   timer: {

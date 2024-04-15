@@ -1,4 +1,4 @@
-import { getUserById, getUserByUsername } from "@/data/user";
+import { getUserById, getUserByUsername } from "@/data/get";
 import UserProfileSection from "@/src/components/user/UserProfileSection";
 import { User } from "@prisma/client";
 import { notFound, redirect } from "next/navigation";
