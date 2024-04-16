@@ -1,6 +1,8 @@
 import { Difficulty, OperationSymbol, Problem, GameMode } from "./types";
 import { v4 as uuidV4 } from "uuid";
 import { evaluate, re } from "mathjs";
+import { GameSessionState } from "../store/useGameSessionStore";
+import { Game, Rating } from "@prisma/client";
 
 export const convertTimeToMilliseconds = ({
   hours = 0,
@@ -186,4 +188,55 @@ export const adjustGameSettingDifficulty = ({
     gameOperations: newOperationList,
   };
   return newGameSetting;
+};
+
+export const getRating = ({
+  correct,
+  wrong,
+  level,
+}: {
+  correct: number;
+  wrong: number;
+  level: number;
+}): Rating => {
+  const totalQuestions = correct + wrong;
+  const accuracy = correct / totalQuestions;
+
+  // Define base level thresholds
+  const baseLevelThresholds = [0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3];
+  let levelThresholds = baseLevelThresholds;
+
+  // Extend level thresholds if level exceeds the number of base thresholds
+  if (level > baseLevelThresholds.length) {
+    const diff = level - baseLevelThresholds.length;
+    const newThresholds = Array(diff).fill(0.2); // Fill with default threshold (0.2)
+    levelThresholds = baseLevelThresholds.concat(newThresholds);
+  }
+
+  // Adjust level within the range of level thresholds
+  const adjustedLevel = Math.min(level, levelThresholds.length);
+
+  const levelThreshold = levelThresholds[adjustedLevel - 1]; // Adjust level to zero-based index
+
+  if (adjustedLevel > levelThresholds.length) {
+    if (accuracy >= levelThreshold) {
+      return "SSS";
+    } else if (accuracy >= levelThreshold - 0.1) {
+      return "SS";
+    } else if (accuracy >= levelThreshold - 0.2) {
+      return "S";
+    }
+  }
+
+  if (accuracy >= levelThreshold - 0.3) {
+    return "A";
+  } else if (accuracy >= levelThreshold - 0.4) {
+    return "B";
+  } else if (accuracy >= levelThreshold - 0.5) {
+    return "C";
+  } else if (accuracy >= levelThreshold - 0.6) {
+    return "D";
+  } else {
+    return "E";
+  }
 };

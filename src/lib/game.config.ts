@@ -13,6 +13,7 @@ export const INITIAL_CLASSIC_GAME_INFO: GameInfo = {
   score: 0,
   totalAnswered: 0,
   level: 1,
+  rating: "E",
 };
 
 export const GAME_START_TIME = convertTimeToMilliseconds({
@@ -48,6 +49,7 @@ export const INITIAL_GAME_SESSION_STATE: GameSessionState = {
     totalAnswered: 0,
     level: 1,
     gameTime: 0,
+    rating: "E",
   },
   problem: null,
   problemList: null,

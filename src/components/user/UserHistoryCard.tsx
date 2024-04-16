@@ -18,11 +18,14 @@ const UserHistoryCard = ({ game }: Props) => {
     <CarouselItem className="basis-1/2 sm:basis-1/2  md:basis-1/4 lg:basis-1/5">
       <Card className="h-44 rounded-sm">
         <CardContent className="flex h-full flex-col items-start justify-between p-1 py-2">
-          <div className="flex w-full flex-col items-center justify-center">
-            <Text className="text-md font-semibold text-primary">
-              {formatNumber(game.score)}
-            </Text>
-            <Text className="text-xs font-semibold ">Lv.{game.level}</Text>
+          <div className="flex w-full items-center justify-center px-3">
+            <div className="flex w-full flex-col justify-between ">
+              <Text className="text-md font-semibold text-primary">
+                {formatNumber(game.score)}
+              </Text>
+              <Text className="text-xs font-semibold ">Lv.{game.level}</Text>
+            </div>
+            <Text className="text-2xl font-extrabold">{game.rating}</Text>
           </div>
           <Separator className="my-1" />
 

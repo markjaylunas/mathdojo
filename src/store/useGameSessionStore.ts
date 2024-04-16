@@ -9,9 +9,11 @@ import {
 } from "../lib/game.config";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { GameInfo, GameMode, Problem } from "../lib/types";
-import { adjustGameSettingDifficulty, generateProblem } from "../lib/game";
-import { chain } from "mathjs";
-import { Game } from "@prisma/client";
+import {
+  adjustGameSettingDifficulty,
+  generateProblem,
+  getRating,
+} from "../lib/game";
 
 export type GameTimerStatus =
   | "IDLE"
@@ -172,7 +174,8 @@ const useGameSessionStore = create<
 
           const newProblemList = [...(problemList || []), problemAnswered];
 
-          const doLevelUp = levelCounter === CLASSIC_LEVEL_UP_THRESHOLD;
+          const doLevelUp =
+            levelCounter === CLASSIC_LEVEL_UP_THRESHOLD && level <= 12;
 
           const newLevel = doLevelUp ? level + 1 : level;
 
@@ -342,6 +345,7 @@ const useGameSessionStore = create<
                 totalAnswered: 0,
                 gameTime: 0,
                 level: 1,
+                rating: "E",
               },
               isCooldown: false,
 
@@ -372,6 +376,13 @@ const useGameSessionStore = create<
           } = state.gameSession;
           if (timer.status !== "RUNNING") return state;
           const runningTime = Date.now() - timer.startRunningTime;
+          const newGameTime = gameTime + runningTime;
+
+          const rating = getRating({
+            correct: state.gameSession.gameInfo.correct,
+            wrong: state.gameSession.gameInfo.wrong,
+            level: state.gameSession.gameInfo.level,
+          });
 
           return {
             gameSession: {
@@ -379,7 +390,8 @@ const useGameSessionStore = create<
               problem: null,
               gameInfo: {
                 ...state.gameSession.gameInfo,
-                gameTime: gameTime + runningTime,
+                gameTime: newGameTime,
+                rating,
               },
               timer: {
                 ...timer,

@@ -4,6 +4,7 @@ import {
   GameMode as Prisma__GameMode,
   GameOperation as Prisma__GameOperation,
   GameDigitRange as Prisma__GameDigitRangeClient,
+  Rating,
 } from "@prisma/client";
 
 export type NavItem = {
@@ -82,6 +83,7 @@ export type GameInfo = {
   score: number;
   gameTime: number;
   level: number;
+  rating: Rating;
 };
 
 export type GameOperation = Prisma__GameOperation & {
