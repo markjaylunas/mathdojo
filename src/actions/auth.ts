@@ -259,7 +259,7 @@ export const actionResetPassword = async ({
 
 export const actionCreateUsername = async (
   values: TCreateUsernameSchema
-): Promise<ActionResponse> => {
+): Promise<ActionResponse & { data?: User }> => {
   const validatedFields = createUsernameSchema.safeParse(values);
   if (!validatedFields.success) {
     return { status: "error", message: validatedFields.error.message };
@@ -285,5 +285,9 @@ export const actionCreateUsername = async (
     return { status: "error", path: "username", message: "User update failed" };
   }
 
-  return { status: "success", message: "Created username successfully" };
+  return {
+    status: "success",
+    message: "Created username successfully",
+    data: updatedUser,
+  };
 };

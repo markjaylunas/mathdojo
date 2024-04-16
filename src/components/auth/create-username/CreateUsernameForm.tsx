@@ -21,10 +21,13 @@ import SubmitButton from "../../ui/submit-button";
 import { notFound, useRouter } from "next/navigation";
 import { actionCreateUsername } from "@/src/actions/auth";
 import { DEFAULT_SIGNIN_REDIRECT } from "@/src/lib/routes";
+import { useStore } from "zustand";
+import useUserStore from "@/src/store/useUserStore";
 
 const CreateUsernameForm = (params: { userId: string }) => {
   const { userId } = params;
   if (!userId) notFound();
+  const setUser = useStore(useUserStore, (state) => state.setUser);
 
   const router = useRouter();
   const { toast } = useToast();
@@ -41,7 +44,12 @@ const CreateUsernameForm = (params: { userId: string }) => {
   const onSubmit = async (data: TCreateUsernameSchema) => {
     try {
       setIsLoading(true);
-      const { status, message, path } = await actionCreateUsername(data);
+      const {
+        status,
+        message,
+        path,
+        data: updatedUser,
+      } = await actionCreateUsername(data);
 
       const isError = status === "error";
       if (isError && path) {
@@ -57,8 +65,19 @@ const CreateUsernameForm = (params: { userId: string }) => {
         variant: status === "error" ? "destructive" : "default",
       });
       if (isError) return;
+      if (!updatedUser) throw new Error("User not found");
 
       form.reset();
+
+      setUser({
+        id: updatedUser.id,
+        email: `${updatedUser.email}`,
+        username: `${updatedUser.username}`,
+        name: `${updatedUser.name}`,
+        role: `${updatedUser.role}`,
+        image: `${updatedUser?.image}`,
+      });
+
       router.push(DEFAULT_SIGNIN_REDIRECT);
     } catch (error) {
       console.error(error);
