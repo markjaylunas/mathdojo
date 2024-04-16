@@ -1,6 +1,6 @@
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { Separator } from "../ui/separator";
-import { UserHistoryCard } from "./UserHistoryCard";
+import UserHistoryCard from "./UserHistoryCard";
 
 const history = [
   {
@@ -30,13 +30,7 @@ const UserHistorySection = ({}: Props) => {
         <ScrollArea className=" w-[100vw]">
           <div className="flex space-x-4 px-8 pb-4">
             {history.map((album) => (
-              <UserHistoryCard
-                key={album.title}
-                className="w-[250px]"
-                aspectRatio="portrait"
-                width={250}
-                height={330}
-              />
+              <UserHistoryCard key={album.title} />
             ))}
           </div>
           <ScrollBar className="px-8" orientation="horizontal" />
