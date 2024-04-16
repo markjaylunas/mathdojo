@@ -61,7 +61,7 @@ const AuthNav = () => {
       {/* {!userStore && <ModeToggle />} */}
       {userStore && !gameRoutes.includes(pathname) && (
         <Link href={CLASSIC_GAME_PATH}>
-          <Button variant="outline" className="px-3">
+          <Button className="px-3">
             <Icons.mathSymbols className="mr-1 h-4" />
             Play
           </Button>
