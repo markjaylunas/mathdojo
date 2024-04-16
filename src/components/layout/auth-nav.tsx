@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { IconLogin2 } from "@tabler/icons-react";
-import { usePathname } from "next/navigation";
+import { redirect, usePathname, useRouter } from "next/navigation";
 import {
   CLASSIC_GAME_PATH,
   DEFAULT_SIGNIN_PATH,
@@ -15,15 +15,24 @@ import useUserStore from "@/src/store/useUserStore";
 import { useEffect } from "react";
 import useCurrentUser from "@/src/hooks/use-current-user";
 import { Icons } from "../ui/icons";
+import { re } from "mathjs";
 
 const AuthNav = () => {
   const pathname = usePathname();
+  const router = useRouter();
   const isPublicPage = publicRoutes.includes(pathname);
   const userStore = useUserStore((state) => state.user);
   const setUser = useUserStore((state) => state.setUser);
   const user = useCurrentUser();
+
   const onSetUser = async () => {
-    if (!userStore && user) {
+    if (!user) return;
+    if (!user.username) {
+      router.push(`/user/${user.id}/create-username`);
+      return;
+    }
+
+    if (!userStore) {
       const newUser = {
         id: `${user.id}`,
         email: `${user.email}`,

@@ -62,3 +62,23 @@ export const resetPasswordSchema = z.object({
 });
 
 export type TResetPasswordSchema = z.infer<typeof resetPasswordSchema>;
+
+export const createUsernameSchema = z.object({
+  username: z
+    .string()
+    .min(3, "Username must be at least 3 characters long")
+    .max(30, "Username must be at most 30 characters long")
+    .refine((value) => /^[a-zA-Z0-9._-]+$/.test(value), {
+      message:
+        "Username can only include alphanumeric characters, periods, underscores, and hyphens",
+      path: ["username"],
+    })
+    .refine((value) => !/\s/.test(value), {
+      message: "Username cannot contain spaces",
+      path: ["username"],
+    }),
+
+  id: z.string().min(1, "ID is required"),
+});
+
+export type TCreateUsernameSchema = z.infer<typeof createUsernameSchema>;

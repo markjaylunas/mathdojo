@@ -1,10 +1,12 @@
 "use server";
 
 import {
+  TCreateUsernameSchema,
   TForgotPasswordSchema,
   TResetPasswordSchema,
   TSigninSchema,
   TSignupSchema,
+  createUsernameSchema,
   forgotPasswordSchema,
   resetPasswordSchema,
   signinSchema,
@@ -25,7 +27,8 @@ import { sendPasswordResetEmail, sendVerificationEmail } from "@lib/mail";
 import { getVerificationTokenByToken } from "@/data/token/verification-token";
 import { getPasswordResetTokenByToken } from "@/data/token/password-reset-token";
 import { User } from "@prisma/client";
-import { getUserByEmail } from "@/data/get";
+import { getUserByEmail, getUserById, getUserByUsername } from "@/data/get";
+import { updateUser } from "@/data/update";
 
 // sign in action
 
@@ -250,4 +253,37 @@ export const actionResetPassword = async ({
   });
 
   return { status: "success", message: "Reset password email sent" };
+};
+
+// create username action
+
+export const actionCreateUsername = async (
+  values: TCreateUsernameSchema
+): Promise<ActionResponse> => {
+  const validatedFields = createUsernameSchema.safeParse(values);
+  if (!validatedFields.success) {
+    return { status: "error", message: validatedFields.error.message };
+  }
+  const { id, username } = validatedFields.data;
+
+  const existingUsername = await getUserByUsername({ username });
+  if (existingUsername) {
+    return {
+      status: "error",
+      path: "username",
+      message: "Username already exist",
+    };
+  }
+
+  const existingUser = await getUserById({ id });
+  if (!existingUser) {
+    return { status: "error", path: "username", message: "User doesn't exist" };
+  }
+
+  const updatedUser = await updateUser({ id: existingUser.id, username });
+  if (!updatedUser) {
+    return { status: "error", path: "username", message: "User update failed" };
+  }
+
+  return { status: "success", message: "Created username successfully" };
 };
