@@ -71,7 +71,10 @@ const ClassicLobbyScreen = ({ initialGameMode, onGameStart }: Props) => {
         variant="outline"
         type="multiple"
         value={gameOperationList}
-        onValueChange={setGameOperationList}
+        onValueChange={(value) => {
+          if (value.length === 0) return;
+          setGameOperationList(value);
+        }}
         className="flex flex-col flex-wrap justify-center gap-2"
       >
         {initialGameMode.gameOperations.map((operation) => (
