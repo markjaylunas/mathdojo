@@ -11,7 +11,7 @@ const UserProfilePage = async ({ params }: { params: { userId: string } }) => {
   if (!user) return notFound();
 
   return (
-    <div className="py-8">
+    <div className="">
       <UserProfileSection user={user} />
     </div>
   );
