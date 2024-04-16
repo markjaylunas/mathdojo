@@ -42,6 +42,7 @@ export const {
       if (!existingUser?.emailVerified) return false;
       return true;
     },
+
     async session({ token, session }) {
       if (token.sub && session.user) {
         session.user.id = token.sub;
@@ -64,7 +65,6 @@ export const {
       if (!existingUser) return token;
       token.role = existingUser.role;
       token.username = existingUser.username;
-
       return token;
     },
   },

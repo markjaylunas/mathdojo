@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 
 const UserRoutePage = async () => {
   const session = await auth();
-  if (session) redirect(`/user/${session.user.id}`);
+  if (session) redirect(`/user/${session.user.username}`);
   return null;
 };
 

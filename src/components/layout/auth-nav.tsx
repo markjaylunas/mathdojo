@@ -23,13 +23,14 @@ const AuthNav = () => {
   const setUser = useUserStore((state) => state.setUser);
   const user = useCurrentUser();
   const onSetUser = async () => {
-    if (user) {
+    if (!userStore && user) {
       const newUser = {
         id: `${user.id}`,
         email: `${user.email}`,
         name: `${user.name}`,
         image: `${user.image}`,
         role: user.role,
+        username: `${user.username}`,
       };
 
       setUser(newUser);
