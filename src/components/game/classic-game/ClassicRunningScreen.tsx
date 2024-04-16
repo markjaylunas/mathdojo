@@ -34,7 +34,7 @@ const ClassicRunningScreen = ({
     <GameLayout>
       <GameHeader>
         <div className="flex items-center justify-between gap-10">
-          <Text className="text-xl font-bold">{`Lv${gameInfo.level}`}</Text>
+          <Text className="text-xl font-bold">{`Lv.${gameInfo.level}`}</Text>
 
           <div className="flex items-center justify-center gap-3">
             <div className="flex items-center justify-center gap-1">
