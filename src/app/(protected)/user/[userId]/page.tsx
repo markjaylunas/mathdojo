@@ -1,4 +1,4 @@
-import { getUserById, getUserByUsername } from "@/data/get";
+import { getGameList, getUserById, getUserByUsername } from "@/data/get";
 import UserHistorySection from "@/src/components/user/UserHistorySection";
 import UserProfileSection from "@/src/components/user/UserProfileSection";
 import { notFound } from "next/navigation";
@@ -11,12 +11,12 @@ const UserProfilePage = async ({ params }: { params: { userId: string } }) => {
   const user = userById || userByUsername;
   if (!user) return notFound();
 
+  const gameList = await getGameList({ where: { userId: user.id } });
+
   return (
     <div className="">
-      <div className="px-8">
-        <UserProfileSection user={user} />
-      </div>
-      <UserHistorySection />
+      <UserProfileSection user={user} />
+      <UserHistorySection gameList={gameList} />
     </div>
   );
 };

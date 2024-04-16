@@ -1,6 +1,7 @@
 import { GameMode } from "@/src/lib/types";
 import prisma from "@lib/prisma";
-import { Prisma } from "@prisma/client";
+import { Game, Prisma } from "@prisma/client";
+import { first } from "lodash";
 
 export const getUserByEmail = async (params: { email: string }) => {
   const { email } = params;
@@ -61,4 +62,18 @@ export const getGameMode = async (
     },
   });
   return gameMode as GameMode;
+};
+
+export const getGameList = async (params: {
+  where: Prisma.GameWhereInput;
+}): Promise<Game[]> => {
+  const { where } = params;
+  const gameModeList = await prisma.game.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+    where,
+    take: 10,
+  });
+  return gameModeList;
 };

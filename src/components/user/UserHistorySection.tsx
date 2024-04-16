@@ -1,41 +1,48 @@
-import { ScrollArea, ScrollBar } from "../ui/scroll-area";
-import { Separator } from "../ui/separator";
+import { Game } from "@prisma/client";
+import { Carousel, CarouselContent } from "../ui/carousel";
 import UserHistoryCard from "./UserHistoryCard";
+import Link from "next/link";
+import { Button } from "../ui/button";
+import { Icons } from "../ui/icons";
+import { CLASSIC_GAME_PATH } from "@/src/lib/routes";
+import Text from "../ui/text";
 
-const history = [
-  {
-    title: "The Weeknd",
-  },
-  {
-    title: "The Weeknd1",
-  },
-  {
-    title: "The Weeknd2",
-  },
-];
-
-type Props = {};
-const UserHistorySection = ({}: Props) => {
+type Props = {
+  gameList: Game[];
+};
+const UserHistorySection = ({ gameList }: Props) => {
   return (
     <div className="">
-      <div className="mt-6 space-y-2 px-8">
+      <div className="mt-6 space-y-2">
         <h2 className="text-xl font-semibold tracking-tight">History</h2>
         <p className="text-sm text-muted-foreground">
           Here&apos;s your game history. It includes all the games you&apos;ve
           played recently.
         </p>
-        <Separator className="" />
       </div>
-      <div className="relative mt-4">
-        <ScrollArea className=" w-[100vw]">
-          <div className="flex space-x-4 px-8 pb-4">
-            {history.map((album) => (
-              <UserHistoryCard key={album.title} />
+      <Carousel
+        opts={{
+          align: "start",
+        }}
+        className="mt-4 w-full max-w-full"
+      >
+        {gameList.length > 0 ? (
+          <CarouselContent>
+            {gameList.map((game) => (
+              <UserHistoryCard game={game} key={game.id} />
             ))}
+          </CarouselContent>
+        ) : (
+          <div className="min-h-18 flex flex-col items-center justify-center gap-4">
+            <Text className="text-center text-sm text-muted-foreground">
+              Haven&apos;t played yet?&nbsp;
+              <Link href={CLASSIC_GAME_PATH}>
+                <span className="underline">Play Now</span>
+              </Link>
+            </Text>
           </div>
-          <ScrollBar className="px-8" orientation="horizontal" />
-        </ScrollArea>
-      </div>
+        )}
+      </Carousel>
     </div>
   );
 };
