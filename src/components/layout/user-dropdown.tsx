@@ -28,9 +28,11 @@ const UserDropdown = ({ name, avatar }: Props) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Avatar className="h-7 w-7 cursor-pointer border-gray-950">
+        <Avatar className="size-7 cursor-pointer border-gray-950">
           <AvatarImage src={avatar} />
-          <AvatarFallback>{getUserInitials(name)}</AvatarFallback>
+          <AvatarFallback className="size-7">
+            {getUserInitials(name)}
+          </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="mr-2 mt-1 min-w-40 ">

@@ -28,3 +28,7 @@ export const isUUID = (str: string) => {
     /^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$/;
   return uuidRegex.test(str);
 };
+
+export const usernameFormat = (str: string) => {
+  return str.replace(/[^a-zA-Z0-9._-]/g, "");
+};

@@ -63,11 +63,13 @@ const SigninForm = () => {
       if (user) {
         const signedUser = {
           id: user.id,
+          username: `${user.username}`,
           email: `${user.email}`,
           name: `${user.name}`,
           image: `${user.image}`,
           role: `${user.role}` as Role,
         };
+
         setUser(signedUser);
       }
 

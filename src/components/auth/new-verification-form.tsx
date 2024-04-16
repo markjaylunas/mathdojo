@@ -56,7 +56,7 @@ const NewVerificationForm = () => {
   };
 
   return (
-    <Card className="mt-12 px-4 py-6">
+    <Card className="mt-12 max-w-lg px-4 py-6">
       <Heading className="mb-6 text-center">Email Verification</Heading>
 
       {response && (
@@ -67,9 +67,9 @@ const NewVerificationForm = () => {
         >
           <div className="flex items-center justify-center">
             {response.status === "error" ? (
-              <IconCoins className="mt-4 h-6 w-6" />
+              <IconCoins className="size-6" />
             ) : (
-              <IconMailCheck className="mt-4 h-6 w-6" />
+              <IconMailCheck className="size-6" />
             )}
           </div>
           <Text

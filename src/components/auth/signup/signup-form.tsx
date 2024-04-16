@@ -17,7 +17,7 @@ import { useToast } from "@/src/components/ui/use-toast";
 import _ from "lodash";
 import SubmitButton from "../../ui/submit-button";
 import { useState } from "react";
-import { removeSpaceBetweenWords } from "@/src/lib/string";
+import { removeSpaceBetweenWords, usernameFormat } from "@/src/lib/string";
 import { Button } from "../../ui/button";
 import { IconEye } from "@tabler/icons-react";
 import { IconEyeClosed } from "@tabler/icons-react";
@@ -30,6 +30,7 @@ const SignupForm = () => {
   const form = useForm<TSignupSchema>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
+      username: "",
       name: "",
       email: "",
       password: "",
@@ -68,6 +69,27 @@ const SignupForm = () => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+        <FormField
+          control={form.control}
+          name="username"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Username</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="makje"
+                  {...field}
+                  disabled={isLoading}
+                  onChange={(data) =>
+                    field.onChange(usernameFormat(data.currentTarget.value))
+                  }
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <FormField
           control={form.control}
           name="name"

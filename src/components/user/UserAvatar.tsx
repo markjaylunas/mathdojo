@@ -13,7 +13,7 @@ const UserAvatar = ({ user }: Props) => {
     <Avatar className={cn("cursor-pointer border-gray-950")}>
       <Link href={`/user/${username ? username : id}`}>
         <AvatarImage src={`${image}`} />
-        <AvatarFallback className="w-full">
+        <AvatarFallback className="w-full p-2 ">
           <IconGhost />
         </AvatarFallback>
       </Link>

@@ -4,7 +4,7 @@ import { Suspense } from "react";
 
 const Page = () => {
   return (
-    <div>
+    <div className="flex justify-center">
       <Suspense
         fallback={
           <div className="mb-6 flex items-center  justify-center">

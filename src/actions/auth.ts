@@ -94,7 +94,7 @@ export const actionSignup = async (
     return { status: "error", message: validatedFields.error.message };
   }
 
-  const { name, email, password } = validatedFields.data;
+  const { username, name, email, password } = validatedFields.data;
 
   const existingUser = await prisma.user.findUnique({
     where: { email },
@@ -108,6 +108,7 @@ export const actionSignup = async (
 
   await prisma.user.create({
     data: {
+      username,
       name,
       email,
       password: hashedPassword,

@@ -8,6 +8,7 @@ import { DEFAULT_SIGNIN_PATH } from "./routes";
 
 export type ExtendedUser = DefaultSession["user"] & {
   role: "ADMIN" | "USER";
+  username: string;
 };
 
 declare module "next-auth" {
@@ -49,6 +50,10 @@ export const {
         session.user.role = token.role as UserRole;
       }
 
+      if (token.username && session.user) {
+        session.user.username = token.username as string;
+      }
+
       return session;
     },
 
@@ -58,6 +63,7 @@ export const {
 
       if (!existingUser) return token;
       token.role = existingUser.role;
+      token.username = existingUser.username;
 
       return token;
     },
