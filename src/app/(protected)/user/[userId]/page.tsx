@@ -1,4 +1,6 @@
 import { getUserById, getUserByUsername } from "@/data/get";
+import { ScrollArea } from "@/src/components/ui/scroll-area";
+import UserHistorySection from "@/src/components/user/UserHistorySection";
 import UserProfileSection from "@/src/components/user/UserProfileSection";
 import { notFound } from "next/navigation";
 
@@ -10,9 +12,29 @@ const UserProfilePage = async ({ params }: { params: { userId: string } }) => {
   const user = userById || userByUsername;
   if (!user) return notFound();
 
+  const history = [
+    {
+      title: "The Weeknd",
+    },
+    {
+      title: "The Weeknd1",
+    },
+    {
+      title: "The Weeknd2",
+    },
+    {
+      title: "The Weeknd3",
+    },
+    {
+      title: "The Weeknd4",
+    },
+  ];
   return (
     <div className="">
-      <UserProfileSection user={user} />
+      <div className="px-8">
+        <UserProfileSection user={user} />
+      </div>
+      <UserHistorySection />
     </div>
   );
 };
