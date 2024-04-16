@@ -5,7 +5,7 @@ import Link from "next/link";
 type Props = {
   user: User;
 };
-const UserProfileSectin = ({ user }: Props) => {
+const UserProfileSection = ({ user }: Props) => {
   const { id, email, name, username } = user;
   return (
     <div className="flex items-center gap-2">
@@ -22,4 +22,4 @@ const UserProfileSectin = ({ user }: Props) => {
   );
 };
 
-export default UserProfileSectin;
+export default UserProfileSection;
