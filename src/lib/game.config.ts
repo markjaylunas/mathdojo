@@ -49,7 +49,7 @@ export const CLASSIC_TIME = convertTimeToMilliseconds({
 });
 
 export const CLASSIC_CORRECT_ADD_TIME = convertTimeToMilliseconds({
-  seconds: 7,
+  seconds: 5,
 });
 
 export const CLASSIC_WRONG_REDUCE_TIME = convertTimeToMilliseconds({
