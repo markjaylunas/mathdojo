@@ -10,7 +10,7 @@ const ClassicPage = async () => {
   }
 
   return (
-    <div className="flex min-h-[calc(100vh-3.6rem)] flex-col p-8">
+    <div className="flex min-h-[calc(100vh-7.2rem)] flex-col p-8">
       <ClassicGame gameMode={gameMode} />
     </div>
   );
