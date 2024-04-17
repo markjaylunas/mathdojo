@@ -18,6 +18,8 @@ import Link from "next/link";
 import { Fragment } from "react";
 import { Icons } from "../ui/icons";
 import { useTheme } from "next-themes";
+import { useStore } from "zustand";
+import useGameSessionStore from "@/src/store/useGameSessionStore";
 
 type Props = {
   name: string;
@@ -25,15 +27,24 @@ type Props = {
 };
 
 const UserDropdown = ({ name, avatar }: Props) => {
+  const { gameSession, gamePause } = useStore(
+    useGameSessionStore,
+    (state) => state
+  );
+  const { status } = gameSession.timer;
+  const isGameRunning = status === "RUNNING";
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Avatar className="size-7 cursor-pointer border-gray-950">
-          <AvatarImage src={avatar} />
-          <AvatarFallback className="size-7">
-            {getUserInitials(name)}
-          </AvatarFallback>
-        </Avatar>
+        <button onClick={() => isGameRunning && gamePause()}>
+          <Avatar className="size-7 cursor-pointer border-gray-950">
+            <AvatarImage src={avatar} />
+            <AvatarFallback className="size-7">
+              {getUserInitials(name)}
+            </AvatarFallback>
+          </Avatar>
+        </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="mr-2 mt-1 min-w-40 ">
         {routesConfig.userNav.map((navItem, navItemIndex) => (

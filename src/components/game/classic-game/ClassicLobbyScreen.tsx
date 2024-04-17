@@ -32,7 +32,7 @@ const ClassicLobbyScreen = ({ initialGameMode, onGameStart }: Props) => {
   );
 
   useEffect(() => {
-    if (!gameSession.gameMode) {
+    if (gameSession.gameMode === null) {
       setGameSession({
         ...gameSession,
         initialGameMode: initialGameMode,

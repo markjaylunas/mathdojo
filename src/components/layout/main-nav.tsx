@@ -23,10 +23,12 @@ export function MainNav() {
 
   const pathname = usePathname();
 
-  const { revealAnswer, setRevealAnswer } = useStore(
+  const { revealAnswer, setRevealAnswer, gameSession, gamePause } = useStore(
     useGameSessionStore,
     (state) => state
   );
+  const { status } = gameSession.timer;
+  const isGameRunning = status === "RUNNING";
 
   const isGamePath = gameRoutes.includes(pathname);
 
@@ -37,6 +39,7 @@ export function MainNav() {
           <Button
             variant="ghost"
             className="mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 "
+            onClick={() => isGameRunning && gamePause()}
           >
             <Icons.menu className="h-4 w-4" />
             <span className="sr-only">Toggle Menu</span>
