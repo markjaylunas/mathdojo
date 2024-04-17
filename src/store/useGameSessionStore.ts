@@ -421,7 +421,7 @@ const useGameSessionStore = create<
     {
       name: "game-session",
       skipHydration: true,
-      storage: createJSONStorage(() => sessionStorage),
+      storage: createJSONStorage(() => localStorage),
     }
   )
 );
