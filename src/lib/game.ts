@@ -228,9 +228,6 @@ export const getRating = ({
 
   const levelThreshold = levelThresholds[level - 1]; // Adjust level to zero-based index
 
-  console.log({ accuracy });
-  console.log({ levelThreshold });
-  console.log(levelThreshold - 0.2);
   if (accuracy === levelThreshold && level === MAX_CLASSIC_LEVEL) {
     return "SSS";
   } else if (
