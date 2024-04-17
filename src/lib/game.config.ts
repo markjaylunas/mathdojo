@@ -91,3 +91,14 @@ export const INITIAL_GAME_SESSION_STATE: GameSessionState = {
   },
   isCooldown: false,
 };
+
+export const RATING_CSS = {
+  SSS: "",
+  SS: "",
+  S: "",
+  A: "text-blue-600",
+  B: "text-green-600",
+  C: "text-red-600",
+  D: "text-purple-600",
+  E: "text-gray-600",
+};

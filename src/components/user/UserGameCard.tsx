@@ -3,18 +3,19 @@ import { Card, CardContent } from "../ui/card";
 import Text from "../ui/text";
 import { formatNumber } from "@/src/lib/game";
 import { Separator } from "../ui/separator";
-import { formatTime } from "@/src/lib/utils";
+import { cn, formatTime } from "@/src/lib/utils";
 import { IconClockFilled, IconSquareXFilled } from "@tabler/icons-react";
 import { IconSquareCheckFilled } from "@tabler/icons-react";
 import _ from "lodash";
 import moment from "moment";
+import { RATING_CSS } from "@/src/lib/game.config";
 
 type Props = {
   game: Game;
 };
 const UserGameCard = ({ game }: Props) => {
   return (
-    <Card className=" h-full rounded-sm">
+    <Card className={cn("h-full rounded-sm")}>
       <CardContent className="flex h-full flex-col items-start justify-between p-1 py-2">
         <div className="flex w-full items-center justify-center px-3">
           <div className="flex w-full flex-col justify-between ">
@@ -23,7 +24,23 @@ const UserGameCard = ({ game }: Props) => {
             </Text>
             <Text className="text-xs font-semibold ">Lv.{game.level}</Text>
           </div>
-          <Text className="text-xl font-extrabold">{game.rating}</Text>
+
+          {game.rating.includes("S") ? (
+            <p className="relative flex">
+              <span className="absolute inline-flex  text-4xl font-extrabold text-yellow-300 duration-1000">
+                {game.rating}
+              </span>
+              <span className="relative inline-flex animate-pulse text-4xl font-extrabold text-amber-500">
+                {game.rating}
+              </span>
+            </p>
+          ) : (
+            <p
+              className={cn("text-3xl font-extrabold", RATING_CSS[game.rating])}
+            >
+              {game.rating}
+            </p>
+          )}
         </div>
         <Separator className="my-1" />
 
