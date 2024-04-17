@@ -15,7 +15,7 @@ export const convertTimeToMilliseconds = ({
   return hours * 3600000 + minutes * 60000 + seconds * 1000 + milliseconds;
 };
 
-export const CLASSIC_LEVEL_UP_THRESHOLD = 2;
+export const CLASSIC_LEVEL_UP_THRESHOLD = 25;
 export const MAX_CLASSIC_LEVEL = 12;
 
 export const INITIAL_CLASSIC_GAME_INFO: GameInfo = {
