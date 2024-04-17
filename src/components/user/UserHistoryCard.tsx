@@ -29,16 +29,19 @@ const UserHistoryCard = ({ game }: Props) => {
           </div>
           <Separator className="my-1" />
 
-          <div className="flex flex-col items-start justify-center gap-1 px-3">
-            <div className="flex items-center justify-start gap-1">
-              <IconSquareXFilled size={20} className="text-red-600" />
-              <Text className="text-sm font-medium">{game.wrong}</Text>
+          <div className="flex w-full flex-1 flex-col gap-2">
+            <div className="flex w-full flex-wrap items-center justify-between gap-1 px-3">
+              <div className="flex items-center justify-start gap-1">
+                <IconSquareCheckFilled size={20} className="text-green-600" />
+                <Text className="text-sm font-medium">{game.correct}</Text>
+              </div>
+              <div className="flex items-center justify-start gap-1">
+                <IconSquareXFilled size={20} className="text-red-600" />
+                <Text className="text-sm font-medium">{game.wrong}</Text>
+              </div>
             </div>
-            <div className="flex items-center justify-start gap-1">
-              <IconSquareCheckFilled size={20} className="text-green-600" />
-              <Text className="text-sm font-medium">{game.correct}</Text>
-            </div>
-            <div className="flex items-center justify-start gap-1">
+
+            <div className="flex w-full items-center justify-center gap-1">
               <IconClockFilled size={20} className="text-gray-600" />
               <Text className="text-sm font-medium">
                 {formatTime(game.gameTime).formattedTime}

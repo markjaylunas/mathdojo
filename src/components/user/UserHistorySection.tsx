@@ -6,6 +6,7 @@ import { Button } from "../ui/button";
 import { Icons } from "../ui/icons";
 import { CLASSIC_GAME_PATH } from "@/src/lib/routes";
 import Text from "../ui/text";
+import { ScrollBar } from "../ui/scroll-area";
 
 type Props = {
   gameList: Game[];
