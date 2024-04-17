@@ -3,6 +3,7 @@
 import { createGame } from "@/data/post";
 import { Prisma, Game } from "@prisma/client";
 import { ActionResponse } from "../lib/types";
+import { revalidatePath } from "next/cache";
 
 // create game
 export const actionCreateGame = async (
@@ -14,6 +15,7 @@ export const actionCreateGame = async (
     return { status: "error", message: "Failed to create game" };
   }
 
+  revalidatePath(`/game/${createdGame.userId}`);
   return {
     status: "success",
     message: "Saved game successfully",
