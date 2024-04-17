@@ -1,25 +1,21 @@
-import { Difficulty, OperationSymbol, Problem, GameMode } from "./types";
+import {
+  Difficulty,
+  OperationSymbol,
+  Problem,
+  GameMode,
+  GameOperation,
+} from "./types";
 import { v4 as uuidV4 } from "uuid";
-import { evaluate, re } from "mathjs";
-import { GameSessionState } from "../store/useGameSessionStore";
-import { Game, Rating } from "@prisma/client";
+import { evaluate } from "mathjs";
+import { Rating } from "@prisma/client";
+import { MAX_CLASSIC_LEVEL } from "./game.config";
 
-export const convertTimeToMilliseconds = ({
-  hours = 0,
-  minutes = 0,
-  seconds = 0,
-  milliseconds = 0,
-}: {
-  hours?: number;
-  minutes?: number;
-  seconds?: number;
-  milliseconds?: number;
-}) => {
-  return hours * 3600000 + minutes * 60000 + seconds * 1000 + milliseconds;
-};
-
-export const generateNumberFromRange = (min: number, max: number) => {
-  return Math.floor(Math.random() * (max - min + 1) + min);
+export const getRandomInt = (min: number, max: number) => {
+  let byteArray = new Uint32Array(1);
+  window.crypto.getRandomValues(byteArray);
+  let range = max - min;
+  let maxRange = Math.pow(2, 32) - 1;
+  return Math.floor((byteArray[0] / maxRange) * range) + min;
 };
 
 export const generateChoices = (answer: number) => {
@@ -41,10 +37,8 @@ export const toTwoDecimalNumber = (num: number) => {
 
 export const generateProblem = ({
   gameMode,
-  level = 0,
 }: {
   gameMode: GameMode | null;
-  level?: number;
 }): Problem => {
   if (gameMode === null)
     throw new Error("Game setting is null, cannot generate problem");
@@ -57,7 +51,7 @@ export const generateProblem = ({
   let numberList: number[] = [];
 
   numberList = operation.digitRange.map((range) =>
-    generateNumberFromRange(range.minRange, range.maxRange)
+    getRandomInt(range.minRange, range.maxRange)
   );
 
   switch (operation.operation) {
@@ -90,7 +84,7 @@ export const generateProblem = ({
   const choices = generateChoices(answer);
   const id = uuidV4().toString();
 
-  return {
+  const newProblem: Problem = {
     id,
     operation: operation.operation,
     numberList,
@@ -102,6 +96,8 @@ export const generateProblem = ({
     status: "UNANSWERED",
     lapTime: null,
   };
+
+  return newProblem;
 };
 
 export const formatNumber = (num: number) => {
@@ -122,8 +118,8 @@ export const adjustGameSettingDifficulty = ({
 }) => {
   if (gameMode === null)
     throw new Error("Game setting is null, cannot adjust difficulty");
-
-  const lowestDifficultyIndex = gameMode.gameOperations.reduce(
+  let lowestDifficultyIndex = 1;
+  lowestDifficultyIndex = gameMode.gameOperations.reduce(
     (acc, operation, index) => {
       const difficultyIndex = DIFFICULTY_HEIRARCHY.indexOf(
         operation.difficulty
@@ -137,55 +133,78 @@ export const adjustGameSettingDifficulty = ({
     -1
   );
 
-  const newOperationList = gameMode.gameOperations.map((operation, index) => {
-    if (index === lowestDifficultyIndex) {
-      const newDigitRange = operation.digitRange.map((digitRange) => {
-        const newDigit = Math.min(digitRange.digit + 1, 9);
-        let newMinRange = Math.pow(10, newDigit - 1);
-        let newMaxRange = Math.pow(10, newDigit) - 1;
+  const operation = gameMode.gameOperations[lowestDifficultyIndex];
 
-        // Restrictions for each operation
-        switch (operation.operation) {
-          case "ADDITION":
-            break;
-          case "SUBTRACTION":
-            if (operation.difficulty === "EXPERT") {
-              newMinRange = Math.min(newMinRange, newMaxRange - 1);
-            }
-            break;
-          case "MULTIPLICATION":
-            newMaxRange = Math.min(newMaxRange, 9);
-            break;
-          case "DIVISION":
-            newMinRange = Math.max(newMinRange, 1);
-            break;
-          default:
-            break;
-        }
+  let maxDigit = 6;
+  switch (operation.operation) {
+    case "ADDITION":
+      maxDigit = 7;
+      break;
+    case "SUBTRACTION":
+      maxDigit = 7;
+      break;
+    case "MULTIPLICATION":
+      maxDigit = 5;
+      break;
+    case "DIVISION":
+      maxDigit = 7;
+      break;
+    default:
+      maxDigit = 6;
+      break;
+  }
 
-        return {
-          ...digitRange,
-          digit: newDigit,
-          minRange: newMinRange,
-          maxRange: newMaxRange,
-        };
-      });
+  const digitRangeIndex = operation.digitRange[0].digit >= maxDigit ? 1 : 0;
 
-      return {
-        ...operation,
-        difficulty:
-          DIFFICULTY_HEIRARCHY[
-            DIFFICULTY_HEIRARCHY.indexOf(operation.difficulty) + 1
-          ],
-        digitRange: newDigitRange,
-      };
-    }
-    return operation;
-  });
+  const digitRange = operation.digitRange[digitRangeIndex];
+
+  const newDigit = Math.min(digitRange.digit + 1, maxDigit);
+  let newMinRange = Math.pow(10, newDigit - 1);
+  let newMaxRange = Math.pow(10, newDigit) - 1;
+
+  // Restrictions for each operation
+  switch (operation.operation) {
+    case "ADDITION":
+      break;
+    case "SUBTRACTION":
+      if (operation.difficulty === "EXPERT") {
+        newMinRange = Math.min(newMinRange, newMaxRange - 1);
+      }
+      break;
+    case "MULTIPLICATION":
+      newMaxRange = Math.min(newMaxRange, 9);
+      break;
+    case "DIVISION":
+      newMinRange = Math.max(newMinRange, 1);
+      break;
+    default:
+      break;
+  }
+
+  const newDigitRange = {
+    ...digitRange,
+    digit: newDigit,
+    minRange: newMinRange,
+    maxRange: newMaxRange,
+  };
+
+  const newOperation: GameOperation = {
+    ...operation,
+    difficulty:
+      DIFFICULTY_HEIRARCHY[
+        DIFFICULTY_HEIRARCHY.indexOf(operation.difficulty) + 1
+      ],
+    digitRange: operation.digitRange.map((range, rangeIndex) =>
+      rangeIndex === digitRangeIndex ? newDigitRange : range
+    ),
+  };
 
   const newGameSetting: GameMode = {
     ...gameMode,
-    gameOperations: newOperationList,
+    gameOperations: [
+      ...gameMode.gameOperations.filter((_, i) => i !== lowestDifficultyIndex),
+      newOperation,
+    ],
   };
   return newGameSetting;
 };
@@ -203,32 +222,22 @@ export const getRating = ({
   const accuracy = correct / totalQuestions;
 
   // Define base level thresholds
-  const baseLevelThresholds = [0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3];
-  let levelThresholds = baseLevelThresholds;
+  const levelThresholds = [
+    1, 0.9, 0.85, 0.8, 0.75, 0.7, 0.65, 0.6, 0.55, 0.5, 0.4, 0.3,
+  ].sort((a, b) => a - b);
 
-  // Extend level thresholds if level exceeds the number of base thresholds
-  if (level > baseLevelThresholds.length) {
-    const diff = level - baseLevelThresholds.length;
-    const newThresholds = Array(diff).fill(0.2); // Fill with default threshold (0.2)
-    levelThresholds = baseLevelThresholds.concat(newThresholds);
-  }
+  const levelThreshold = levelThresholds[level - 1]; // Adjust level to zero-based index
 
-  // Adjust level within the range of level thresholds
-  const adjustedLevel = Math.min(level, levelThresholds.length);
-
-  const levelThreshold = levelThresholds[adjustedLevel - 1]; // Adjust level to zero-based index
-
-  if (adjustedLevel > levelThresholds.length) {
-    if (accuracy >= levelThreshold) {
-      return "SSS";
-    } else if (accuracy >= levelThreshold - 0.1) {
-      return "SS";
-    } else if (accuracy >= levelThreshold - 0.2) {
-      return "S";
-    }
-  }
-
-  if (accuracy >= levelThreshold - 0.3) {
+  if (accuracy === levelThreshold && level === MAX_CLASSIC_LEVEL) {
+    return "SSS";
+  } else if (
+    accuracy >= levelThreshold - 0.1 &&
+    level > MAX_CLASSIC_LEVEL / 2
+  ) {
+    return "SS";
+  } else if (accuracy >= levelThreshold - 0.2) {
+    return "S";
+  } else if (accuracy >= levelThreshold - 0.3) {
     return "A";
   } else if (accuracy >= levelThreshold - 0.4) {
     return "B";

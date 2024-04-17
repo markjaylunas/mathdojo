@@ -6,6 +6,8 @@ import {
   CLASSIC_LEVEL_UP_THRESHOLD,
   CLASSIC_TIME,
   INITIAL_GAME_SESSION_STATE,
+  MAX_CLASSIC_LEVEL,
+  GAME_MAX_TIMER,
 } from "../lib/game.config";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { GameInfo, GameMode, Problem } from "../lib/types";
@@ -130,7 +132,6 @@ const useGameSessionStore = create<
               ...state.gameSession,
               problem: generateProblem({
                 gameMode: state.gameSession.gameMode,
-                level: state.gameSession.gameInfo.level,
               }),
               timer: {
                 ...timer,
@@ -175,7 +176,8 @@ const useGameSessionStore = create<
           const newProblemList = [...(problemList || []), problemAnswered];
 
           const doLevelUp =
-            levelCounter === CLASSIC_LEVEL_UP_THRESHOLD && level <= 12;
+            levelCounter === CLASSIC_LEVEL_UP_THRESHOLD &&
+            level < MAX_CLASSIC_LEVEL;
 
           const newLevel = doLevelUp ? level + 1 : level;
 
@@ -189,6 +191,12 @@ const useGameSessionStore = create<
 
           const combo = isCorrect ? state.gameSession.combo + 1 : 0;
           const scoreIncrement = isCorrect ? combo * newLevel : 0;
+
+          const initialValue = isCorrect
+            ? timer.value + CLASSIC_CORRECT_ADD_TIME
+            : timer.value - CLASSIC_WRONG_REDUCE_TIME;
+
+          const timerValue = Math.min(initialValue, GAME_MAX_TIMER);
 
           setTimeout(() => {
             useGameSessionStore
@@ -228,9 +236,7 @@ const useGameSessionStore = create<
               problemList: newProblemList,
               timer: {
                 ...timer,
-                value: isCorrect
-                  ? timer.value + CLASSIC_CORRECT_ADD_TIME
-                  : timer.value - CLASSIC_WRONG_REDUCE_TIME,
+                value: timerValue,
                 lap: currentLapTime,
                 lapHistory: [...timer.lapHistory, currentLapTime - timer.lap],
                 history: [
@@ -306,7 +312,6 @@ const useGameSessionStore = create<
               ...state.gameSession,
               problem: generateProblem({
                 gameMode: state.gameSession.gameMode,
-                level: state.gameSession.gameInfo.level,
               }),
               timer: {
                 ...timer,

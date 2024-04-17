@@ -40,8 +40,7 @@ const GameView = ({ problem }: Props) => {
         </div>
       </div>
       <div className="border-[3px] border-gray-600 dark:border-gray-300" />
-      <div className="flex items-end justify-between gap-5">
-        <Text className="text-right text-5xl font-medium">=</Text>
+      <div className="flex items-end justify-end gap-5">
         {userAnswer !== null ? (
           <Number
             numberFullValue={userAnswer}

@@ -12,6 +12,7 @@ import { startCase, toLower } from "lodash";
 import { IconCheckbox } from "@tabler/icons-react";
 import { Icons } from "../../ui/icons";
 import Text from "../../ui/text";
+import { getRating } from "@/src/lib/game";
 
 type Props = {
   initialGameMode: GameMode;

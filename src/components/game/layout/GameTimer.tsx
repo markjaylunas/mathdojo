@@ -5,6 +5,7 @@ import React, { useEffect } from "react";
 import { Progress } from "../../ui/progress";
 import { Problem } from "@/src/lib/types";
 import { TimerState } from "@/src/store/useGameSessionStore";
+import { GAME_MAX_TIMER } from "@/src/lib/game.config";
 
 type GameTimerProps = {
   timer: TimerState;
@@ -19,9 +20,14 @@ const GameTimer: React.FC<GameTimerProps> = ({
   setTimerValue,
   gameFinish,
 }) => {
-  const { value, initialValue, totalAddedTime, isActive } = timer;
+  const { value, initialValue, totalAddedTime, totalReducedTime, isActive } =
+    timer;
   const { formattedTime } = formatTime(value);
-  const percentage = (timer.value / (initialValue + totalAddedTime)) * 100;
+  const totalTime = Math.min(
+    initialValue + totalAddedTime - totalReducedTime,
+    GAME_MAX_TIMER
+  );
+  const percentage = (timer.value / totalTime) * 100;
 
   useEffect(() => {
     const intervalId = setInterval(() => {

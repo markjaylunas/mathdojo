@@ -5,6 +5,7 @@ import { Button } from "../../ui/button";
 import { cn } from "@/src/lib/utils";
 import { useStore } from "zustand";
 import useGameSessionStore from "@/src/store/useGameSessionStore";
+import { formatNumber } from "@/src/lib/game";
 
 type Props = {
   problem: Problem;
@@ -18,6 +19,7 @@ const GameChoices = ({ problem, onAnswer, disabled }: Props) => {
       {problem.choices.map((choice, index) => {
         const showAnswer = problem.status !== "UNANSWERED" || revealAnswer;
         const isAnswer = problem.answer === choice;
+        const choiceLength = choice.toString().length;
         return (
           <Button
             size="icon"
@@ -31,7 +33,17 @@ const GameChoices = ({ problem, onAnswer, disabled }: Props) => {
             disabled={disabled}
             key={problem.id + index}
           >
-            <p className="px-2">{choice}</p>
+            <p
+              className={cn(
+                choiceLength > 6
+                  ? "text-lg"
+                  : choiceLength > 4
+                    ? "text-2xl"
+                    : ""
+              )}
+            >
+              {formatNumber(choice)}
+            </p>
           </Button>
         );
       })}

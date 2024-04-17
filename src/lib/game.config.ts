@@ -1,8 +1,22 @@
 import { GameSessionState } from "../store/useGameSessionStore";
-import { convertTimeToMilliseconds } from "./game";
 import { GameInfo } from "./types";
 
-export const CLASSIC_LEVEL_UP_THRESHOLD = 20;
+export const convertTimeToMilliseconds = ({
+  hours = 0,
+  minutes = 0,
+  seconds = 0,
+  milliseconds = 0,
+}: {
+  hours?: number;
+  minutes?: number;
+  seconds?: number;
+  milliseconds?: number;
+}) => {
+  return hours * 3600000 + minutes * 60000 + seconds * 1000 + milliseconds;
+};
+
+export const CLASSIC_LEVEL_UP_THRESHOLD = 2;
+export const MAX_CLASSIC_LEVEL = 12;
 
 export const INITIAL_CLASSIC_GAME_INFO: GameInfo = {
   highestCombo: 0,
@@ -15,6 +29,10 @@ export const INITIAL_CLASSIC_GAME_INFO: GameInfo = {
   level: 1,
   rating: "E",
 };
+
+export const GAME_MAX_TIMER = convertTimeToMilliseconds({
+  minutes: 3,
+});
 
 export const GAME_START_TIME = convertTimeToMilliseconds({
   seconds: 4,

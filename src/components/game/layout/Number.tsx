@@ -20,6 +20,12 @@ const Number = ({
   const spaceCount =
     maxDigitLength > valueLength ? maxDigitLength - valueLength : 0;
   const numberValue = `${" ".repeat(spaceCount)}${numberFullValue}`;
+  const size =
+    maxDigitLength > 7
+      ? "text-4xl w-6"
+      : maxDigitLength > 4
+        ? "text-5xl w-8"
+        : "text-6xl w-10";
 
   const color =
     status === "CORRECT"
@@ -38,11 +44,7 @@ const Number = ({
         .map((digit, index) => (
           <p
             key={index}
-            className={cn(
-              "w-8 text-center text-5xl font-bold",
-              className,
-              color
-            )}
+            className={cn("text-center  font-bold", size, className, color)}
             {...props}
           >
             {digit}
