@@ -1,5 +1,5 @@
 import { Game } from "@prisma/client";
-import { Carousel, CarouselContent } from "../ui/carousel";
+import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel";
 import UserHistoryCard from "./UserHistoryCard";
 import Link from "next/link";
 import { Button } from "../ui/button";
@@ -30,7 +30,12 @@ const UserHistorySection = ({ gameList }: Props) => {
         {gameList.length > 0 ? (
           <CarouselContent>
             {gameList.map((game) => (
-              <UserHistoryCard game={game} key={game.id} />
+              <CarouselItem
+                className="h-44 basis-1/2  md:basis-1/3 lg:basis-1/4"
+                key={game.id}
+              >
+                <UserHistoryCard game={game} />
+              </CarouselItem>
             ))}
           </CarouselContent>
         ) : (
