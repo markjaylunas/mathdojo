@@ -223,12 +223,12 @@ export const getRating = ({
 
   // Define base level thresholds
   const levelThresholds = [
-    1, 0.9, 0.85, 0.8, 0.75, 0.7, 0.65, 0.6, 0.55, 0.5, 0.4, 0.3,
+    1, 0.95, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0,
   ].sort((a, b) => b - a);
 
   const levelThreshold = levelThresholds[level - 1]; // Adjust level to zero-based index
 
-  if (accuracy === levelThreshold && level === MAX_CLASSIC_LEVEL) {
+  if (accuracy === levelThreshold + 1 && level === MAX_CLASSIC_LEVEL) {
     return "SSS";
   } else if (
     accuracy >= levelThreshold - 0.1 &&
