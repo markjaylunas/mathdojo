@@ -1,12 +1,20 @@
 import Heading from "../../ui/heading";
 import { Button } from "../../ui/button";
-import { IconHome, IconReload } from "@tabler/icons-react";
+import {
+  IconHome,
+  IconReload,
+  IconSquareCheckFilled,
+  IconSquareXFilled,
+} from "@tabler/icons-react";
 import Link from "next/link";
 import { DEFAULT_HOME_PATH } from "@/src/lib/routes";
 import GameLayout from "./GameLayout";
-import { formatTime } from "@/src/lib/utils";
+import { cn, formatTime } from "@/src/lib/utils";
 import { GameSessionState } from "@/src/store/useGameSessionStore";
 import { Icons } from "../../ui/icons";
+import Text from "../../ui/text";
+import { formatNumber } from "@/src/lib/game";
+import { RATING_CSS } from "@/src/lib/game.config";
 
 type Props = {
   gameSession: GameSessionState;
@@ -18,22 +26,83 @@ const GameFinished = ({ gameSession, onRetry, isSaving }: Props) => {
   return (
     <GameLayout>
       <div className="flex flex-1 flex-col justify-around">
-        <div className="flex h-full flex-col items-center justify-center gap-2">
-          <Heading className="text-5xl">Game Over</Heading>
-          <h2 className=" text-xl">Score: {gameInfo.score}</h2>
-          <h2 className=" text-xl">Correct: {gameInfo.correct}</h2>
-          <h2 className=" text-xl">Wrong: {gameInfo.wrong}</h2>
-          <h2 className=" text-xl">Highest Combo: {gameInfo.highestCombo}</h2>
-          <h2 className=" text-xl">Total Combo: {gameInfo.totalCombo}</h2>
-          <h2 className=" text-xl">Total Answered: {gameInfo.totalAnswered}</h2>
-          <h2 className=" text-xl">
-            Game Time: {formatTime(gameInfo.gameTime).formattedTime}
-          </h2>
+        <Heading order="5xl" className="text-center">
+          Game Over
+        </Heading>
+
+        <div className="flex w-full flex-col items-center justify-center gap-8">
+          <Heading
+            order="3xl"
+            className="text-center font-extrabold text-primary"
+          >
+            {formatNumber(gameInfo.score)}
+          </Heading>
+          <div className="flex w-full items-center justify-center gap-8">
+            <div className="flex h-full flex-col items-center justify-center gap-4">
+              <div className="flex flex-col items-center justify-center">
+                <Text className="text-xl font-bold">
+                  {formatTime(gameInfo.gameTime).formattedTime}
+                </Text>
+                <Text className="text-sm">Game Time</Text>
+              </div>
+              <div className="flex flex-col items-center justify-center">
+                <Text className="text-xl font-bold">
+                  {gameInfo.highestCombo}
+                </Text>
+                <Text className="text-sm">Highest Combo</Text>
+              </div>
+
+              <div className="flex flex-col items-center justify-center">
+                <Text className="text-xl font-bold">
+                  {gameInfo.totalAnswered}
+                </Text>
+                <Text className="text-sm">Total Answered</Text>
+              </div>
+            </div>
+
+            <div className="flex h-full flex-col items-center justify-center gap-4">
+              {gameInfo.rating.includes("S") ? (
+                <p className="relative flex">
+                  <span className="absolute inline-flex  text-7xl font-extrabold text-yellow-200">
+                    {gameInfo.rating}
+                  </span>
+                  <span className="relative inline-flex animate-pulse text-7xl font-extrabold text-amber-400">
+                    {gameInfo.rating}
+                  </span>
+                </p>
+              ) : (
+                <p
+                  className={cn(
+                    "text-6xl font-extrabold",
+                    RATING_CSS[gameInfo.rating]
+                  )}
+                >
+                  {gameInfo.rating}
+                </p>
+              )}
+
+              <div className="flex w-full items-center justify-center gap-1">
+                <Text className="text-xl font-bold">Lv.{gameInfo.level}</Text>
+              </div>
+
+              <div className="flex items-center justify-center gap-3">
+                <div className="flex items-center justify-center gap-1">
+                  <IconSquareCheckFilled size={24} className="text-green-600" />
+                  <Text className="text-xl font-bold">{gameInfo.correct}</Text>
+                </div>
+                <div className="flex items-center justify-center gap-1">
+                  <IconSquareXFilled size={24} className="text-red-600" />
+                  <Text className="text-xl font-bold">{gameInfo.wrong}</Text>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         {isSaving ? (
-          <div className="flex justify-center">
+          <div className="flex flex-col items-center justify-center gap-3">
             <Icons.spinner className="size-10 animate-spin" />
+            <Text>Saving </Text>
           </div>
         ) : (
           <div className="flex justify-center gap-4 ">
