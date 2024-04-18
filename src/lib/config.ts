@@ -1,5 +1,5 @@
 import { MainNavItem, SidebarNavItem, UserNavItem } from "@lib/types";
-import { Icons } from "../components/ui/icons";
+import { DEFAULT_HOME_PATH } from "./routes";
 
 export const siteConfig = {
   name: "mathwars",
@@ -31,7 +31,7 @@ export const routesConfig: RoutesConfig = {
       items: [
         {
           title: "Home",
-          href: "/home",
+          href: DEFAULT_HOME_PATH,
           items: [],
         },
         {
