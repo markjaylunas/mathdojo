@@ -27,10 +27,10 @@ const UserGameCard = ({ game }: Props) => {
 
           {game.rating.includes("S") ? (
             <p className="relative flex">
-              <span className="absolute inline-flex  text-4xl font-extrabold text-yellow-300 duration-1000">
+              <span className="absolute inline-flex  text-4xl font-extrabold text-yellow-200">
                 {game.rating}
               </span>
-              <span className="relative inline-flex animate-pulse text-4xl font-extrabold text-amber-500">
+              <span className="relative inline-flex animate-pulse text-4xl font-extrabold text-amber-400">
                 {game.rating}
               </span>
             </p>
