@@ -6,6 +6,7 @@ import { Separator } from "@components/ui/separator";
 import { IconBrandGithub, IconBrandGoogle } from "@tabler/icons-react";
 import React from "react";
 import { signIn } from "next-auth/react";
+import { Icons } from "../../ui/icons";
 
 const OauthButtons = () => {
   const onSignIn = async (provider: "google" | "github") => {
@@ -25,7 +26,7 @@ const OauthButtons = () => {
         onClick={() => onSignIn("google")}
       >
         <div className="mr-2 h-6 w-6">
-          <IconBrandGoogle />
+          <Icons.google />
         </div>
         Continue with Google
       </Button>
@@ -36,7 +37,7 @@ const OauthButtons = () => {
         onClick={() => onSignIn("github")}
       >
         <div className="mr-2 h-6 w-6">
-          <IconBrandGithub />
+          <Icons.gitHub />
         </div>
         Continue with Github
       </Button>
