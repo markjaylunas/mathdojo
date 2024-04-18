@@ -3,7 +3,6 @@
 import { DEFAULT_SIGNIN_REDIRECT } from "@/src/lib/routes";
 import { Button } from "@components/ui/button";
 import { Separator } from "@components/ui/separator";
-import { IconBrandGithub, IconBrandGoogle } from "@tabler/icons-react";
 import React from "react";
 import { signIn } from "next-auth/react";
 import { Icons } from "../../ui/icons";

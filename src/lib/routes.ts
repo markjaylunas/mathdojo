@@ -29,7 +29,7 @@ export const apiAuthPrefix = "/api/auth";
  * The default login redirect path
  * @type {string}
  */
-export const DEFAULT_SIGNIN_REDIRECT = "/home";
+export const DEFAULT_SIGNIN_REDIRECT = "/";
 
 /**
  * The default sign in path
@@ -56,7 +56,7 @@ export const DEFAULT_FORGOT_PASSWORD_PATH = "/forgot-password";
  * @type {string}
  */
 
-export const DEFAULT_HOME_PATH = "/home";
+export const DEFAULT_HOME_PATH = "/";
 
 /**
  * The default classic game path
