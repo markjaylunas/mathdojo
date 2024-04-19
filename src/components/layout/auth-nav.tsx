@@ -25,8 +25,8 @@ const AuthNav = () => {
   const user = useCurrentUser();
 
   const onSetUser = async () => {
-    if (!user) return;
-    if (!user.username) {
+    if (user === null || !user) return;
+    if (user.username.length === 0) {
       router.push(`/user/${user.id}/create-username`);
       return;
     }
