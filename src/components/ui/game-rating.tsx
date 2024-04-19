@@ -55,7 +55,13 @@ const GameRating: React.FC<
           </span>
         </p>
       ) : (
-        <p className={cn(gameRatingVariants({ size, className }))} {...props}>
+        <p
+          className={cn(
+            RATING_CSS[rating],
+            gameRatingVariants({ size, className })
+          )}
+          {...props}
+        >
           {rating}
         </p>
       )}
