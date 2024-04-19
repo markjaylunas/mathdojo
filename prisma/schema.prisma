@@ -45,6 +45,18 @@ enum Rating {
   E
 }
 
+enum PerkType {
+  SHOW_ANSWER // Reveals the correct answer to the current problem
+  REMOVE_TWO_WRONG_ANSWER // Removes two incorrect options from the current problem
+  NEW_PROBLEM // Generates a new problem to solve
+  SHIELD // Protects the user from a wrong answer
+  EXTRA_TIME // Adds extra time to the timer
+  DOUBLE_SCORE // Doubles the score earned for a certain duration
+  DOUBLE_TIME // Doubles the time for a certain duration
+  LUCKY_STRIKE // The next answer will be correct regardless
+  SCORE_MULTIPLIER // Multiplies the score earned for a certain duration
+}
+
 model User {
   id            String    @id @default(uuid())
   username      String?
@@ -54,10 +66,12 @@ model User {
   image         String?
   password      String?
   role          UserRole  @default(USER)
+  coin          Int       @default(0)
 
   accounts Account[]
   games    Game[]
   likes    GameLike[]
+  perks    UserPerk[] 
 }
 
 model Account {
@@ -158,4 +172,28 @@ model GameLike {
 
   user User @relation(fields: [userId], references: [id])
   game Game @relation(fields: [gameId], references: [id])
+}
+
+model Perk {
+  id        String   @id @default(uuid())
+  name      String   
+  effect    String   
+  icon      String
+  price     Int
+  type      PerkType
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users UserPerk[] 
+}
+
+model UserPerk {
+  id        String   @id @default(uuid())
+  userId    String
+  perkId    String
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+  perk Perk @relation(fields: [perkId], references: [id])
 }
