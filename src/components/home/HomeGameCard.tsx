@@ -18,7 +18,7 @@ type Props = {
 };
 const HomeGameCard = ({ game }: Props) => {
   return (
-    <div className="min-h-56 w-full border-b border-slate-300 px-8 pb-6 pt-4 dark:border-slate-700">
+    <div className="min-h-56 w-full border-b border-slate-300 px-4 pb-6 pt-4 dark:border-slate-700">
       <div className="flex items-start justify-between gap-4">
         <UserProfileSection user={game.user} />
         <Text className="mt-1 text-xs">{moment(game.createdAt).fromNow()}</Text>

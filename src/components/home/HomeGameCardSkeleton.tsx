@@ -2,7 +2,7 @@ import { Skeleton } from "../ui/skeleton";
 
 const HomeGameCardSkeleton = () => {
   return (
-    <div className="min-h-56 w-full border-b-2 border-slate-300 px-8 pb-6 pt-4 dark:border-slate-700">
+    <div className="min-h-56 w-full border-b-2 border-slate-300 px-4 pb-6 pt-4 dark:border-slate-700">
       <div className="flex items-start justify-between gap-4">
         <div className="flex gap-2">
           <Skeleton className="size-11 rounded-full" />
