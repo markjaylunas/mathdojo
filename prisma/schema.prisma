@@ -71,7 +71,7 @@ model User {
   accounts Account[]
   games    Game[]
   likes    GameLike[]
-  perks    UserPerk[] 
+  perks    UserPerk[]
 }
 
 model Account {
@@ -176,15 +176,15 @@ model GameLike {
 
 model Perk {
   id        String   @id @default(uuid())
-  name      String   
-  effect    String   
+  name      String
+  effect    String
   icon      String
   price     Int
   type      PerkType
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  users UserPerk[] 
+  users UserPerk[]
 }
 
 model UserPerk {
