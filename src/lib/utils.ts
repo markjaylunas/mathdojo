@@ -35,11 +35,11 @@ export const formatTime = (milliseconds: number) => {
   // Construct the time string
   let formattedTime = "";
   if (hours > 0) {
-    formattedTime += `${hoursStr}h`;
+    formattedTime += `${hoursStr}h `;
   }
 
   if (minutes > 0) {
-    formattedTime += `${minutesStr}m`;
+    formattedTime += `${minutesStr}m `;
   }
   formattedTime += `${secondsStr}s`;
 
