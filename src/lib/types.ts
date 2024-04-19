@@ -83,6 +83,7 @@ export type GameInfo = {
   correct: number;
   wrong: number;
   score: number;
+  coin: number;
   gameTime: number;
   level: number;
   rating: Rating;

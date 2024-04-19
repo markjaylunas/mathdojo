@@ -19,15 +19,16 @@ export const CLASSIC_LEVEL_UP_THRESHOLD = 25;
 export const MAX_CLASSIC_LEVEL = 12;
 
 export const INITIAL_CLASSIC_GAME_INFO: GameInfo = {
-  highestCombo: 0,
-  totalCombo: 0,
-  gameTime: 0,
+  score: 0,
   correct: 0,
   wrong: 0,
-  score: 0,
   totalAnswered: 0,
+  highestCombo: 0,
+  totalCombo: 0,
   level: 1,
+  gameTime: 0,
   rating: "E",
+  coin: 0,
 };
 
 export const GAME_MAX_TIMER = convertTimeToMilliseconds({
@@ -58,17 +59,7 @@ export const CLASSIC_WRONG_REDUCE_TIME = convertTimeToMilliseconds({
 
 export const INITIAL_GAME_SESSION_STATE: GameSessionState = {
   combo: 0,
-  gameInfo: {
-    correct: 0,
-    wrong: 0,
-    score: 0,
-    highestCombo: 0,
-    totalCombo: 0,
-    totalAnswered: 0,
-    level: 1,
-    gameTime: 0,
-    rating: "E",
-  },
+  gameInfo: INITIAL_CLASSIC_GAME_INFO,
   problem: null,
   problemList: null,
   initialGameMode: null,

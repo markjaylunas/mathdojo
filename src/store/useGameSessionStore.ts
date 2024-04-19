@@ -351,6 +351,7 @@ const useGameSessionStore = create<
                 gameTime: 0,
                 level: 1,
                 rating: "E",
+                coin: 0,
               },
               isCooldown: false,
 
