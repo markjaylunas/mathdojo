@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { IconLogin2 } from "@tabler/icons-react";
-import { redirect, usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   CLASSIC_GAME_PATH,
   DEFAULT_SIGNIN_PATH,
@@ -15,7 +15,6 @@ import useUserStore from "@/src/store/useUserStore";
 import { useEffect } from "react";
 import useCurrentUser from "@/src/hooks/use-current-user";
 import { Icons } from "../ui/icons";
-import { re } from "mathjs";
 
 const AuthNav = () => {
   const pathname = usePathname();

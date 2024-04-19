@@ -98,7 +98,7 @@ export const RATING_CSS = {
   S: "",
   A: "text-blue-600",
   B: "text-green-600",
-  C: "text-red-600",
-  D: "text-purple-600",
+  C: "text-orange-600",
+  D: "text-indigo-600",
   E: "text-gray-600",
 };

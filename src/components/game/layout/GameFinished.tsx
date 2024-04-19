@@ -9,12 +9,11 @@ import {
 import Link from "next/link";
 import { DEFAULT_HOME_PATH } from "@/src/lib/routes";
 import GameLayout from "./GameLayout";
-import { cn, formatTime } from "@/src/lib/utils";
+import { formatTime } from "@/src/lib/utils";
 import { GameSessionState } from "@/src/store/useGameSessionStore";
 import { Icons } from "../../ui/icons";
 import Text from "../../ui/text";
 import { formatNumber } from "@/src/lib/game";
-import { RATING_CSS } from "@/src/lib/game.config";
 import GameRating from "../../ui/game-rating";
 
 type Props = {

@@ -1,10 +1,12 @@
 import { Icons } from "@components/ui/icons";
-import { User } from "next-auth";
 import {
   GameMode as Prisma__GameMode,
   GameOperation as Prisma__GameOperation,
   GameDigitRange as Prisma__GameDigitRangeClient,
   Rating,
+  Prisma,
+  Game,
+  User,
 } from "@prisma/client";
 
 export type NavItem = {
@@ -92,4 +94,8 @@ export type GameOperation = Prisma__GameOperation & {
 
 export type GameMode = Prisma__GameMode & {
   gameOperations: GameOperation[];
+};
+
+export type GameWithUser = Game & {
+  user: User;
 };

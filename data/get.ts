@@ -1,7 +1,8 @@
-import { GameMode } from "@/src/lib/types";
+"use server";
+
+import { GameMode, GameWithUser } from "@/src/lib/types";
 import prisma from "@lib/prisma";
 import { Game, Prisma } from "@prisma/client";
-import { first } from "lodash";
 
 export const getUserByEmail = async (params: { email: string }) => {
   const { email } = params;
@@ -64,16 +65,49 @@ export const getGameMode = async (
   return gameMode as GameMode;
 };
 
-export const getGameList = async (params: {
-  where: Prisma.GameWhereInput;
-}): Promise<Game[]> => {
-  const { where } = params;
-  const gameModeList = await prisma.game.findMany({
+export const getGameList = async ({
+  where = {},
+  page = 1,
+  limit = 10,
+}: {
+  where?: Prisma.GameWhereInput;
+  include?: Prisma.GameInclude;
+  page?: number;
+  limit?: number;
+}) => {
+  const gameList = await prisma.game.findMany({
     orderBy: {
       createdAt: "desc",
     },
     where,
-    take: 10,
+    take: limit,
+    skip: (page - 1) * limit,
   });
-  return gameModeList;
+
+  return gameList;
+};
+
+export const getGameWithUserList = async ({
+  where = {},
+  page = 1,
+  limit = 10,
+}: {
+  where?: Prisma.GameWhereInput;
+  include?: Prisma.GameInclude;
+  page?: number;
+  limit?: number;
+}) => {
+  const gameList = await prisma.game.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+    where,
+    include: {
+      user: true,
+    },
+    take: limit,
+    skip: (page - 1) * limit,
+  });
+
+  return gameList as GameWithUser[];
 };

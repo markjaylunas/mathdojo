@@ -1,12 +1,8 @@
 import { Game } from "@prisma/client";
 import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel";
-import UserHistoryCard from "./UserGameCard";
 import Link from "next/link";
-import { Button } from "../ui/button";
-import { Icons } from "../ui/icons";
 import { CLASSIC_GAME_PATH } from "@/src/lib/routes";
 import Text from "../ui/text";
-import { ScrollBar } from "../ui/scroll-area";
 import UserGameCard from "./UserGameCard";
 
 type Props = {
@@ -15,13 +11,7 @@ type Props = {
 const UserHistorySection = ({ gameList }: Props) => {
   return (
     <div className="">
-      <div className="mt-6 space-y-2">
-        <h2 className="text-xl font-semibold tracking-tight">History</h2>
-        <p className="text-sm text-muted-foreground">
-          Here&apos;s your game history. It includes all the games you&apos;ve
-          played recently.
-        </p>
-      </div>
+      <h2 className="mt-6 text-xl font-semibold tracking-tight">History</h2>
       <Carousel
         opts={{
           align: "start",

@@ -1,7 +1,26 @@
-export default function Home() {
+import { actionGetGameWithUserList } from "../actions/game";
+import HomeGameList from "../components/home/HomeGameList";
+import EmptyList from "../components/ui/empty-list";
+import Heading from "../components/ui/heading";
+
+export const Page = async () => {
+  const { data: gameList } = await actionGetGameWithUserList({
+    page: 1,
+  });
+
+  if (!gameList?.length) return <EmptyList />;
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      content
-    </main>
+    <div className="">
+      <main className="mx-auto flex min-h-screen  max-w-3xl flex-col items-start justify-between border-x py-6 ">
+        <div className="px-8">
+          <Heading>Activity</Heading>
+        </div>
+
+        <HomeGameList gameList={gameList} />
+      </main>
+    </div>
   );
-}
+};
+
+export default Page;

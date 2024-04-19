@@ -46,7 +46,7 @@ const GameRating: React.FC<
           </span>
           <span
             className={cn(
-              "relative inline-flex animate-pulse font-extrabold text-amber-400",
+              "relative inline-flex animate-pulse font-extrabold text-amber-500",
               gameRatingVariants({ size, className })
             )}
             {...props}
