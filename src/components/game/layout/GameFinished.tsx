@@ -15,6 +15,7 @@ import { Icons } from "../../ui/icons";
 import Text from "../../ui/text";
 import { formatNumber } from "@/src/lib/game";
 import { RATING_CSS } from "@/src/lib/game.config";
+import GameRating from "../../ui/game-rating";
 
 type Props = {
   gameSession: GameSessionState;
@@ -61,25 +62,7 @@ const GameFinished = ({ gameSession, onRetry, isSaving }: Props) => {
             </div>
 
             <div className="flex h-full flex-col items-center justify-center gap-4">
-              {gameInfo.rating.includes("S") ? (
-                <p className="relative flex">
-                  <span className="absolute inline-flex  text-7xl font-extrabold text-yellow-200">
-                    {gameInfo.rating}
-                  </span>
-                  <span className="relative inline-flex animate-pulse text-7xl font-extrabold text-amber-400">
-                    {gameInfo.rating}
-                  </span>
-                </p>
-              ) : (
-                <p
-                  className={cn(
-                    "text-6xl font-extrabold",
-                    RATING_CSS[gameInfo.rating]
-                  )}
-                >
-                  {gameInfo.rating}
-                </p>
-              )}
+              <GameRating rating={gameInfo.rating} size={8} />
 
               <div className="flex w-full items-center justify-center gap-1">
                 <Text className="text-xl font-bold">Lv.{gameInfo.level}</Text>

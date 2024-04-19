@@ -9,6 +9,7 @@ import { IconSquareCheckFilled } from "@tabler/icons-react";
 import _ from "lodash";
 import moment from "moment";
 import { RATING_CSS } from "@/src/lib/game.config";
+import GameRating from "../ui/game-rating";
 
 type Props = {
   game: Game;
@@ -25,22 +26,7 @@ const UserGameCard = ({ game }: Props) => {
             <Text className="text-xs font-semibold ">Lv.{game.level}</Text>
           </div>
 
-          {game.rating.includes("S") ? (
-            <p className="relative flex">
-              <span className="absolute inline-flex  text-4xl font-extrabold text-yellow-200">
-                {game.rating}
-              </span>
-              <span className="relative inline-flex animate-pulse text-4xl font-extrabold text-amber-400">
-                {game.rating}
-              </span>
-            </p>
-          ) : (
-            <p
-              className={cn("text-3xl font-extrabold", RATING_CSS[game.rating])}
-            >
-              {game.rating}
-            </p>
-          )}
+          <GameRating rating={game.rating} />
         </div>
         <Separator className="my-1" />
 
