@@ -6,7 +6,7 @@ export const siteConfig = {
   url: "https://mathwars.makje.com",
   description: "Mathwars created by Makje",
   links: {
-    github: "https://github.com/markjaylunas",
+    github: "https://github.com/markjaylunas/mathwars-makje",
   },
 };
 
@@ -35,15 +35,20 @@ export const routesConfig: RoutesConfig = {
           items: [],
         },
         {
-          title: "Leaderboard",
-          href: "/leaderboard",
+          title: "History",
+          href: "/user",
           items: [],
         },
-        {
-          title: "Friends",
-          href: "/friends",
-          items: [],
-        },
+        // {
+        //   title: "Leaderboard",
+        //   href: "/leaderboard",
+        //   items: [],
+        // },
+        // {
+        //   title: "Friends",
+        //   href: "/friends",
+        //   items: [],
+        // },
       ],
     },
   ],
@@ -57,12 +62,12 @@ export const routesConfig: RoutesConfig = {
           items: [],
           icon: "user",
         },
-        {
-          title: "Setting",
-          href: "/setting",
-          items: [],
-          icon: "setting",
-        },
+        // {
+        //   title: "Setting",
+        //   href: "/setting",
+        //   items: [],
+        //   icon: "setting",
+        // },
       ],
     },
     {
