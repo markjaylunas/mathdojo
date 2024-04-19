@@ -3,7 +3,7 @@ import HomeGameList from "../components/home/HomeGameList";
 import EmptyList from "../components/ui/empty-list";
 import Heading from "../components/ui/heading";
 
-export const Page = async () => {
+const Page = async () => {
   const { data: gameList } = await actionGetGameWithUserList({
     page: 1,
   });
