@@ -40,7 +40,7 @@ const AuthNav = () => {
     }
 
     if (user?.id && !user?.username) {
-      router.push(`/user/${userStore?.id}/create-username`);
+      router.push(`/user/${user?.id}/create-username`);
     }
   };
 
