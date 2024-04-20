@@ -37,17 +37,16 @@ const AuthNav = () => {
       };
 
       setUser(newUser);
-
-      if (newUser?.username?.length === 0) {
-        router.push(`/user/${newUser?.id}/create-username`);
-      }
+    }
+    if (userStore?.id && userStore?.username?.length === 0) {
+      router.push(`/user/${userStore?.id}/create-username`);
     }
   };
 
   useEffect(() => {
     useUserStore.persist.rehydrate();
     onSetUser();
-  }, [user]);
+  }, [user, userStore]);
 
   return (
     <nav className="flex items-center gap-2">
