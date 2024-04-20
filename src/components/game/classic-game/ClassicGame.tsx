@@ -13,7 +13,7 @@ import useGameSessionStore, {
   GameTimerStatus,
 } from "@/src/store/useGameSessionStore";
 import GameStartingCountdown from "../layout/GameStartingCountdown";
-import { GameMode } from "@/src/lib/types";
+import { GameMode, PlayerInfo } from "@/src/lib/types";
 import { createGame } from "@/data/post";
 import { toast } from "../../ui/use-toast";
 import { actionCreateGame } from "@/src/actions/game";
@@ -21,9 +21,10 @@ import useUserStore from "@/src/store/useUserStore";
 
 type Props = {
   gameMode: GameMode;
+  playerInfo: PlayerInfo;
 };
 
-const ClassicGame = ({ gameMode: initialGameMode }: Props) => {
+const ClassicGame = ({ gameMode: initialGameMode, playerInfo }: Props) => {
   const user = useStore(useUserStore, (state) => state.user);
   const [isSaving, setIsSaving] = useState(false);
   const router = useRouter();
@@ -157,6 +158,7 @@ const ClassicGame = ({ gameMode: initialGameMode }: Props) => {
           <ClassicLobbyScreen
             onGameStart={handleCountDownGameStart}
             initialGameMode={initialGameMode}
+            playerInfo={playerInfo}
           />
         );
       case "STARTING":
@@ -206,6 +208,7 @@ const ClassicGame = ({ gameMode: initialGameMode }: Props) => {
           <ClassicLobbyScreen
             onGameStart={handleGameStart}
             initialGameMode={initialGameMode}
+            playerInfo={playerInfo}
           />
         );
     }

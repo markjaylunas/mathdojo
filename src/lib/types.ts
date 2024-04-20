@@ -85,3 +85,7 @@ export type GameMode = Prisma__GameMode & {
 export type GameWithUser = Game & {
   user: User;
 };
+
+export type PlayerInfo = {
+  highestScore: number;
+};

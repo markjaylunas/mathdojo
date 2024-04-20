@@ -1,6 +1,6 @@
 "use server";
 
-import { GameMode, GameWithUser } from "@/src/lib/types";
+import { GameMode, GameWithUser, PlayerInfo } from "@/src/lib/types";
 import prisma from "@lib/prisma";
 import { Game, Prisma } from "@prisma/client";
 
@@ -110,4 +110,26 @@ export const getGameWithUserList = async ({
   });
 
   return gameList as GameWithUser[];
+};
+
+export const getPlayerInfo = async (params: {
+  userId: string;
+}): Promise<PlayerInfo> => {
+  const { userId } = params;
+
+  const gameScore = await prisma.game.findFirst({
+    where: {
+      userId,
+    },
+    orderBy: {
+      score: "desc",
+    },
+    select: {
+      score: true,
+    },
+  });
+
+  const highestScore = gameScore?.score || 0;
+
+  return { highestScore };
 };

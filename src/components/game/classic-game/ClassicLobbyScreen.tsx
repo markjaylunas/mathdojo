@@ -3,22 +3,26 @@
 import { Button } from "../../ui/button";
 import Heading from "../../ui/heading";
 import GameLayout from "../layout/GameLayout";
-import { GameMode } from "@/src/lib/types";
+import { GameMode, PlayerInfo } from "@/src/lib/types";
 import { useEffect, useState } from "react";
 import { useStore } from "zustand";
 import useGameSessionStore from "@/src/store/useGameSessionStore";
 import { ToggleGroup, ToggleGroupItem } from "../../ui/toggle-group";
 import { startCase, toLower } from "lodash";
-import { IconCheckbox } from "@tabler/icons-react";
 import { Icons } from "../../ui/icons";
 import Text from "../../ui/text";
-import { getRating } from "@/src/lib/game";
+import { formatNumber } from "@/src/lib/game";
 
 type Props = {
   initialGameMode: GameMode;
   onGameStart: () => void;
+  playerInfo: PlayerInfo;
 };
-const ClassicLobbyScreen = ({ initialGameMode, onGameStart }: Props) => {
+const ClassicLobbyScreen = ({
+  initialGameMode,
+  onGameStart,
+  playerInfo,
+}: Props) => {
   const { gameSession, setGameSession } = useStore(
     useGameSessionStore,
     (state) => state
@@ -66,6 +70,13 @@ const ClassicLobbyScreen = ({ initialGameMode, onGameStart }: Props) => {
         </Heading>
         <p className="text-center text-2xl">{gameMode?.description}</p>
       </div>
+
+      <Text className="text-center">
+        Your Best Score:{" "}
+        <span className="text-lg font-bold">
+          {formatNumber(playerInfo.highestScore)}
+        </span>
+      </Text>
 
       <ToggleGroup
         size="lg"
