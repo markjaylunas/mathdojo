@@ -15,6 +15,7 @@ import useUserStore from "@/src/store/useUserStore";
 import { useEffect } from "react";
 import useCurrentUser from "@/src/hooks/use-current-user";
 import { Icons } from "../ui/icons";
+import { useStore } from "zustand";
 
 const AuthNav = () => {
   const pathname = usePathname();
@@ -25,20 +26,20 @@ const AuthNav = () => {
   const user = useCurrentUser();
 
   const onSetUser = async () => {
-    if (user?.id) {
-      if (userStore?.id === user?.id) return;
+    if (userStore?.id !== user?.id) {
       const newUser = {
         id: `${user?.id}`,
         email: `${user?.email}`,
         name: `${user?.name}`,
         image: `${user?.image}`,
         role: user?.role || "USER",
-        username: `${user?.username}`,
+        username: user?.username,
       };
 
       setUser(newUser);
     }
-    if (userStore?.id && userStore?.username?.length === 0) {
+
+    if (user?.id && !user?.username) {
       router.push(`/user/${userStore?.id}/create-username`);
     }
   };
@@ -46,8 +47,7 @@ const AuthNav = () => {
   useEffect(() => {
     useUserStore.persist.rehydrate();
     onSetUser();
-  }, [user, userStore]);
-
+  }, [user]);
   return (
     <nav className="flex items-center gap-2">
       {/* <Link href={siteConfig.links.github} target="_blank" rel="noreferrer">
@@ -56,7 +56,7 @@ const AuthNav = () => {
               <span className="sr-only">GitHub</span>
             </Button>
           </Link> */}
-      {!user && isPublicPage && (
+      {!useStore && isPublicPage && (
         <Link href={DEFAULT_SIGNIN_PATH}>
           <Button variant="outline" className="px-3">
             <IconLogin2 className="mr-1 h-4" />
@@ -66,7 +66,7 @@ const AuthNav = () => {
       )}
 
       {/* {!userStore && <ModeToggle />} */}
-      {userStore && !gameRoutes.includes(pathname) && (
+      {userStore && !gameRoutes.includes(pathname) && userStore.username && (
         <Link href={CLASSIC_GAME_PATH}>
           <Button className="px-3">
             <Icons.mathSymbols className="mr-1 h-4" />
