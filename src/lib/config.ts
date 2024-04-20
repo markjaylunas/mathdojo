@@ -70,16 +70,16 @@ export const routesConfig: RoutesConfig = {
         // },
       ],
     },
-    {
-      title: "",
-      items: [
-        {
-          title: "GitHub",
-          href: siteConfig.links.github,
-          items: [],
-          icon: "gitHub",
-        },
-      ],
-    },
+    // {
+    //   title: "",
+    //   items: [
+    //     {
+    //       title: "GitHub",
+    //       href: siteConfig.links.github,
+    //       items: [],
+    //       icon: "gitHub",
+    //     },
+    //   ],
+    // },
   ],
 };
