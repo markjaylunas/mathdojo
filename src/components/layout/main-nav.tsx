@@ -13,7 +13,7 @@ import { Button } from "@components/ui/button";
 import { useStore } from "zustand";
 import useLayoutStore from "@/src/store/useLayoutStore";
 import useGameSessionStore from "@/src/store/useGameSessionStore";
-import { gameRoutes } from "@/src/lib/routes";
+import { DEFAULT_HOME_PATH, gameRoutes } from "@/src/lib/routes";
 
 export function MainNav() {
   const { sideNavOpen, setSideNavOpen } = useStore(
@@ -23,7 +23,7 @@ export function MainNav() {
 
   const pathname = usePathname();
 
-  const { revealAnswer, setRevealAnswer, gameSession, gamePause } = useStore(
+  const { gameSession, gamePause } = useStore(
     useGameSessionStore,
     (state) => state
   );
@@ -89,15 +89,10 @@ export function MainNav() {
       </Sheet>
 
       <Link
-        href={isGamePath ? "" : "/"}
+        href={DEFAULT_HOME_PATH}
         className="mr-6 flex items-center space-x-2"
       >
-        <Icons.logo
-          onClick={
-            isGamePath ? () => setRevealAnswer(!revealAnswer) : undefined
-          }
-          className="h-6 w-6"
-        />
+        <Icons.logo className="h-6 w-6" />
         <span className="hidden font-bold sm:inline-block ">
           {siteConfig.name}
         </span>
