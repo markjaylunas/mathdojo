@@ -1,24 +1,21 @@
 "use server";
 
-import { createGame } from "@/data/post";
-import { Prisma, Game } from "@prisma/client";
-import { ActionResponse, GameWithUser, PlayerInfo } from "../lib/types";
-import { revalidatePath } from "next/cache";
-import { getGameList, getGameWithUserList, getPlayerInfo } from "@/data/get";
+import { ActionResponse, HighScore, PlayerInfo } from "../lib/types";
+import { getHighScoreList } from "@/data/get";
 
-// get player info
-export const actionGetPlayerInfo = async (params: {
-  userId: string;
-}): Promise<ActionResponse & { data?: PlayerInfo }> => {
-  const playerInfo = await getPlayerInfo(params);
+// get high score list
+export const actionGetHighScoreList = async (params: {}): Promise<
+  ActionResponse & { data?: HighScore[] }
+> => {
+  const highScoreList = await getHighScoreList();
 
-  if (!playerInfo) {
-    return { status: "error", message: "Failed to fetch player info" };
+  if (!highScoreList) {
+    return { status: "error", message: "Failed to fetch high score list" };
   }
 
   return {
     status: "success",
-    message: "Fetch player info successfully",
-    data: playerInfo,
+    message: "Fetch high score list successfully",
+    data: highScoreList,
   };
 };

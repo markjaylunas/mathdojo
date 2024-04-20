@@ -1,6 +1,6 @@
 "use server";
 
-import { GameMode, GameWithUser, PlayerInfo } from "@/src/lib/types";
+import { GameMode, GameWithUser, HighScore, PlayerInfo } from "@/src/lib/types";
 import prisma from "@lib/prisma";
 import { Game, Prisma } from "@prisma/client";
 
@@ -96,20 +96,26 @@ export const getGameWithUserList = async ({
   include?: Prisma.GameInclude;
   page?: number;
   limit?: number;
-}) => {
+}): Promise<GameWithUser[]> => {
   const gameList = await prisma.game.findMany({
     orderBy: {
       createdAt: "desc",
     },
     where,
     include: {
-      user: true,
+      user: {
+        select: {
+          id: true,
+          name: true,
+          username: true,
+        },
+      },
     },
     take: limit,
     skip: (page - 1) * limit,
   });
 
-  return gameList as GameWithUser[];
+  return gameList;
 };
 
 export const getPlayerInfo = async (params: {
@@ -132,4 +138,25 @@ export const getPlayerInfo = async (params: {
   const highestScore = gameScore?.score || 0;
 
   return { highestScore };
+};
+
+export const getHighScoreList = async (): Promise<HighScore[]> => {
+  const highScoreList = await prisma.game.findMany({
+    orderBy: {
+      score: "desc",
+    },
+    select: {
+      score: true,
+      user: {
+        select: {
+          id: true,
+          name: true,
+          username: true,
+        },
+      },
+    },
+    take: 12,
+  });
+
+  return highScoreList;
 };

@@ -83,9 +83,22 @@ export type GameMode = Prisma__GameMode & {
 };
 
 export type GameWithUser = Game & {
-  user: User;
+  user: {
+    id: User["id"];
+    name: User["name"];
+    username: User["username"];
+  };
 };
 
 export type PlayerInfo = {
   highestScore: number;
+};
+
+export type HighScore = {
+  score: Game["score"];
+  user: {
+    id: User["id"];
+    name: User["name"];
+    username: User["username"];
+  };
 };
