@@ -1,9 +1,10 @@
 import { User } from "@prisma/client";
 import UserAvatar from "./UserAvatar";
 import Link from "next/link";
+import { BasicUser } from "@/src/lib/types";
 
 type Props = {
-  user: User;
+  user: BasicUser;
 };
 const UserProfileSection = ({ user }: Props) => {
   const { id, email, name, username } = user;

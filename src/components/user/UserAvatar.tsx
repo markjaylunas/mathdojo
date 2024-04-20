@@ -3,9 +3,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { cn } from "@/src/lib/utils";
 import Link from "next/link";
 import { IconGhost } from "@tabler/icons-react";
+import { BasicUser } from "@/src/lib/types";
 
 type Props = {
-  user: User;
+  user: BasicUser;
 };
 const UserAvatar = ({ user }: Props) => {
   const { id, username, image } = user;

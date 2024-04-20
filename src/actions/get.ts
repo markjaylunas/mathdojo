@@ -1,7 +1,25 @@
 "use server";
 
 import { ActionResponse, HighScore, PlayerInfo } from "../lib/types";
-import { getHighScoreList } from "@/data/get";
+import { getHighScoreList, getPlayerInfo } from "@/data/get";
+
+// get player info
+export const actionGetPlayerInfo = async (params: {
+  userId: string;
+}): Promise<ActionResponse & { data?: PlayerInfo }> => {
+  const { userId } = params;
+  const playerInfo = await getPlayerInfo({ userId: userId });
+
+  if (!playerInfo) {
+    return { status: "error", message: "Failed to fetch player info" };
+  }
+
+  return {
+    status: "success",
+    message: "Fetch player info successfully",
+    data: playerInfo,
+  };
+};
 
 // get high score list
 export const actionGetHighScoreList = async (params: {}): Promise<
