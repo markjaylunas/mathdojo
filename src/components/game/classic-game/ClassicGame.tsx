@@ -104,7 +104,6 @@ const ClassicGame = ({ gameMode: initialGameMode }: Props) => {
             },
           },
         },
-        coin,
       });
 
       const isError = status === "error";

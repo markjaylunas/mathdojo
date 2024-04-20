@@ -3,9 +3,8 @@ import { Game, Prisma } from "@prisma/client";
 
 export const createGame = async (params: {
   gameParams: Prisma.GameCreateInput;
-  coin: number;
 }): Promise<Game> => {
-  const { gameParams, coin } = params;
+  const { gameParams } = params;
   const game = await prisma.game.create({
     data: gameParams,
   });
@@ -20,7 +19,7 @@ export const createGame = async (params: {
     },
     data: {
       coin: {
-        increment: coin,
+        increment: gameParams.coin,
       },
     },
   });

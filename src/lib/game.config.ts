@@ -24,7 +24,6 @@ export const INITIAL_CLASSIC_GAME_INFO: GameInfo = {
   wrong: 0,
   totalAnswered: 0,
   highestCombo: 0,
-  totalCombo: 0,
   level: 1,
   gameTime: 0,
   rating: "E",

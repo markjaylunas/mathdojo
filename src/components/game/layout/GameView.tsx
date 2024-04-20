@@ -20,7 +20,7 @@ const GameView = ({ problem }: Props) => {
   const { userAnswer, status } = problem;
 
   return (
-    <div className="mx-auto flex max-w-fit flex-auto flex-col justify-center gap-1 p-3 transition-all duration-150 ease-in-out">
+    <div className="mx-auto flex max-w-fit flex-auto flex-col justify-center gap-1 p-1 transition-all duration-150 ease-in-out">
       <div className="flex items-end justify-between gap-5">
         <Text className="text-right text-5xl font-medium">
           {operationSymbol}

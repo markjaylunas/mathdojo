@@ -48,6 +48,7 @@ export type Problem = {
   answer: number;
   userAnswer: number | null;
   choices: number[];
+  coin: number;
   status: "CORRECT" | "WRONG" | "UNANSWERED";
   lapTime: number | null;
 };
@@ -77,16 +78,15 @@ export type Difficulty = "EASY" | "MEDIUM" | "HARD" | "EXPERT" | "CUSTOM";
 // };
 
 export type GameInfo = {
-  highestCombo: number;
-  totalCombo: number;
-  totalAnswered: number;
+  score: number;
   correct: number;
   wrong: number;
-  score: number;
-  coin: number;
+  totalAnswered: number;
+  highestCombo: number;
   gameTime: number;
   level: number;
   rating: Rating;
+  coin: number;
 };
 
 export type GameOperation = Prisma__GameOperation & {

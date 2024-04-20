@@ -31,12 +31,9 @@ const GameFinished = ({ gameSession, onRetry, isSaving }: Props) => {
         </Heading>
 
         <div className="flex w-full flex-col items-center justify-center gap-8">
-          <Heading
-            order="3xl"
-            className="text-center font-extrabold text-primary"
-          >
+          <Text className="text-center  text-6xl font-extrabold text-primary">
             {formatNumber(gameInfo.score)}
-          </Heading>
+          </Text>
           <div className="flex w-full items-center justify-center gap-8">
             <div className="flex h-full flex-col items-center justify-center gap-4">
               <div className="flex flex-col items-center justify-center">
@@ -76,6 +73,13 @@ const GameFinished = ({ gameSession, onRetry, isSaving }: Props) => {
                   <IconSquareXFilled size={24} className="text-red-600" />
                   <Text className="text-xl font-bold">{gameInfo.wrong}</Text>
                 </div>
+              </div>
+
+              <div className="flex items-center justify-center gap-1">
+                <Icons.coin className="size-6" />
+                <Text className="text-xl font-bold">
+                  +{formatNumber(gameInfo.coin)}
+                </Text>
               </div>
             </div>
           </div>

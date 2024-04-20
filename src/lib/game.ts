@@ -84,6 +84,8 @@ export const generateProblem = ({
   const choices = generateChoices(answer);
   const id = uuidV4().toString();
 
+  const coin = getRandomInt(1, 3);
+
   const newProblem: Problem = {
     id,
     operation: operation.operation,
@@ -94,6 +96,7 @@ export const generateProblem = ({
     choices,
     game_id: game_id,
     status: "UNANSWERED",
+    coin,
     lapTime: null,
   };
 

@@ -9,7 +9,6 @@ import { getGameList, getGameWithUserList } from "@/data/get";
 // create game
 export const actionCreateGame = async (params: {
   gameParams: Prisma.GameCreateInput;
-  coin: number;
 }): Promise<ActionResponse & { data?: Game }> => {
   const createdGame = await createGame(params);
 

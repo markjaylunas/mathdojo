@@ -154,10 +154,10 @@ model Game {
   gameTime      Int
   level         Int      @default(1)
   highestCombo  Int      @default(0)
-  totalCombo    Int      @default(0)
   rating        Rating   @default(E)
   createdAt     DateTime @default(now())
-  likeCount     Int      @default(0)
+  like          Int      @default(0)
+  coin          Int      @default(0)
 
   user User @relation(fields: [userId], references: [id])
 

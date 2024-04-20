@@ -11,6 +11,7 @@ import { formatNumber } from "@/src/lib/game";
 import GameView from "../layout/GameView";
 import GameChoices from "../layout/GameChoices";
 import { GameSessionState } from "@/src/store/useGameSessionStore";
+import { Icons } from "../../ui/icons";
 
 type Props = {
   gameSession: GameSessionState;
@@ -63,11 +64,26 @@ const ClassicRunningScreen = ({
         <div className="flex items-center justify-between">
           <div className="flex justify-between">
             <div className="flex items-center justify-evenly gap-10">
-              <div className="flex items-center justify-center gap-1">
-                <Text className="text-gray-500 dark:text-gray-400">Score:</Text>
-                <Text className="text-xl font-bold">
-                  {formatNumber(gameInfo.score)}
-                </Text>
+              <div className="flex flex-col items-start justify-start">
+                <div className="flex items-center justify-center gap-1">
+                  <Text className="text-gray-500 dark:text-gray-400">
+                    Score:
+                  </Text>
+                  <Text className="text-xl font-bold">
+                    {formatNumber(gameInfo.score)}
+                  </Text>
+                </div>
+                <div className="flex items-center justify-center gap-1">
+                  <Icons.coin className="size-6" />
+                  <Text className="text-xl font-bold">
+                    {formatNumber(gameInfo.coin)}
+                  </Text>
+                  {!isCooldown && (
+                    <Text className="text-xs font-bold transition-opacity duration-1000">
+                      +{formatNumber(problem.coin)}
+                    </Text>
+                  )}
+                </div>
               </div>
             </div>
           </div>

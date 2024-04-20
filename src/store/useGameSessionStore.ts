@@ -182,7 +182,9 @@ const useGameSessionStore = create<
           const timerValue = Math.min(initialValue, GAME_MAX_TIMER);
 
           // new values
-          const newCoin = isCorrect ? gameInfo.coin + 1 : gameInfo.coin;
+          const newCoin = isCorrect
+            ? gameInfo.coin + problem.coin
+            : gameInfo.coin;
           const newCorrect = isCorrect
             ? gameInfo.correct + 1
             : gameInfo.correct;

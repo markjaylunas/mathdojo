@@ -12,6 +12,8 @@ import {
   IconSquareXFilled,
 } from "@tabler/icons-react";
 import { GameWithUser } from "@/src/lib/types";
+import { Separator } from "../ui/separator";
+import { Icons } from "../ui/icons";
 
 type Props = {
   game: GameWithUser;
@@ -23,40 +25,48 @@ const HomeGameCard = ({ game }: Props) => {
         <UserProfileSection user={game.user} />
         <Text className="mt-1 text-xs">{moment(game.createdAt).fromNow()}</Text>
       </div>
-
-      <div className="ml-12 mt-4 flex items-start justify-between">
-        <div className="flex w-full flex-col">
-          <div className="flex items-end gap-4 border-b">
-            <Text className="text-2xl font-bold">
-              {formatNumber(game.score)}
-            </Text>
-            <Text className="text-lg font-semibold">Lv.{game.level}</Text>
-          </div>
-
-          <div className="mt-1 flex">
-            <div className="flex flex-col items-start gap-2 py-2">
-              <div className="flex items-center justify-center gap-1">
-                <IconClockFilled size={24} />
-                <Text className="text-sm text-gray-500">
-                  {formatTime(game.gameTime).formattedTime}
-                </Text>
-              </div>
-              <div className="flex flex-wrap gap-8">
-                <div className="flex items-center justify-center gap-1">
-                  <IconSquareCheckFilled size={24} className="text-green-600" />
-                  <Text className="text-xl font-bold">{game.correct}</Text>
-                </div>
-                <div className="flex items-center justify-center gap-1">
-                  <IconSquareXFilled size={24} className="text-red-600" />
-                  <Text className="text-xl font-bold">{game.wrong}</Text>
-                </div>
-              </div>
+      <div className="ml-12 mt-4 flex h-full  items-start ">
+        <div className="flex h-full flex-1 flex-col items-start justify-around">
+          <div className="flex w-full flex-col">
+            <div className="flex items-end gap-4">
+              <Text className="text-2xl font-bold">
+                {formatNumber(game.score)}
+              </Text>
+              <Text className="text-lg font-semibold">Lv.{game.level}</Text>
             </div>
+          </div>
+          <Separator className="my-1" />
+          <div className="flex items-center justify-center gap-1">
+            <IconClockFilled size={24} />
+            <Text className="text-sm text-gray-500">
+              {formatTime(game.gameTime).formattedTime}
+            </Text>
           </div>
         </div>
         <div className="flex flex-col items-center justify-center pl-4">
           <GameRating rating={game.rating} size={5} />
           <Text className="text-sm">Rating</Text>
+        </div>
+      </div>
+
+      <div className="ml-12 flex">
+        <div className="flex flex-col items-start gap-2">
+          <div className="flex flex-wrap gap-8">
+            <div className="flex items-center justify-center gap-1">
+              <IconSquareCheckFilled size={24} className="text-green-600" />
+              <Text className="text-xl font-bold">{game.correct}</Text>
+            </div>
+            <div className="flex items-center justify-center gap-1">
+              <IconSquareXFilled size={24} className="text-red-600" />
+              <Text className="text-xl font-bold">{game.wrong}</Text>
+            </div>
+            <div className="flex items-center justify-center gap-1">
+              <Icons.coin className="size-6" />
+              <Text className="text-xl font-bold">
+                +{formatNumber(game.coin)}
+              </Text>
+            </div>
+          </div>
         </div>
       </div>
     </div>
