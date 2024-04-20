@@ -7,9 +7,10 @@ import { revalidatePath } from "next/cache";
 import { getGameList, getGameWithUserList } from "@/data/get";
 
 // create game
-export const actionCreateGame = async (
-  params: Prisma.GameCreateInput
-): Promise<ActionResponse & { data?: Game }> => {
+export const actionCreateGame = async (params: {
+  gameParams: Prisma.GameCreateInput;
+  coin: number;
+}): Promise<ActionResponse & { data?: Game }> => {
   const createdGame = await createGame(params);
 
   if (!createdGame) {

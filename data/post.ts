@@ -1,11 +1,28 @@
 import prisma from "@lib/prisma";
 import { Game, Prisma } from "@prisma/client";
 
-export const createGame = async (
-  params: Prisma.GameCreateInput
-): Promise<Game> => {
+export const createGame = async (params: {
+  gameParams: Prisma.GameCreateInput;
+  coin: number;
+}): Promise<Game> => {
+  const { gameParams, coin } = params;
   const game = await prisma.game.create({
-    data: params,
+    data: gameParams,
+  });
+
+  if (!game) {
+    throw new Error("Failed to create game");
+  }
+
+  await prisma.user.update({
+    where: {
+      id: game.userId,
+    },
+    data: {
+      coin: {
+        increment: coin,
+      },
+    },
   });
   return game;
 };

@@ -94,13 +94,17 @@ const ClassicGame = ({ gameMode: initialGameMode }: Props) => {
     try {
       setIsSaving(true);
       const { gameInfo } = gameSession;
+      const { coin, ...gameOnly } = gameInfo;
       const { status, message, data } = await actionCreateGame({
-        ...gameInfo,
-        user: {
-          connect: {
-            id: user?.id,
+        gameParams: {
+          ...gameOnly,
+          user: {
+            connect: {
+              id: user?.id,
+            },
           },
         },
+        coin,
       });
 
       const isError = status === "error";
