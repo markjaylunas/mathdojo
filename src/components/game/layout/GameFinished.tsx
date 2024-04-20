@@ -93,7 +93,7 @@ const GameFinished = ({ gameSession, onRetry, isSaving }: Props) => {
         ) : (
           <div className="flex justify-center gap-4 ">
             <Link href={DEFAULT_HOME_PATH}>
-              <Button className="w-full max-w-40">
+              <Button className="w-full max-w-40" onClick={onRetry}>
                 <IconHome className="mr-2" size={16} />
                 Home
               </Button>
