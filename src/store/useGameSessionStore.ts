@@ -16,6 +16,7 @@ import {
   generateProblem,
   getRating,
 } from "../lib/game";
+import { v4 as uuidV4 } from "uuid";
 
 export type GameTimerStatus =
   | "IDLE"
@@ -133,6 +134,10 @@ const useGameSessionStore = create<
               problem: generateProblem({
                 gameMode: state.gameSession.gameMode,
               }),
+              gameInfo: {
+                ...state.gameSession.gameInfo,
+                id: uuidV4(),
+              },
               timer: {
                 ...timer,
                 value: CLASSIC_TIME,
@@ -359,6 +364,7 @@ const useGameSessionStore = create<
               combo: 0,
               gameCreatedAt: null,
               gameInfo: {
+                id: "",
                 correct: 0,
                 wrong: 0,
                 score: 0,

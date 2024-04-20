@@ -60,24 +60,9 @@ export type OperationName =
   | "DIVISION";
 
 export type Difficulty = "EASY" | "MEDIUM" | "HARD" | "EXPERT" | "CUSTOM";
-// | "INFINITE";
-
-// export type GameOperation = {
-//   id: string;
-//   operation: OperationName;
-//   symbol: OperationSymbol;
-//   difficulty: Difficulty;
-//   digitRange: {
-//     id: string;
-//     order: number;
-//     digit: number;
-//     minRange: number;
-//     maxRange: number;
-//     operationId: string;
-//   }[];
-// };
 
 export type GameInfo = {
+  id: string;
   score: number;
   correct: number;
   wrong: number;

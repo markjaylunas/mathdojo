@@ -19,6 +19,7 @@ export const CLASSIC_LEVEL_UP_THRESHOLD = 25;
 export const MAX_CLASSIC_LEVEL = 12;
 
 export const INITIAL_CLASSIC_GAME_INFO: GameInfo = {
+  id: "",
   score: 0,
   correct: 0,
   wrong: 0,
