@@ -25,23 +25,20 @@ const AuthNav = () => {
   const user = useCurrentUser();
 
   const onSetUser = async () => {
-    if (user === null || !user) return;
-    if (user.username.length === 0) {
-      router.push(`/user/${user.id}/create-username`);
-      return;
-    }
-
     if (!userStore) {
       const newUser = {
-        id: `${user.id}`,
-        email: `${user.email}`,
-        name: `${user.name}`,
-        image: `${user.image}`,
-        role: user.role,
-        username: `${user.username}`,
+        id: `${user?.id}`,
+        email: `${user?.email}`,
+        name: `${user?.name}`,
+        image: `${user?.image}`,
+        role: user?.role || "USER",
+        username: `${user?.username}`,
       };
 
       setUser(newUser);
+    }
+    if (userStore?.username?.length === 0) {
+      router.push(`/user/${user?.id}/create-username`);
     }
   };
 
