@@ -56,7 +56,7 @@ const AuthNav = () => {
               <span className="sr-only">GitHub</span>
             </Button>
           </Link> */}
-      {!useStore && isPublicPage && (
+      {!userStore?.username && isPublicPage && (
         <Link href={DEFAULT_SIGNIN_PATH}>
           <Button variant="outline" className="px-3">
             <IconLogin2 className="mr-1 h-4" />
