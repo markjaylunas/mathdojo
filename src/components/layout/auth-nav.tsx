@@ -25,7 +25,7 @@ const AuthNav = () => {
   const user = useCurrentUser();
 
   const onSetUser = async () => {
-    if (!userStore) {
+    if (!userStore && !user?.id) {
       const newUser = {
         id: `${user?.id}`,
         email: `${user?.email}`,
