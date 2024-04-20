@@ -51,6 +51,7 @@ enum PerkType {
   NEW_PROBLEM // Generates a new problem to solve
   SHIELD // Protects the user from a wrong answer
   EXTRA_TIME // Adds extra time to the timer
+  EXTRA_MAX_TIME // Adds extra time to the max time of the timer
   DOUBLE_SCORE // Doubles the score earned for a certain duration
   DOUBLE_TIME // Doubles the time for a certain duration
   LUCKY_STRIKE // The next answer will be correct regardless
