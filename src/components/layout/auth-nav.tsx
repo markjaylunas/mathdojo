@@ -48,7 +48,7 @@ const AuthNav = () => {
   useEffect(() => {
     useUserStore.persist.rehydrate();
     onSetUser();
-  }, []);
+  }, [user]);
 
   return (
     <nav className="flex items-center gap-2">
