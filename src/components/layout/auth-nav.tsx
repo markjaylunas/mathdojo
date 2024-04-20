@@ -25,7 +25,8 @@ const AuthNav = () => {
   const user = useCurrentUser();
 
   const onSetUser = async () => {
-    if (!userStore && !user?.id) {
+    if (user?.id) {
+      if (userStore?.id === user?.id) return;
       const newUser = {
         id: `${user?.id}`,
         email: `${user?.email}`,
@@ -36,9 +37,10 @@ const AuthNav = () => {
       };
 
       setUser(newUser);
-    }
-    if (userStore?.username?.length === 0) {
-      router.push(`/user/${user?.id}/create-username`);
+
+      if (newUser?.username?.length === 0) {
+        router.push(`/user/${newUser?.id}/create-username`);
+      }
     }
   };
 
