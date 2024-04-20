@@ -17,6 +17,7 @@ export const actionCreateGame = async (params: {
   }
 
   revalidatePath(`/game/${createdGame.userId}`);
+  revalidatePath("/");
   return {
     status: "success",
     message: "Saved game successfully",
