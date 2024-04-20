@@ -153,19 +153,65 @@ const useGameSessionStore = create<
 
       gameAnswer: (answer) => {
         set((state) => {
+          const { gameSession } = state;
+
           const {
             timer,
             problemList,
             problem,
             gameMode,
-            gameInfo: { level },
+            gameInfo,
             levelCounter,
-          } = state.gameSession;
+          } = gameSession;
+
+          const { level } = gameInfo;
+
+          // restrictions
           if (timer.status !== "RUNNING") return state;
           if (!problem) return state;
+
+          // constants
           const isCorrect = answer === problem.answer;
           let newLevelCounter = isCorrect ? levelCounter + 1 : 1;
+          const doLevelUp =
+            levelCounter === CLASSIC_LEVEL_UP_THRESHOLD &&
+            level < MAX_CLASSIC_LEVEL;
+          const initialValue = isCorrect
+            ? timer.value + CLASSIC_CORRECT_ADD_TIME
+            : timer.value - CLASSIC_WRONG_REDUCE_TIME;
+          const timerValue = Math.min(initialValue, GAME_MAX_TIMER);
+
+          // new values
+          const newCoin = isCorrect ? gameInfo.coin + 1 : gameInfo.coin;
+          const newCorrect = isCorrect
+            ? gameInfo.correct + 1
+            : gameInfo.correct;
+          const newWrong = !isCorrect ? gameInfo.wrong + 1 : gameInfo.wrong;
+          const newCombo = isCorrect ? gameSession.combo + 1 : 0;
+          const newLevel = doLevelUp ? level + 1 : level;
+          const newScore = gameInfo.score + newCombo * newLevel;
+          const newHighestCombo =
+            isCorrect && gameSession.combo + 1 > gameInfo.highestCombo
+              ? gameSession.combo + 1
+              : gameInfo.highestCombo;
+          const newTotalAnswered = gameInfo.totalAnswered + 1;
           const currentLapTime = Date.now();
+          const newLapHistory = [
+            ...timer.lapHistory,
+            currentLapTime - timer.lap,
+          ];
+          const newHistory: TimerAction[] = [
+            ...timer.history,
+            { action: "ANSWER", time: currentLapTime },
+          ];
+          const newTotalAddedTime = isCorrect
+            ? timer.totalAddedTime + CLASSIC_CORRECT_ADD_TIME
+            : timer.totalAddedTime;
+          const newTotalReducedTime = !isCorrect
+            ? timer.totalReducedTime + CLASSIC_WRONG_REDUCE_TIME
+            : timer.totalReducedTime;
+
+          // update problem
           const problemAnswered: Problem = {
             ...problem,
             userAnswer: answer,
@@ -175,12 +221,7 @@ const useGameSessionStore = create<
 
           const newProblemList = [...(problemList || []), problemAnswered];
 
-          const doLevelUp =
-            levelCounter === CLASSIC_LEVEL_UP_THRESHOLD &&
-            level < MAX_CLASSIC_LEVEL;
-
-          const newLevel = doLevelUp ? level + 1 : level;
-
+          // update game setting
           let adjustedGameSetting = gameMode;
           if (doLevelUp) {
             newLevelCounter = 1;
@@ -189,15 +230,7 @@ const useGameSessionStore = create<
             });
           }
 
-          const combo = isCorrect ? state.gameSession.combo + 1 : 0;
-          const scoreIncrement = isCorrect ? combo * newLevel : 0;
-
-          const initialValue = isCorrect
-            ? timer.value + CLASSIC_CORRECT_ADD_TIME
-            : timer.value - CLASSIC_WRONG_REDUCE_TIME;
-
-          const timerValue = Math.min(initialValue, GAME_MAX_TIMER);
-
+          // generate new problem
           setTimeout(() => {
             useGameSessionStore
               .getState()
@@ -206,31 +239,20 @@ const useGameSessionStore = create<
 
           return {
             gameSession: {
-              ...state.gameSession,
+              ...gameSession,
               gameInfo: {
-                ...state.gameSession.gameInfo,
-                correct: isCorrect
-                  ? state.gameSession.gameInfo.correct + 1
-                  : state.gameSession.gameInfo.correct,
-                wrong: !isCorrect
-                  ? state.gameSession.gameInfo.wrong + 1
-                  : state.gameSession.gameInfo.wrong,
-                score: state.gameSession.gameInfo.score + scoreIncrement,
-                highestCombo:
-                  isCorrect &&
-                  state.gameSession.combo + 1 >
-                    state.gameSession.gameInfo.highestCombo
-                    ? state.gameSession.combo + 1
-                    : state.gameSession.gameInfo.highestCombo,
-                totalCombo: isCorrect
-                  ? state.gameSession.gameInfo.totalCombo + 1
-                  : state.gameSession.gameInfo.totalCombo,
-                totalAnswered: state.gameSession.gameInfo.totalAnswered + 1,
+                ...gameInfo,
+                correct: newCorrect,
+                wrong: newWrong,
+                score: newScore,
+                coin: newCoin,
+                highestCombo: newHighestCombo,
+                totalAnswered: newTotalAnswered,
                 level: newLevel,
               },
               gameMode: adjustedGameSetting,
               isCooldown: true,
-              combo: combo,
+              combo: newCombo,
               levelCounter: newLevelCounter,
               problem: problemAnswered,
               problemList: newProblemList,
@@ -238,17 +260,10 @@ const useGameSessionStore = create<
                 ...timer,
                 value: timerValue,
                 lap: currentLapTime,
-                lapHistory: [...timer.lapHistory, currentLapTime - timer.lap],
-                history: [
-                  ...timer.history,
-                  { action: "ANSWER", time: currentLapTime },
-                ],
-                totalAddedTime: isCorrect
-                  ? timer.totalAddedTime + CLASSIC_CORRECT_ADD_TIME
-                  : timer.totalAddedTime,
-                totalReducedTime: !isCorrect
-                  ? timer.totalReducedTime + CLASSIC_WRONG_REDUCE_TIME
-                  : timer.totalReducedTime,
+                lapHistory: newLapHistory,
+                history: newHistory,
+                totalAddedTime: newTotalAddedTime,
+                totalReducedTime: newTotalReducedTime,
               },
             },
           };
@@ -346,7 +361,6 @@ const useGameSessionStore = create<
                 wrong: 0,
                 score: 0,
                 highestCombo: 0,
-                totalCombo: 0,
                 totalAnswered: 0,
                 gameTime: 0,
                 level: 1,
