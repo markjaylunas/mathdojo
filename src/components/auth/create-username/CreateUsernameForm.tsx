@@ -16,19 +16,20 @@ import {
 } from "@components/ui/form";
 import { Input } from "@components/ui/input";
 import { useToast } from "@/src/components/ui/use-toast";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SubmitButton from "../../ui/submit-button";
 import { notFound, useRouter } from "next/navigation";
 import { actionCreateUsername } from "@/src/actions/auth";
 import { DEFAULT_SIGNIN_REDIRECT } from "@/src/lib/routes";
 import { useStore } from "zustand";
 import useUserStore from "@/src/store/useUserStore";
+import useCurrentUser from "@/src/hooks/use-current-user";
 
 const CreateUsernameForm = (params: { userId: string }) => {
   const { userId } = params;
   if (!userId) notFound();
   const setUser = useStore(useUserStore, (state) => state.setUser);
-
+  const sessionUser = useCurrentUser();
   const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
@@ -89,6 +90,14 @@ const CreateUsernameForm = (params: { userId: string }) => {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (sessionUser) {
+      if (sessionUser.username.length > 0) {
+        router.push(DEFAULT_SIGNIN_REDIRECT);
+      }
+    }
+  }, [sessionUser]);
 
   return (
     <Form {...form}>
