@@ -37,6 +37,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "embla-carousel-react": "^8.0.2",
+    "input-otp": "^1.2.4",
     "lodash": "^4.17.21",
     "mathjs": "^12.4.1",
     "moment": "^2.30.1",
@@ -51,6 +52,7 @@
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^9.0.1",
+    "vaul": "^0.9.0",
     "zod": "^3.22.4",
     "zustand": "^4.5.2"
   },
