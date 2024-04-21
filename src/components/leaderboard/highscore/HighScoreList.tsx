@@ -47,9 +47,11 @@ const HighScoreList = ({ highScoreList }: Props) => {
                   className={cn(
                     "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform text-xl font-medium",
                     topThree.includes(highScoreIndex) && "font-extrabold",
-                    highScoreIndex === 0 && "text-gold-900 ",
-                    highScoreIndex === 1 && "text-silver-900 ",
-                    highScoreIndex === 2 && "text-bronze-900 "
+                    highScoreIndex === 0 && "text-gold-900 dark:text-gold-500 ",
+                    highScoreIndex === 1 &&
+                      "text-silver-900 dark:text-silver-500",
+                    highScoreIndex === 2 &&
+                      "text-bronze-900 dark:text-bronze-500"
                   )}
                 >
                   {highScoreIndex + 1}
