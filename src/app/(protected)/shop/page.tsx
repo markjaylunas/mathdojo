@@ -1,16 +1,29 @@
-import { actionGetPerkList } from "@/src/actions/get";
+import { actionGetShopOnLoad } from "@/src/actions/get";
 import ShopList from "@/src/components/shop/ShopList";
 import Heading from "@/src/components/ui/heading";
+import { Icons } from "@/src/components/ui/icons";
+import Text from "@/src/components/ui/text";
+import { auth } from "@/src/lib/auth";
+import { formatNumber } from "@/src/lib/game";
 
 const ShopPage = async () => {
-  const { data: perkList, message } = await actionGetPerkList({});
-  if (!perkList) throw new Error(message);
+  const session = await auth();
+  const { data, message } = await actionGetShopOnLoad({
+    userId: session?.user.id || "",
+  });
+  if (!data) throw new Error(message);
 
   return (
     <div className="py-8">
-      <Heading>Shop</Heading>
+      <div className="flex items-center justify-between">
+        <Heading>Shop</Heading>
+        <div className="flex items-center">
+          <Icons.coin className="mr-2 size-6" />
+          <Text>{formatNumber(data.userCoin)}</Text>
+        </div>
+      </div>
 
-      <ShopList perkList={perkList} />
+      <ShopList perkList={data.perkList} />
     </div>
   );
 };

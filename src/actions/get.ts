@@ -1,8 +1,17 @@
 "use server";
 
-import { Perk } from "@prisma/client";
-import { ActionResponse, HighScore, PlayerInfo } from "../lib/types";
-import { getHighScoreList, getPerkList, getPlayerInfo } from "@/data/get";
+import {
+  ActionResponse,
+  HighScore,
+  PlayerInfo,
+  ShopOnLoad,
+} from "../lib/types";
+import {
+  getHighScoreList,
+  getPerkList,
+  getPlayerInfo,
+  getUserCoin,
+} from "@/data/get";
 
 // get player info
 export const actionGetPlayerInfo = async (params: {
@@ -39,19 +48,26 @@ export const actionGetHighScoreList = async (params: {}): Promise<
   };
 };
 
-// get perk list
-export const actionGetPerkList = async (params: {}): Promise<
-  ActionResponse & { data?: Perk[] }
-> => {
-  const perkList = await getPerkList();
+// get shop on load data
+export const actionGetShopOnLoad = async (params: {
+  userId: string;
+}): Promise<ActionResponse & { data?: ShopOnLoad }> => {
+  const { userId } = params;
 
-  if (!perkList) {
-    return { status: "error", message: "Failed to fetch perks" };
-  }
+  const perkListPromise = getPerkList();
+  const userCointPromise = getUserCoin({ userId });
+
+  const [perkList, userCoin] = await Promise.all([
+    perkListPromise,
+    userCointPromise,
+  ]);
 
   return {
     status: "success",
-    message: "Fetch perks successfully",
-    data: perkList,
+    message: "Fetch shop on load data successfully",
+    data: {
+      perkList,
+      userCoin,
+    },
   };
 };

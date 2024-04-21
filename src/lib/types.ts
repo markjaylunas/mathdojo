@@ -7,6 +7,7 @@ import {
   Prisma,
   Game,
   User,
+  Perk,
 } from "@prisma/client";
 
 export type NavItem = {
@@ -101,4 +102,9 @@ export type BasicUser = {
   username: User["username"];
   email: User["email"];
   image: User["image"];
+};
+
+export type ShopOnLoad = {
+  perkList: Perk[];
+  userCoin: User["coin"];
 };
