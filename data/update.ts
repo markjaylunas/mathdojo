@@ -70,13 +70,13 @@ export const buyPerk = async (params: {
     if (!createdBuyerPerk) throw new Error("Failed to create user perk");
   }
 
-  const updatedBuyer = await prisma.user.update({
+  await prisma.user.update({
     where: {
       id: userId,
     },
     data: {
       coin: {
-        decrement: totalPrice,
+        decrement: existingBuyerPerk ? totalPrice : 0,
       },
     },
   });

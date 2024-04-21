@@ -70,7 +70,9 @@ const ShopItem = ({ perk, userPerk }: Props) => {
         <DrawerTrigger className="w-full" asChild>
           <Button size="sm" className="w-full" disabled={loading}>
             <Icons.coin className="mr-1 size-5" />
-            <span className="font-bold">{formatNumber(perk.price)}</span>
+            <span className="font-bold">
+              {userPerk ? formatNumber(perk.price) : "Free"}
+            </span>
           </Button>
         </DrawerTrigger>
         <DrawerContent>
@@ -78,12 +80,10 @@ const ShopItem = ({ perk, userPerk }: Props) => {
             <DrawerHeader>
               <div className="flex items-center justify-between">
                 <DrawerTitle>Buy {perk.name}</DrawerTitle>
-                {userPerk && (
-                  <Text>
-                    Owned:{" "}
-                    <span className="font-medium">{userPerk?.quantity}</span>
-                  </Text>
-                )}
+                <Text>
+                  Owned:{" "}
+                  <span className="font-medium">{userPerk?.quantity || 0}</span>
+                </Text>
               </div>
 
               <DrawerDescription>{perk.description}</DrawerDescription>
@@ -92,7 +92,7 @@ const ShopItem = ({ perk, userPerk }: Props) => {
               <div className="flex items-center justify-center">
                 <Icons.coin className="mr-1 size-5" />
                 <span className="font-medium">
-                  {formatNumber(perk.price * quantity)}
+                  {userPerk ? formatNumber(perk.price * quantity) : "Free"}
                 </span>
               </div>
 
@@ -103,7 +103,7 @@ const ShopItem = ({ perk, userPerk }: Props) => {
                   }
                   variant="outline"
                   className="mr-2"
-                  disabled={loading}
+                  disabled={loading || !userPerk}
                 >
                   -
                 </Button>
@@ -112,7 +112,7 @@ const ShopItem = ({ perk, userPerk }: Props) => {
                   onClick={() => setQuantity(quantity + 1)}
                   className="ml-2"
                   variant="outline"
-                  disabled={loading}
+                  disabled={loading || !userPerk}
                 >
                   +
                 </Button>
