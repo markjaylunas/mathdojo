@@ -15,14 +15,14 @@ import {
   DrawerTrigger,
 } from "../ui/drawer";
 import { useState } from "react";
-import { InputOTP } from "../ui/input-otp";
-import { Input } from "../ui/input";
+import { formatNumber } from "@/src/lib/game";
 
 type Props = {
   perk: Perk;
 };
 const ShopItem = ({ perk }: Props) => {
   const [quantity, setQuantity] = useState(1);
+
   return (
     <div className="flex flex-col items-center justify-between">
       <div className="flex flex-1 flex-col items-center justify-center">
@@ -31,11 +31,11 @@ const ShopItem = ({ perk }: Props) => {
         <Text className="text-center text-sm">{perk.description}</Text>
       </div>
 
-      <Drawer>
+      <Drawer onClose={() => setQuantity(1)}>
         <DrawerTrigger className="w-full" asChild>
           <Button size="sm" className="w-full">
             <Icons.coin className="mr-1 size-5" />
-            {perk.price}
+            {formatNumber(perk.price)}
           </Button>
         </DrawerTrigger>
         <DrawerContent>
@@ -47,7 +47,9 @@ const ShopItem = ({ perk }: Props) => {
 
               <div className="flex items-center justify-center">
                 <Icons.coin className="mr-1 size-5" />
-                <span className="font-medium">{perk.price * quantity}</span>
+                <span className="font-medium">
+                  {formatNumber(perk.price * quantity)}
+                </span>
               </div>
 
               <div className="mt-2 flex items-center justify-center gap-2">
@@ -60,7 +62,7 @@ const ShopItem = ({ perk }: Props) => {
                 >
                   -
                 </Button>
-                <Text>{quantity}</Text>
+                <Text>{formatNumber(quantity)}</Text>
                 <Button
                   onClick={() => setQuantity(quantity + 1)}
                   className="ml-2"
