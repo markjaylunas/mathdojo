@@ -44,6 +44,11 @@ export const routesConfig: RoutesConfig = {
           href: "/leaderboard",
           items: [],
         },
+        {
+          title: "Shop",
+          href: "/shop",
+          items: [],
+        },
         // {
         //   title: "Friends",
         //   href: "/friends",
