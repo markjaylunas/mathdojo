@@ -24,10 +24,10 @@ const ShopItem = ({ perk }: Props) => {
   const [quantity, setQuantity] = useState(1);
 
   return (
-    <div className="flex flex-col items-center justify-between">
+    <div className="flex flex-col items-center justify-between gap-4">
       <div className="flex flex-1 flex-col items-center justify-center">
         <p className="text-5xl">{perk.icon}</p>
-        <Text className="text-center font-medium">{perk.name}</Text>
+        <Text className="mt-4 text-center font-medium">{perk.name}</Text>
         <Text className="text-center text-sm">{perk.description}</Text>
       </div>
 
@@ -35,7 +35,7 @@ const ShopItem = ({ perk }: Props) => {
         <DrawerTrigger className="w-full" asChild>
           <Button size="sm" className="w-full">
             <Icons.coin className="mr-1 size-5" />
-            {formatNumber(perk.price)}
+            <span className="font-bold">{formatNumber(perk.price)}</span>
           </Button>
         </DrawerTrigger>
         <DrawerContent>
