@@ -23,7 +23,7 @@ const ShopPage = async () => {
         </div>
       </div>
 
-      <ShopList perkList={data.perkList} />
+      <ShopList perkList={data.perkList} userPerkList={data.userPerkList} />
     </div>
   );
 };

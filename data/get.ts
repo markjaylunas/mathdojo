@@ -2,7 +2,7 @@
 
 import { GameMode, GameWithUser, HighScore, PlayerInfo } from "@/src/lib/types";
 import prisma from "@lib/prisma";
-import { Game, Perk, Prisma, User } from "@prisma/client";
+import { Game, Perk, Prisma, User, UserPerk } from "@prisma/client";
 
 export const getUserByEmail = async (params: { email: string }) => {
   const { email } = params;
@@ -168,7 +168,7 @@ export const getHighScoreList = async (): Promise<HighScore[]> => {
 export const getPerkList = async (): Promise<Perk[]> => {
   const perkList = await prisma.perk.findMany({
     orderBy: {
-      name: "asc",
+      price: "asc",
     },
   });
 
@@ -187,4 +187,18 @@ export const getUserCoin = async ({
   });
 
   return coinCount?.coin || 0;
+};
+
+export const getUserPerkList = async ({
+  userId,
+}: {
+  userId: User["id"];
+}): Promise<UserPerk[]> => {
+  const userPerkList = await prisma.userPerk.findMany({
+    where: {
+      userId,
+    },
+  });
+
+  return userPerkList;
 };

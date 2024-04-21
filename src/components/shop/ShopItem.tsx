@@ -1,6 +1,6 @@
 "use client";
 
-import { Perk } from "@prisma/client";
+import { Perk, UserPerk } from "@prisma/client";
 import Text from "../ui/text";
 import { Button } from "../ui/button";
 import { Icons } from "../ui/icons";
@@ -16,12 +16,47 @@ import {
 } from "../ui/drawer";
 import { useState } from "react";
 import { formatNumber } from "@/src/lib/game";
+import { actionBuyPerk } from "@/src/actions/update";
+import useUserStore from "@/src/store/useUserStore";
+import { toast } from "../ui/use-toast";
+import SubmitButton from "../ui/submit-button";
 
 type Props = {
   perk: Perk;
+  userPerk: UserPerk | undefined;
 };
-const ShopItem = ({ perk }: Props) => {
+const ShopItem = ({ perk, userPerk }: Props) => {
+  const user = useUserStore((state) => state.user);
   const [quantity, setQuantity] = useState(1);
+  const [loading, setIsLoading] = useState(false);
+
+  const handleBuy = async () => {
+    try {
+      setIsLoading(true);
+      if (quantity <= 0) return;
+      if (!user) return;
+      const message = await actionBuyPerk({
+        userId: user?.id,
+        perkId: perk.id,
+        quantity,
+      });
+
+      if (message) {
+        toast({
+          description: message.message,
+        });
+        setQuantity(1);
+      }
+    } catch (error) {
+      console.error(error);
+      toast({
+        description: "Something went wrong, please try again",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="flex flex-col items-center justify-between gap-4">
@@ -33,7 +68,7 @@ const ShopItem = ({ perk }: Props) => {
 
       <Drawer onClose={() => setQuantity(1)}>
         <DrawerTrigger className="w-full" asChild>
-          <Button size="sm" className="w-full">
+          <Button size="sm" className="w-full" disabled={loading}>
             <Icons.coin className="mr-1 size-5" />
             <span className="font-bold">{formatNumber(perk.price)}</span>
           </Button>
@@ -41,7 +76,16 @@ const ShopItem = ({ perk }: Props) => {
         <DrawerContent>
           <div className="mx-auto w-full max-w-lg">
             <DrawerHeader>
-              <DrawerTitle>Buy {perk.name}</DrawerTitle>
+              <div className="flex items-center justify-between">
+                <DrawerTitle>Buy {perk.name}</DrawerTitle>
+                {userPerk && (
+                  <Text>
+                    Owned:{" "}
+                    <span className="font-medium">{userPerk?.quantity}</span>
+                  </Text>
+                )}
+              </div>
+
               <DrawerDescription>{perk.description}</DrawerDescription>
               <p className="mt-4 text-center text-5xl">{perk.icon}</p>
 
@@ -59,6 +103,7 @@ const ShopItem = ({ perk }: Props) => {
                   }
                   variant="outline"
                   className="mr-2"
+                  disabled={loading}
                 >
                   -
                 </Button>
@@ -67,15 +112,20 @@ const ShopItem = ({ perk }: Props) => {
                   onClick={() => setQuantity(quantity + 1)}
                   className="ml-2"
                   variant="outline"
+                  disabled={loading}
                 >
                   +
                 </Button>
               </div>
             </DrawerHeader>
             <DrawerFooter>
-              <Button>Buy</Button>
+              <SubmitButton onClick={handleBuy} loading={loading}>
+                Buy
+              </SubmitButton>
               <DrawerClose asChild>
-                <Button variant="secondary">Cancel</Button>
+                <Button variant="secondary" disabled={loading}>
+                  Cancel
+                </Button>
               </DrawerClose>
             </DrawerFooter>
           </div>

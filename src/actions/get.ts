@@ -11,6 +11,7 @@ import {
   getPerkList,
   getPlayerInfo,
   getUserCoin,
+  getUserPerkList,
 } from "@/data/get";
 
 // get player info
@@ -55,10 +56,12 @@ export const actionGetShopOnLoad = async (params: {
   const { userId } = params;
 
   const perkListPromise = getPerkList();
+  const userPerkListPromise = getUserPerkList({ userId });
   const userCointPromise = getUserCoin({ userId });
 
-  const [perkList, userCoin] = await Promise.all([
+  const [perkList, userPerkList, userCoin] = await Promise.all([
     perkListPromise,
+    userPerkListPromise,
     userCointPromise,
   ]);
 
@@ -67,6 +70,7 @@ export const actionGetShopOnLoad = async (params: {
     message: "Fetch shop on load data successfully",
     data: {
       perkList,
+      userPerkList,
       userCoin,
     },
   };
