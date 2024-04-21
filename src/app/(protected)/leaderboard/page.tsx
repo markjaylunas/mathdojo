@@ -7,7 +7,7 @@ const LeaderBoardPage = async () => {
   if (!highScoreList) throw new Error("Failed to fetch high score list");
 
   return (
-    <div>
+    <div className="py-8">
       <Heading>Leaderboard</Heading>
       <HighScoreList highScoreList={highScoreList} />
     </div>
