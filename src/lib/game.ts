@@ -4,6 +4,7 @@ import {
   Problem,
   GameMode,
   GameOperation,
+  GameInfo,
 } from "./types";
 import { v4 as uuidV4 } from "uuid";
 import { evaluate } from "mathjs";
@@ -37,8 +38,10 @@ export const toTwoDecimalNumber = (num: number) => {
 
 export const generateProblem = ({
   gameMode,
+  gameInfo,
 }: {
   gameMode: GameMode | null;
+  gameInfo: GameInfo;
 }): Problem => {
   if (gameMode === null)
     throw new Error("Game setting is null, cannot generate problem");
@@ -84,7 +87,7 @@ export const generateProblem = ({
   const choices = generateChoices(answer);
   const id = uuidV4().toString();
 
-  const coin = getRandomInt(1, 8);
+  const coin = getRandomInt(0, 2) + gameInfo.level;
 
   const newProblem: Problem = {
     id,

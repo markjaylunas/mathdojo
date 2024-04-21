@@ -133,6 +133,7 @@ const useGameSessionStore = create<
               ...state.gameSession,
               problem: generateProblem({
                 gameMode: state.gameSession.gameMode,
+                gameInfo: state.gameSession.gameInfo,
               }),
               gameInfo: {
                 ...state.gameSession.gameInfo,
@@ -284,6 +285,7 @@ const useGameSessionStore = create<
               ...state.gameSession,
               problem: generateProblem({
                 gameMode: adjustedGameSetting,
+                gameInfo: state.gameSession.gameInfo,
               }),
 
               isCooldown: false,
@@ -334,6 +336,7 @@ const useGameSessionStore = create<
               ...state.gameSession,
               problem: generateProblem({
                 gameMode: state.gameSession.gameMode,
+                gameInfo: state.gameSession.gameInfo,
               }),
               timer: {
                 ...timer,
