@@ -23,7 +23,7 @@ const HighScoreList = ({ highScoreList }: Props) => {
       <TableCaption>A list of high scores.</TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">Ranking</TableHead>
+          <TableHead className="w-[70px] md:w-[100px]">Ranking</TableHead>
           <TableHead>Player</TableHead>
           <TableHead className="text-right">Score</TableHead>
         </TableRow>
