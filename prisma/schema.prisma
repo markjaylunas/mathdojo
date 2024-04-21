@@ -46,16 +46,15 @@ enum Rating {
 }
 
 enum PerkType {
-  SHOW_ANSWER // Reveals the correct answer to the current problem
-  REMOVE_TWO_WRONG_ANSWER // Removes two incorrect options from the current problem
-  NEW_PROBLEM // Generates a new problem to solve
-  SHIELD // Protects the user from a wrong answer
-  EXTRA_TIME // Adds extra time to the timer
-  EXTRA_MAX_TIME // Adds extra time to the max time of the timer
-  DOUBLE_SCORE // Doubles the score earned for a certain duration
-  DOUBLE_TIME // Doubles the time for a certain duration
-  LUCKY_STRIKE // The next answer will be correct regardless
-  SCORE_MULTIPLIER // Multiplies the score earned for a certain duration
+  SHOW_ANSWER
+  REMOVE_TWO_WRONG_ANSWER
+  NEW_PROBLEM
+  SHIELD
+  EXTRA_TIME
+  ADD_MAX_TIME
+  DOUBLE_SCORE
+  DOUBLE_COIN
+  LUCKY_STRIKE
 }
 
 model User {
@@ -176,14 +175,15 @@ model GameLike {
 }
 
 model Perk {
-  id        String   @id @default(uuid())
-  name      String
-  effect    String
-  icon      String
-  price     Int
-  type      PerkType
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  type        PerkType
+  duration    Int      @default(0)
+  price       Int
+  icon        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   users UserPerk[]
 }
