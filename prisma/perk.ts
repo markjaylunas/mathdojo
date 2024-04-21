@@ -24,13 +24,6 @@ export const perkSeedList: Prisma.PerkCreateInput[] = [
     price: 50,
   },
   {
-    name: "Shield",
-    description: "Protects the user from a wrong answer",
-    type: "SHIELD",
-    icon: "🛡️",
-    price: 400,
-  },
-  {
     name: "Extra Time",
     description: "Adds extra 1 minute time to the timer",
     type: "EXTRA_TIME",

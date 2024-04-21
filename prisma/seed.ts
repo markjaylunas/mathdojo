@@ -4,6 +4,8 @@ import { perkSeedList } from "./perk";
 const prisma = new PrismaClient();
 
 async function main() {
+  await prisma.perk.deleteMany();
+
   await prisma.perk.createMany({
     data: perkSeedList,
   });
