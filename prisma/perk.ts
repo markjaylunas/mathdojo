@@ -3,8 +3,7 @@ import { Prisma } from "@prisma/client";
 export const perkSeedList: Prisma.PerkCreateInput[] = [
   {
     name: "Show Answer",
-    description: "Reveals the correct answer",
-    duration: 30000,
+    description: "Reveals the correct answer for 30 seconds",
     type: "SHOW_ANSWER",
     icon: "👁️",
     price: 950,

@@ -178,7 +178,6 @@ model Perk {
   name        String
   description String
   type        PerkType
-  duration    Int      @default(0)
   price       Int
   icon        String
   createdAt   DateTime @default(now())
