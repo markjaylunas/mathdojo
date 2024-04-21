@@ -1,7 +1,8 @@
 "use server";
 
+import { Perk } from "@prisma/client";
 import { ActionResponse, HighScore, PlayerInfo } from "../lib/types";
-import { getHighScoreList, getPlayerInfo } from "@/data/get";
+import { getHighScoreList, getPerkList, getPlayerInfo } from "@/data/get";
 
 // get player info
 export const actionGetPlayerInfo = async (params: {
@@ -35,5 +36,22 @@ export const actionGetHighScoreList = async (params: {}): Promise<
     status: "success",
     message: "Fetch high score list successfully",
     data: highScoreList,
+  };
+};
+
+// get perk list
+export const actionGetPerkList = async (params: {}): Promise<
+  ActionResponse & { data?: Perk[] }
+> => {
+  const perkList = await getPerkList();
+
+  if (!perkList) {
+    return { status: "error", message: "Failed to fetch perks" };
+  }
+
+  return {
+    status: "success",
+    message: "Fetch perks successfully",
+    data: perkList,
   };
 };
