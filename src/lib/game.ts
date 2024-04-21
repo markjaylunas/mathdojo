@@ -84,7 +84,7 @@ export const generateProblem = ({
   const choices = generateChoices(answer);
   const id = uuidV4().toString();
 
-  const coin = getRandomInt(1, 3);
+  const coin = getRandomInt(1, 8);
 
   const newProblem: Problem = {
     id,
