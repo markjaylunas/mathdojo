@@ -9,7 +9,7 @@ export const perkSeedList: Prisma.PerkCreateInput[] = [
     price: 350,
   },
   {
-    name: "Remove Two Wrong Answer",
+    name: "Less Choices",
     description: "Removes two incorrect options from the current problem",
     type: "REMOVE_TWO_WRONG_ANSWER",
     icon: "❌",
@@ -30,7 +30,7 @@ export const perkSeedList: Prisma.PerkCreateInput[] = [
     price: 60,
   },
   {
-    name: "Add Max Time",
+    name: "Max Time",
     description: "Adds 1 minute to max time of the timer",
     type: "ADD_MAX_TIME",
     icon: "⏳",
