@@ -69,14 +69,22 @@ const ClassicRunningScreen = ({
           <div className="flex justify-between">
             <div className="flex items-center justify-evenly gap-10">
               <div className="flex flex-col items-start justify-start">
-                <div className="flex items-center justify-center gap-1">
-                  <Text className="text-gray-500 dark:text-gray-400">
-                    Score:
-                  </Text>
-                  <Text className="text-xl font-bold">
-                    {formatNumber(gameInfo.score)}
-                  </Text>
+                <div className="flex items-start justify-start gap-2">
+                  <div className="flex items-center justify-center gap-1">
+                    <Text className="text-gray-500 dark:text-gray-400">
+                      Score:
+                    </Text>
+                    <Text className="text-xl font-bold">
+                      {formatNumber(gameInfo.score)}
+                    </Text>
+                  </div>
+                  {combo > 1 && (
+                    <Text className="text-right text-xs font-extrabold">
+                      Combo x{combo}
+                    </Text>
+                  )}
                 </div>
+
                 <div className="flex items-center justify-center gap-1">
                   <Icons.coin className="size-6" />
                   <Text className="text-xl font-bold">
@@ -91,18 +99,13 @@ const ClassicRunningScreen = ({
               </div>
             </div>
           </div>
-          {combo > 1 && (
-            <Text className="text-right text-xl font-extrabold">
-              Combo {combo}x
-            </Text>
-          )}
+
+          <GameUserPerkList userPerkList={playerInfo.userPerkList} />
         </div>
       </GameHeader>
 
       <div className="flex h-full flex-1 flex-col justify-between gap-4">
         <GameView problem={problem} />
-
-        <GameUserPerkList userPerkList={playerInfo.userPerkList} />
 
         <GameChoices
           problem={problem}

@@ -41,15 +41,12 @@ const GameView = ({ problem }: Props) => {
       </div>
       <div className="border-[3px] border-gray-600 dark:border-gray-300" />
       <div className="flex items-end justify-end gap-5">
-        {userAnswer !== null ? (
-          <Number
-            numberFullValue={userAnswer}
-            maxDigitLength={maxDigitLength}
-            status={status}
-          />
-        ) : (
-          ""
-        )}
+        <Number
+          numberFullValue={userAnswer || 0}
+          maxDigitLength={maxDigitLength}
+          status={status}
+          hidden={status === "UNANSWERED"}
+        />
       </div>
     </div>
   );

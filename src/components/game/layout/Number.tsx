@@ -6,6 +6,7 @@ type Props = {
   numberFullValue: number;
   maxDigitLength: number;
   status?: Problem["status"];
+  hidden?: boolean;
 } & React.HTMLAttributes<HTMLParagraphElement>;
 
 const Number = ({
@@ -14,6 +15,7 @@ const Number = ({
   numberFullValue,
   maxDigitLength,
   status,
+  hidden,
   ...props
 }: Props) => {
   const valueLength = numberFullValue.toString().length;
@@ -36,7 +38,10 @@ const Number = ({
 
   return (
     <div
-      className={`grid grid-flow-col grid-cols-${numberFullValue.toString().length}`}
+      className={cn(
+        `grid grid-flow-col grid-cols-${numberFullValue.toString().length}`,
+        hidden && "text-transparent"
+      )}
     >
       {numberValue
         .toString()
@@ -44,7 +49,13 @@ const Number = ({
         .map((digit, index) => (
           <p
             key={index}
-            className={cn("text-center  font-bold", size, className, color)}
+            className={cn(
+              "text-center  font-bold",
+              size,
+              className,
+              color,
+              hidden && "text-transparent"
+            )}
             {...props}
           >
             {digit}
