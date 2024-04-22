@@ -1,4 +1,4 @@
-import { Perk, Prisma, User } from "@prisma/client";
+import { Perk, Prisma, User, UserPerk } from "@prisma/client";
 import prisma from "@lib/prisma";
 
 export const updateUser = async (
@@ -82,4 +82,21 @@ export const buyPerk = async (params: {
   });
 
   return "Perk bought successfully";
+};
+
+export const updateUsePerk = async (params: {
+  userPerkId: UserPerk["id"];
+}): Promise<boolean> => {
+  const udpatedUserPerk = await prisma.userPerk.update({
+    data: {
+      quantity: {
+        decrement: 1,
+      },
+    },
+    where: {
+      id: params.userPerkId,
+    },
+  });
+
+  return Boolean(udpatedUserPerk);
 };

@@ -1,9 +1,11 @@
 "use server";
 
-import { buyPerk } from "@/data/update";
+import { buyPerk, updateUsePerk } from "@/data/update";
 import { ActionResponse } from "../lib/types";
 import { revalidatePath } from "next/cache";
 import { routesConfig } from "../lib/config";
+import { User } from "next-auth";
+import { UserPerk } from "@prisma/client";
 
 // buy perk
 export const actionBuyPerk = async (params: {
@@ -21,5 +23,21 @@ export const actionBuyPerk = async (params: {
   return {
     status: "success",
     message: "Bought perk successfully",
+  };
+};
+
+// use perk
+export const actionUsePerk = async (params: {
+  userPerkId: UserPerk["id"];
+}): Promise<ActionResponse> => {
+  const updated = await updateUsePerk(params);
+
+  if (!updated) {
+    return { status: "error", message: "Failed to use perk" };
+  }
+
+  return {
+    status: "success",
+    message: "Used perk successfully",
   };
 };

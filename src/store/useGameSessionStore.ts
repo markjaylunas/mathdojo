@@ -78,7 +78,7 @@ export type UseGameSessionActions = {
   gameReset: () => void;
   gameDoneCooldown: (adjustedGameSetting: GameMode | null) => void;
   setStatus: (status: GameTimerStatus) => void;
-  applyPerk: (type: PerkType) => boolean;
+  applyPerk: (type: PerkType) => void;
   perkExtraTimer: () => void;
   perkNewProblem: () => void;
   perkLessChoices: () => void;
@@ -462,13 +462,6 @@ const useGameSessionStore = create<
       },
 
       applyPerk: (type) => {
-        if (
-          useGameSessionStore
-            .getState()
-            .gameSession.activePerkList.includes(type)
-        )
-          return false;
-
         set((state) => {
           return {
             ...state,
@@ -496,7 +489,6 @@ const useGameSessionStore = create<
             useGameSessionStore.getState().perkMaxTime();
             break;
         }
-        return true;
       },
 
       perkExtraTimer: () => {

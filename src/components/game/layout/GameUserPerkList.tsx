@@ -16,24 +16,45 @@ import Text from "../../ui/text";
 import { useStore } from "zustand";
 import useGameSessionStore from "@/src/store/useGameSessionStore";
 import { PerkType } from "@prisma/client";
+import { actionUsePerk } from "@/src/actions/update";
 
 type Props = {
   userPerkList: PlayerInfo["userPerkList"];
   disabled?: boolean;
 };
 
-const GameUserPerkList = ({ userPerkList, disabled }: Props) => {
+const GameUserPerkList = ({
+  userPerkList: initialUerPerkList,
+  disabled,
+}: Props) => {
+  const [userPerkList, setUserPerkList] = useState(initialUerPerkList);
   const soon: PerkType[] = ["DOUBLE_COIN", "DOUBLE_SCORE", "SHOW_ANSWER"];
-  const applyPerk = useStore(useGameSessionStore, (state) => state.applyPerk);
+  const {
+    applyPerk,
+    gameSession: { activePerkList },
+  } = useStore(useGameSessionStore, (state) => state);
 
   const [open, setOpen] = useState(false);
 
-  const handeUsePerk = (perkId: string, perkType: PerkType) => {
+  const handeUsePerk = async (userPerkId: string, perkType: PerkType) => {
     setOpen(false);
+    const appliable = !activePerkList.includes(perkType);
+    if (!appliable) return;
 
-    const applied = applyPerk(perkType);
-
-    if (applied) {
+    try {
+      const { status } = await actionUsePerk({ userPerkId });
+      if (status === "error") return;
+      applyPerk(perkType);
+      setUserPerkList((prev) =>
+        prev.map((userPerk) => {
+          if (userPerk.id === userPerkId) {
+            return { ...userPerk, quantity: userPerk.quantity - 1 };
+          }
+          return userPerk;
+        })
+      );
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -58,18 +79,28 @@ const GameUserPerkList = ({ userPerkList, disabled }: Props) => {
           <ScrollArea className="max-h-xs">
             <div className="mx-auto mb-4 grid w-fit  grid-cols-3 gap-2 p-4 md:grid-cols-4">
               {userPerkList.map((userPerk) => (
-                <Button
-                  variant="outline"
-                  className="size-20 bg-gray-200 dark:bg-gray-600"
-                  onClick={() => handeUsePerk(userPerk.id, userPerk.perk.type)}
-                  key={userPerk.id}
-                  disabled={soon.includes(userPerk.perk.type)}
-                >
-                  <div className="flex flex-col">
-                    <p className="text-xl">{userPerk.perk.icon} </p>
-                    <Text className="text-xs">{userPerk.perk.name}</Text>
+                <div key={userPerk.id} className="relative">
+                  <Button
+                    variant="outline"
+                    className="size-20 "
+                    onClick={() =>
+                      handeUsePerk(userPerk.id, userPerk.perk.type)
+                    }
+                    disabled={
+                      userPerk.quantity <= 0 ||
+                      soon.includes(userPerk.perk.type) ||
+                      activePerkList.includes(userPerk.perk.type)
+                    }
+                  >
+                    <div className="flex flex-col">
+                      <p className="text-xl">{userPerk.perk.icon} </p>
+                      <Text className="text-xs">{userPerk.perk.name}</Text>
+                    </div>
+                  </Button>
+                  <div className="absolute -right-1 -top-1 flex size-7 items-center justify-center rounded-full border  bg-secondary p-2 ">
+                    <p className="text-center text-xs">{userPerk.quantity}</p>
                   </div>
-                </Button>
+                </div>
               ))}
             </div>
           </ScrollArea>

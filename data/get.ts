@@ -157,6 +157,11 @@ export const getPlayerInfo = async (params: {
         },
       },
     },
+    orderBy: {
+      perk: {
+        price: "asc",
+      },
+    },
   });
 
   return { highestScore, userPerkList };
