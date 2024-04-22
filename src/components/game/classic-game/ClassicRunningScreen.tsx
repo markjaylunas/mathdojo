@@ -107,7 +107,27 @@ const ClassicRunningScreen = ({
             </div>
           </div>
 
-          <GameUserPerkList userPerkList={playerInfo.userPerkList} />
+          <div className="flex items-center justify-center gap-2">
+            <div className="flex flex-row-reverse flex-wrap gap-2">
+              {activePerkList.length > 0 &&
+                activePerkList.map((perk) => {
+                  const pointedPerk = playerInfo.userPerkList.find(
+                    (userPerk) => userPerk.perk.type === perk
+                  );
+                  if (!pointedPerk) return;
+
+                  return (
+                    <div
+                      className="flex size-8 items-center justify-center bg-secondary"
+                      key={pointedPerk.id}
+                    >
+                      <p className="text-xl">{pointedPerk.perk.icon}</p>
+                    </div>
+                  );
+                })}
+            </div>
+            <GameUserPerkList userPerkList={playerInfo.userPerkList} />
+          </div>
         </div>
       </GameHeader>
 
