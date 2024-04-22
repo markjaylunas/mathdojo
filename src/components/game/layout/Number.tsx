@@ -6,7 +6,6 @@ type Props = {
   numberFullValue: number;
   maxDigitLength: number;
   status?: Problem["status"];
-  hidden?: boolean;
 } & React.HTMLAttributes<HTMLParagraphElement>;
 
 const Number = ({

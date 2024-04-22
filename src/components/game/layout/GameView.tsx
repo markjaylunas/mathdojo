@@ -1,6 +1,7 @@
 import { Problem } from "@/src/lib/types";
 import Number from "./Number";
 import Text from "../../ui/text";
+import { cn } from "@/src/lib/utils";
 
 type Props = {
   problem: Problem;
@@ -41,12 +42,14 @@ const GameView = ({ problem }: Props) => {
       </div>
       <div className="border-[3px] border-gray-600 dark:border-gray-300" />
       <div className="flex items-end justify-end gap-5">
-        <Number
-          numberFullValue={userAnswer || 0}
-          maxDigitLength={maxDigitLength}
-          status={status}
-          hidden={status === "UNANSWERED"}
-        />
+        {userAnswer && (
+          <Number
+            numberFullValue={userAnswer || 0}
+            maxDigitLength={maxDigitLength}
+            status={status}
+          />
+        )}
+        {!userAnswer && <div className={cn("h-[48px] w-full")} />}
       </div>
     </div>
   );
