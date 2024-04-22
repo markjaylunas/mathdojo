@@ -15,7 +15,7 @@ export const convertTimeToMilliseconds = ({
   return hours * 3600000 + minutes * 60000 + seconds * 1000 + milliseconds;
 };
 
-export const CLASSIC_LEVEL_UP_THRESHOLD = 25;
+export const CLASSIC_LEVEL_UP_THRESHOLD = 10;
 export const MAX_CLASSIC_LEVEL = 12;
 
 export const INITIAL_CLASSIC_GAME_INFO: GameInfo = {
@@ -45,7 +45,6 @@ export const CLASSIC_ANSWER_DELAY_TIME = convertTimeToMilliseconds({
 });
 
 export const CLASSIC_TIME = convertTimeToMilliseconds({
-  hours: 1,
   minutes: 1,
   seconds: 30,
 });
@@ -55,7 +54,7 @@ export const CLASSIC_CORRECT_ADD_TIME = convertTimeToMilliseconds({
 });
 
 export const CLASSIC_WRONG_REDUCE_TIME = convertTimeToMilliseconds({
-  seconds: 5,
+  seconds: 10,
 });
 
 export const INITIAL_GAME_SESSION_STATE: GameSessionState = {
@@ -67,6 +66,7 @@ export const INITIAL_GAME_SESSION_STATE: GameSessionState = {
   gameMode: null,
   gameCreatedAt: null,
   levelCounter: 1,
+  activePerkList: [],
   timer: {
     value: CLASSIC_TIME,
     isActive: false,
@@ -80,6 +80,7 @@ export const INITIAL_GAME_SESSION_STATE: GameSessionState = {
     totalAddedTime: 0,
     totalReducedTime: 0,
     initialValue: CLASSIC_TIME,
+    maxTime: GAME_MAX_TIMER,
   },
   isCooldown: false,
 };

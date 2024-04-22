@@ -39,6 +39,8 @@ const ClassicGame = ({ gameMode: initialGameMode, playerInfo }: Props) => {
     gameAnswer,
     gameReset,
     setGameSession,
+    setRevealAnswer,
+    revealAnswer,
   } = useStore(useGameSessionStore, (state) => state);
 
   const { timer, problem } = gameSession;
@@ -178,6 +180,7 @@ const ClassicGame = ({ gameMode: initialGameMode, playerInfo }: Props) => {
             setTimerValue={setTimerValue}
             gameFinish={handleFinish}
             playerInfo={playerInfo}
+            dev={() => setRevealAnswer(!revealAnswer)}
           />
         );
       case "PAUSED":

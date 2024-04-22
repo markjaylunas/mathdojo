@@ -13,6 +13,9 @@ import {
 import { Icons } from "../../ui/icons";
 import { useState } from "react";
 import Text from "../../ui/text";
+import { useStore } from "zustand";
+import useGameSessionStore from "@/src/store/useGameSessionStore";
+import { PerkType } from "@prisma/client";
 
 type Props = {
   userPerkList: PlayerInfo["userPerkList"];
@@ -20,10 +23,18 @@ type Props = {
 };
 
 const GameUserPerkList = ({ userPerkList, disabled }: Props) => {
+  const soon: PerkType[] = ["DOUBLE_COIN", "DOUBLE_SCORE", "SHOW_ANSWER"];
+  const applyPerk = useStore(useGameSessionStore, (state) => state.applyPerk);
+
   const [open, setOpen] = useState(false);
-  const handeUsePerk = (perkId: string) => {
+
+  const handeUsePerk = (perkId: string, perkType: PerkType) => {
     setOpen(false);
-    console.log(perkId);
+
+    const applied = applyPerk(perkType);
+
+    if (applied) {
+    }
   };
 
   return (
@@ -50,8 +61,9 @@ const GameUserPerkList = ({ userPerkList, disabled }: Props) => {
                 <Button
                   variant="outline"
                   className="size-20 bg-gray-200 dark:bg-gray-600"
-                  onClick={() => handeUsePerk(userPerk.id)}
+                  onClick={() => handeUsePerk(userPerk.id, userPerk.perk.type)}
                   key={userPerk.id}
+                  disabled={soon.includes(userPerk.perk.type)}
                 >
                   <div className="flex flex-col">
                     <p className="text-xl">{userPerk.perk.icon} </p>

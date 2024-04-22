@@ -6,7 +6,6 @@ import {
   CLASSIC_LEVEL_UP_THRESHOLD,
   CLASSIC_TIME,
   INITIAL_GAME_SESSION_STATE,
-  MAX_CLASSIC_LEVEL,
   GAME_MAX_TIMER,
 } from "../lib/game.config";
 import { createJSONStorage, persist } from "zustand/middleware";
@@ -17,6 +16,7 @@ import {
   getRating,
 } from "../lib/game";
 import { v4 as uuidV4 } from "uuid";
+import { PerkType } from "@prisma/client";
 
 export type GameTimerStatus =
   | "IDLE"
@@ -46,6 +46,7 @@ export type TimerState = {
   totalAddedTime: number;
   totalReducedTime: number;
   initialValue: number;
+  maxTime: number;
 };
 
 export type GameSessionState = {
@@ -58,6 +59,7 @@ export type GameSessionState = {
   gameInfo: GameInfo;
   timer: TimerState;
   isCooldown: boolean;
+  activePerkList: PerkType[];
   gameCreatedAt: Date | null;
 };
 
@@ -65,7 +67,7 @@ type UseGameSession = {
   gameSession: GameSessionState;
 };
 
-type UseGameSessionActions = {
+export type UseGameSessionActions = {
   setGameSession: (gameSession: GameSessionState) => void;
   setTimerValue: (value: number) => void;
   gameStart: () => void;
@@ -76,6 +78,11 @@ type UseGameSessionActions = {
   gameReset: () => void;
   gameDoneCooldown: (adjustedGameSetting: GameMode | null) => void;
   setStatus: (status: GameTimerStatus) => void;
+  applyPerk: (type: PerkType) => boolean;
+  perkExtraTimer: () => void;
+  perkNewProblem: () => void;
+  perkLessChoices: () => void;
+  perkMaxTime: () => void;
 };
 
 type GamePowers = {
@@ -180,12 +187,17 @@ const useGameSessionStore = create<
           const isCorrect = answer === problem.answer;
           let newLevelCounter = isCorrect ? levelCounter + 1 : 1;
           const doLevelUp =
-            levelCounter === CLASSIC_LEVEL_UP_THRESHOLD &&
-            level < MAX_CLASSIC_LEVEL;
+            levelCounter === CLASSIC_LEVEL_UP_THRESHOLD + level * 2;
           const initialValue = isCorrect
             ? timer.value + CLASSIC_CORRECT_ADD_TIME
             : timer.value - CLASSIC_WRONG_REDUCE_TIME;
-          const timerValue = Math.min(initialValue, GAME_MAX_TIMER);
+          const timerValue = Math.min(initialValue, timer.maxTime);
+          const removablePerk: PerkType[] = [
+            "REMOVE_TWO_WRONG_ANSWER",
+            "EXTRA_TIME",
+            "NEW_PROBLEM",
+            "ADD_MAX_TIME",
+          ];
 
           // new values
           const newCoin = isCorrect
@@ -218,6 +230,9 @@ const useGameSessionStore = create<
           const newTotalReducedTime = !isCorrect
             ? timer.totalReducedTime + CLASSIC_WRONG_REDUCE_TIME
             : timer.totalReducedTime;
+          const newActivePerkList = gameSession.activePerkList.filter(
+            (perk) => !removablePerk.includes(perk)
+          );
 
           // update problem
           const problemAnswered: Problem = {
@@ -248,6 +263,7 @@ const useGameSessionStore = create<
           return {
             gameSession: {
               ...gameSession,
+              activePerkList: newActivePerkList,
               gameInfo: {
                 ...gameInfo,
                 correct: newCorrect,
@@ -379,7 +395,7 @@ const useGameSessionStore = create<
                 coin: 0,
               },
               isCooldown: false,
-
+              activePerkList: [],
               timer: {
                 value: CLASSIC_TIME,
                 status: "IDLE",
@@ -393,6 +409,7 @@ const useGameSessionStore = create<
                 totalAddedTime: 0,
                 totalReducedTime: 0,
                 lastLapTime: 0,
+                maxTime: GAME_MAX_TIMER,
               },
             },
           };
@@ -442,6 +459,112 @@ const useGameSessionStore = create<
 
       setRevealAnswer: (revealAnswer) => {
         set({ revealAnswer });
+      },
+
+      applyPerk: (type) => {
+        if (
+          useGameSessionStore
+            .getState()
+            .gameSession.activePerkList.includes(type)
+        )
+          return false;
+
+        set((state) => {
+          return {
+            ...state,
+            gameSession: {
+              ...state.gameSession,
+              activePerkList: [...state.gameSession.activePerkList, type],
+            },
+          };
+        });
+
+        switch (type) {
+          case "EXTRA_TIME":
+            useGameSessionStore.getState().perkExtraTimer();
+            break;
+
+          case "NEW_PROBLEM":
+            useGameSessionStore.getState().perkNewProblem();
+            break;
+
+          case "REMOVE_TWO_WRONG_ANSWER":
+            useGameSessionStore.getState().perkLessChoices();
+            break;
+
+          case "ADD_MAX_TIME":
+            useGameSessionStore.getState().perkMaxTime();
+            break;
+        }
+        return true;
+      },
+
+      perkExtraTimer: () => {
+        set((state) => {
+          const oneMinute = 60000;
+          const newTimeValue = Math.min(
+            state.gameSession.timer.value + oneMinute,
+            state.gameSession.timer.maxTime
+          );
+          return {
+            ...state,
+            gameSession: {
+              ...state.gameSession,
+              timer: {
+                ...state.gameSession.timer,
+                value: newTimeValue,
+                totalAddedTime:
+                  state.gameSession.timer.totalAddedTime + oneMinute,
+              },
+            },
+          };
+        });
+      },
+      perkNewProblem: () => {
+        set((state) => {
+          return {
+            ...state,
+            gameSession: {
+              ...state.gameSession,
+              problem: generateProblem({
+                gameMode: state.gameSession.gameMode,
+                gameInfo: state.gameSession.gameInfo,
+              }),
+            },
+          };
+        });
+      },
+      perkLessChoices: () => {
+        set((state) => {
+          if (
+            state.gameSession.activePerkList.includes("REMOVE_TWO_WRONG_ANSWER")
+          )
+            return state;
+          return {
+            ...state,
+            gameSession: {
+              ...state.gameSession,
+              activePerkList: [
+                ...state.gameSession.activePerkList,
+                "REMOVE_TWO_WRONG_ANSWER",
+              ],
+            },
+          };
+        });
+      },
+      perkMaxTime: () => {
+        set((state) => {
+          return {
+            ...state,
+            gameSession: {
+              ...state.gameSession,
+              timer: {
+                ...state.gameSession.timer,
+                maxTime: state.gameSession.timer.maxTime + 60000,
+              },
+            },
+          };
+        });
       },
     }),
     {

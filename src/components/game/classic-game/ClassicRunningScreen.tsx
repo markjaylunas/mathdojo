@@ -22,6 +22,7 @@ type Props = {
   setTimerValue: (value: number) => void;
   gameFinish: () => void;
   playerInfo: PlayerInfo;
+  dev: () => void;
 };
 
 const ClassicRunningScreen = ({
@@ -31,8 +32,10 @@ const ClassicRunningScreen = ({
   gameFinish,
   setTimerValue,
   playerInfo,
+  dev,
 }: Props) => {
-  const { problem, timer, isCooldown, combo, gameInfo } = gameSession;
+  const { problem, timer, isCooldown, combo, gameInfo, activePerkList } =
+    gameSession;
 
   if (!problem) return null;
   return (
@@ -47,7 +50,11 @@ const ClassicRunningScreen = ({
               <Text className="text-xl font-bold">{gameInfo.wrong}</Text>
             </div>
             <div className="flex items-center justify-center gap-1">
-              <IconSquareCheckFilled size={24} className="text-green-600" />
+              <IconSquareCheckFilled
+                size={24}
+                className="text-green-600"
+                onClick={dev}
+              />
               <Text className="text-xl font-bold">{gameInfo.correct}</Text>
             </div>
           </div>
@@ -105,7 +112,7 @@ const ClassicRunningScreen = ({
       </GameHeader>
 
       <div className="flex h-full flex-1 flex-col justify-between gap-4">
-        <GameView problem={problem} />
+        <GameView problem={problem} activePerkList={activePerkList} />
 
         <GameChoices
           problem={problem}

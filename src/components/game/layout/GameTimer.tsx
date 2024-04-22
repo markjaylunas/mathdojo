@@ -20,12 +20,18 @@ const GameTimer: React.FC<GameTimerProps> = ({
   setTimerValue,
   gameFinish,
 }) => {
-  const { value, initialValue, totalAddedTime, totalReducedTime, isActive } =
-    timer;
+  const {
+    value,
+    maxTime,
+    initialValue,
+    totalAddedTime,
+    totalReducedTime,
+    isActive,
+  } = timer;
   const { formattedTime } = formatTime(value);
   const totalTime = Math.min(
     initialValue + totalAddedTime - totalReducedTime,
-    GAME_MAX_TIMER
+    maxTime
   );
   const percentage = (timer.value / totalTime) * 100;
 

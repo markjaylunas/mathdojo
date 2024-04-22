@@ -13,7 +13,15 @@ type Props = {
   disabled: boolean;
 };
 const GameChoices = ({ problem, onAnswer, disabled }: Props) => {
-  const { revealAnswer } = useStore(useGameSessionStore, (state) => state);
+  const {
+    revealAnswer,
+    gameSession: { activePerkList },
+  } = useStore(useGameSessionStore, (state) => state);
+  const isLessChoices = activePerkList.includes("REMOVE_TWO_WRONG_ANSWER");
+  const wrongAnswers = problem.choices
+    .filter((choice) => choice !== problem.answer)
+    .slice(0, 2);
+
   return (
     <div className="grid grid-flow-row auto-rows-fr  grid-cols-2 gap-5">
       {problem.choices.map((choice, index) => {
@@ -30,7 +38,9 @@ const GameChoices = ({ problem, onAnswer, disabled }: Props) => {
               }
             )}
             onClick={() => onAnswer(choice)}
-            disabled={disabled}
+            disabled={
+              disabled || (isLessChoices && wrongAnswers.includes(choice))
+            }
             key={problem.id + index}
           >
             <p
