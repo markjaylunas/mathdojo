@@ -38,7 +38,7 @@ export const formatTime = (milliseconds: number) => {
     formattedTime += `${hoursStr}h `;
   }
 
-  if (minutes > 0) {
+  if (minutes > 0 || hours > 0) {
     formattedTime += `${minutesStr}m `;
   }
   formattedTime += `${secondsStr}s`;
