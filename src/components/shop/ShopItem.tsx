@@ -20,12 +20,14 @@ import { actionBuyPerk } from "@/src/actions/update";
 import useUserStore from "@/src/store/useUserStore";
 import { toast } from "../ui/use-toast";
 import SubmitButton from "../ui/submit-button";
+import { cn } from "@/src/lib/utils";
 
 type Props = {
   perk: Perk;
   userPerk: UserPerk | undefined;
+  userCoin: number;
 };
-const ShopItem = ({ perk, userPerk }: Props) => {
+const ShopItem = ({ perk, userPerk, userCoin }: Props) => {
   const user = useUserStore((state) => state.user);
   const [quantity, setQuantity] = useState(1);
   const [loading, setIsLoading] = useState(false);
@@ -91,7 +93,12 @@ const ShopItem = ({ perk, userPerk }: Props) => {
 
               <div className="flex items-center justify-center">
                 <Icons.coin className="mr-1 size-5" />
-                <span className="font-medium">
+                <span
+                  className={cn(
+                    "font-medium",
+                    perk.price * quantity > userCoin && "text-destructive"
+                  )}
+                >
                   {userPerk ? formatNumber(perk.price * quantity) : "Free"}
                 </span>
               </div>
@@ -119,7 +126,11 @@ const ShopItem = ({ perk, userPerk }: Props) => {
               </div>
             </DrawerHeader>
             <DrawerFooter>
-              <SubmitButton onClick={handleBuy} loading={loading}>
+              <SubmitButton
+                onClick={handleBuy}
+                disabled={perk.price * quantity > userCoin}
+                loading={loading}
+              >
                 Buy
               </SubmitButton>
               <DrawerClose asChild>
