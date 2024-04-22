@@ -90,6 +90,19 @@ export type GameWithUser = Game & {
 
 export type PlayerInfo = {
   highestScore: number;
+  userPerkList: UserPerkWithPerk[];
+};
+
+export type UserPerkWithPerk = {
+  id: UserPerk["id"];
+  quantity: UserPerk["quantity"];
+  perk: {
+    id: Perk["id"];
+    name: Perk["name"];
+    description: Perk["description"];
+    icon: Perk["icon"];
+    type: Perk["type"];
+  };
 };
 
 export type HighScore = {

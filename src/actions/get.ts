@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import {
   ActionResponse,
   HighScore,
@@ -13,17 +14,20 @@ import {
   getUserCoin,
   getUserPerkList,
 } from "@/data/get";
+import { gameRoutes } from "../lib/routes";
 
 // get player info
 export const actionGetPlayerInfo = async (params: {
   userId: string;
 }): Promise<ActionResponse & { data?: PlayerInfo }> => {
   const { userId } = params;
-  const playerInfo = await getPlayerInfo({ userId: userId });
 
+  const playerInfo = await getPlayerInfo({ userId: userId });
   if (!playerInfo) {
     return { status: "error", message: "Failed to fetch player info" };
   }
+
+  revalidatePath("/classic");
 
   return {
     status: "success",

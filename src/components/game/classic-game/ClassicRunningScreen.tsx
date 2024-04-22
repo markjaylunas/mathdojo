@@ -12,6 +12,8 @@ import GameView from "../layout/GameView";
 import GameChoices from "../layout/GameChoices";
 import { GameSessionState } from "@/src/store/useGameSessionStore";
 import { Icons } from "../../ui/icons";
+import { PlayerInfo } from "@/src/lib/types";
+import GameUserPerkList from "../layout/GameUserPerkList";
 
 type Props = {
   gameSession: GameSessionState;
@@ -19,6 +21,7 @@ type Props = {
   onAnswer: (answer: number) => void;
   setTimerValue: (value: number) => void;
   gameFinish: () => void;
+  playerInfo: PlayerInfo;
 };
 
 const ClassicRunningScreen = ({
@@ -27,6 +30,7 @@ const ClassicRunningScreen = ({
   onPause,
   gameFinish,
   setTimerValue,
+  playerInfo,
 }: Props) => {
   const { problem, timer, isCooldown, combo, gameInfo } = gameSession;
 
@@ -97,6 +101,8 @@ const ClassicRunningScreen = ({
 
       <div className="flex h-full flex-1 flex-col justify-between gap-4">
         <GameView problem={problem} />
+
+        <GameUserPerkList userPerkList={playerInfo.userPerkList} />
 
         <GameChoices
           problem={problem}

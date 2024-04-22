@@ -177,6 +177,7 @@ const ClassicGame = ({ gameMode: initialGameMode, playerInfo }: Props) => {
             onPause={handlePause}
             setTimerValue={setTimerValue}
             gameFinish={handleFinish}
+            playerInfo={playerInfo}
           />
         );
       case "PAUSED":
