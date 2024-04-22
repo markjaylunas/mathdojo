@@ -45,7 +45,6 @@ export const CLASSIC_ANSWER_DELAY_TIME = convertTimeToMilliseconds({
 });
 
 export const CLASSIC_TIME = convertTimeToMilliseconds({
-  hours: 1,
   minutes: 1,
   seconds: 30,
 });
