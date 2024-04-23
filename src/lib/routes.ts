@@ -15,7 +15,7 @@ export const publicRoutes = [
  * @type {string[]}
  */
 
-export const authRoutes = ["/sign-in", "/sign-up", "/auth/error"];
+export const authRoutes = ["/", "/sign-up", "/auth/error"];
 
 /**
  * The prefix for the API authentication routes
@@ -29,13 +29,19 @@ export const apiAuthPrefix = "/api/auth";
  * The default login redirect path
  * @type {string}
  */
-export const DEFAULT_SIGNIN_REDIRECT = "/";
+export const DEFAULT_SIGNIN_REDIRECT = "/home";
+
+/**
+ * The default login redirect path for oauth
+ * @type {string}
+ */
+export const DEFAULT_OAUTH_SIGNIN_REDIRECT = "/create-username";
 
 /**
  * The default sign in path
  * @type {string}
  */
-export const DEFAULT_SIGNIN_PATH = "/sign-in";
+export const DEFAULT_SIGNIN_PATH = "/";
 
 /**
  * The default sign up path
@@ -56,7 +62,7 @@ export const DEFAULT_FORGOT_PASSWORD_PATH = "/forgot-password";
  * @type {string}
  */
 
-export const DEFAULT_HOME_PATH = "/";
+export const DEFAULT_HOME_PATH = "/home";
 
 /**
  * The default classic game path

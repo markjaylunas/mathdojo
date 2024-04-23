@@ -7,7 +7,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
       <SiteHeader />
       <main className="flex-1">
         <div className=" mx-auto max-w-3xl flex-col border-0 sm:border-x">
-          <div className=" min-h-screen px-8">{children}</div>
+          <div className=" min-h-screen">{children}</div>
         </div>
         <SiteFooter />
       </main>

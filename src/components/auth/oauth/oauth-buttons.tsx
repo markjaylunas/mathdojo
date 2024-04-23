@@ -1,6 +1,9 @@
 "use client";
 
-import { DEFAULT_SIGNIN_REDIRECT } from "@/src/lib/routes";
+import {
+  DEFAULT_OAUTH_SIGNIN_REDIRECT,
+  DEFAULT_SIGNIN_REDIRECT,
+} from "@/src/lib/routes";
 import { Button } from "@components/ui/button";
 import { Separator } from "@components/ui/separator";
 import React from "react";
@@ -11,7 +14,7 @@ const OauthButtons = () => {
   const onSignIn = async (provider: "google" | "github") => {
     await signIn(provider, {
       redirect: false,
-      callbackUrl: DEFAULT_SIGNIN_REDIRECT,
+      callbackUrl: DEFAULT_OAUTH_SIGNIN_REDIRECT,
     });
   };
 

@@ -91,13 +91,13 @@ const CreateUsernameForm = (params: { userId: string }) => {
     }
   };
 
-  useEffect(() => {
-    if (sessionUser) {
-      if (sessionUser.username.length > 0) {
-        router.push(DEFAULT_SIGNIN_REDIRECT);
-      }
-    }
-  }, [sessionUser]);
+  // useEffect(() => {
+  //   if (sessionUser) {
+  //     if (sessionUser.username.length > 0) {
+  //       router.push(DEFAULT_SIGNIN_REDIRECT);
+  //     }
+  //   }
+  // }, [sessionUser]);
 
   return (
     <Form {...form}>
