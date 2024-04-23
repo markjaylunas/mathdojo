@@ -30,6 +30,12 @@ type Props = {
 };
 const ShopItem = ({ perk, userPerk, userCoin }: Props) => {
   const user = useUserStore((state) => state.user);
+  const havePerk = Boolean(userPerk);
+  const isFree = !havePerk;
+  const isSufficientCoins = userPerk
+    ? userCoin >= perk.price * userPerk.quantity
+    : false;
+
   const [quantity, setQuantity] = useState(1);
   const [loading, setIsLoading] = useState(false);
 
@@ -85,7 +91,7 @@ const ShopItem = ({ perk, userPerk, userCoin }: Props) => {
             )}
             <Icons.coin className="mr-1 size-5" />
             <span className="font-bold">
-              {userPerk ? formatNumber(perk.price) : "Free"}
+              {isFree ? "Free" : formatNumber(perk.price)}
             </span>
           </Button>
         </DrawerTrigger>
@@ -108,10 +114,10 @@ const ShopItem = ({ perk, userPerk, userCoin }: Props) => {
                 <span
                   className={cn(
                     "font-medium",
-                    perk.price * quantity > userCoin && "text-destructive"
+                    !isSufficientCoins && !isFree && "text-destructive"
                   )}
                 >
-                  {userPerk ? formatNumber(perk.price * quantity) : "Free"}
+                  {isFree ? "Free" : formatNumber(perk.price * quantity)}
                 </span>
               </div>
 
@@ -140,7 +146,7 @@ const ShopItem = ({ perk, userPerk, userCoin }: Props) => {
             <DrawerFooter>
               <SubmitButton
                 onClick={handleBuy}
-                disabled={perk.price * quantity > userCoin}
+                disabled={!isFree && !isSufficientCoins}
                 loading={loading}
               >
                 Buy

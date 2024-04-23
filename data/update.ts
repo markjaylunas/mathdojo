@@ -37,15 +37,15 @@ export const buyPerk = async (params: {
   });
   if (!buyer) throw new Error("User not found");
 
-  const totalPrice = perkToBuy.price * quantity;
-  if (buyer.coin < totalPrice) throw new Error("Not enough coin");
-
   const existingBuyerPerk = await prisma.userPerk.findFirst({
     where: {
       userId: userId,
       perkId: perkId,
     },
   });
+
+  const totalPrice = existingBuyerPerk ? perkToBuy.price * quantity : 0;
+  if (buyer.coin < totalPrice) throw new Error("Not enough coin");
 
   if (existingBuyerPerk) {
     const updatedBuyerPerk = await prisma.userPerk.update({
@@ -70,16 +70,18 @@ export const buyPerk = async (params: {
     if (!createdBuyerPerk) throw new Error("Failed to create user perk");
   }
 
-  await prisma.user.update({
-    where: {
-      id: userId,
-    },
-    data: {
-      coin: {
-        decrement: existingBuyerPerk ? totalPrice : 0,
+  if (existingBuyerPerk) {
+    await prisma.user.update({
+      where: {
+        id: userId,
       },
-    },
-  });
+      data: {
+        coin: {
+          decrement: existingBuyerPerk ? totalPrice : 0,
+        },
+      },
+    });
+  }
 
   return "Perk bought successfully";
 };
