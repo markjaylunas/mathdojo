@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import {
   ActionResponse,
+  BasicUser,
   HighScore,
   PlayerInfo,
   ShopOnLoad,
@@ -13,8 +14,10 @@ import {
   getPlayerInfo,
   getUserCoin,
   getUserPerkList,
+  searchUser,
 } from "@/data/get";
 import { gameRoutes } from "../lib/routes";
+import { User } from "@prisma/client";
 
 // get player info
 export const actionGetPlayerInfo = async (params: {
@@ -77,5 +80,18 @@ export const actionGetShopOnLoad = async (params: {
       userPerkList,
       userCoin,
     },
+  };
+};
+
+// search user
+export const actionSearchUser = async (params: {
+  search: string;
+}): Promise<ActionResponse & { data?: BasicUser[] }> => {
+  const userList = await searchUser(params);
+
+  return {
+    status: "success",
+    message: "Fetch shop on load data successfully",
+    data: userList,
   };
 };

@@ -1,6 +1,12 @@
 "use server";
 
-import { GameMode, GameWithUser, HighScore, PlayerInfo } from "@/src/lib/types";
+import {
+  BasicUser,
+  GameMode,
+  GameWithUser,
+  HighScore,
+  PlayerInfo,
+} from "@/src/lib/types";
 import prisma from "@lib/prisma";
 import { Game, Perk, Prisma, User, UserPerk } from "@prisma/client";
 import { get } from "lodash";
@@ -226,4 +232,39 @@ export const getUserPerkList = async ({
   });
 
   return userPerkList;
+};
+
+export const searchUser = async ({
+  search,
+}: {
+  search: string;
+}): Promise<BasicUser[]> => {
+  const userList = await prisma.user.findMany({
+    where: {
+      OR: [
+        {
+          name: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+        {
+          username: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+      ],
+    },
+    take: 12,
+    select: {
+      id: true,
+      name: true,
+      username: true,
+      email: true,
+      image: true,
+    },
+  });
+
+  return userList;
 };
