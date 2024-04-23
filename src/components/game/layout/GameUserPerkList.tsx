@@ -17,6 +17,7 @@ import { useStore } from "zustand";
 import useGameSessionStore from "@/src/store/useGameSessionStore";
 import { PerkType } from "@prisma/client";
 import { actionUsePerk } from "@/src/actions/update";
+import { PERK_SOON } from "@/src/lib/game.config";
 
 type Props = {
   userPerkList: PlayerInfo["userPerkList"];
@@ -28,7 +29,6 @@ const GameUserPerkList = ({
   disabled,
 }: Props) => {
   const [userPerkList, setUserPerkList] = useState(initialUerPerkList);
-  const soon: PerkType[] = ["DOUBLE_COIN", "DOUBLE_SCORE", "SHOW_ANSWER"];
   const {
     applyPerk,
     gameSession: { activePerkList },
@@ -88,7 +88,7 @@ const GameUserPerkList = ({
                     }
                     disabled={
                       userPerk.quantity <= 0 ||
-                      soon.includes(userPerk.perk.type) ||
+                      PERK_SOON.includes(userPerk.perk.type) ||
                       activePerkList.includes(userPerk.perk.type)
                     }
                   >

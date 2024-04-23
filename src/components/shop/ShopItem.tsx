@@ -21,6 +21,7 @@ import useUserStore from "@/src/store/useUserStore";
 import { toast } from "../ui/use-toast";
 import SubmitButton from "../ui/submit-button";
 import { cn } from "@/src/lib/utils";
+import { PERK_SOON } from "@/src/lib/game.config";
 
 type Props = {
   perk: Perk;
@@ -60,6 +61,8 @@ const ShopItem = ({ perk, userPerk, userCoin }: Props) => {
     }
   };
 
+  const isSoon = PERK_SOON.includes(perk.type);
+
   return (
     <div className="flex flex-col items-center justify-between gap-4">
       <div className="flex flex-1 flex-col items-center justify-center">
@@ -70,7 +73,16 @@ const ShopItem = ({ perk, userPerk, userCoin }: Props) => {
 
       <Drawer onClose={() => setQuantity(1)}>
         <DrawerTrigger className="w-full" asChild>
-          <Button size="sm" className="w-full" disabled={loading}>
+          <Button
+            size="sm"
+            className="relative w-full"
+            disabled={loading || isSoon}
+          >
+            {isSoon && (
+              <span className="absolute right-0 top-0 rounded-bl bg-accent px-1 text-xs text-white">
+                Avalable soon
+              </span>
+            )}
             <Icons.coin className="mr-1 size-5" />
             <span className="font-bold">
               {userPerk ? formatNumber(perk.price) : "Free"}

@@ -1,5 +1,12 @@
+import { PerkType } from "@prisma/client";
 import { GameSessionState } from "../store/useGameSessionStore";
 import { GameInfo } from "./types";
+
+export const PERK_SOON: PerkType[] = [
+  "DOUBLE_COIN",
+  "DOUBLE_SCORE",
+  "SHOW_ANSWER",
+];
 
 export const convertTimeToMilliseconds = ({
   hours = 0,
