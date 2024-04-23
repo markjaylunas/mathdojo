@@ -24,11 +24,7 @@ type Props = {
   disabled?: boolean;
 };
 
-const GameUserPerkList = ({
-  userPerkList: initialUerPerkList,
-  disabled,
-}: Props) => {
-  const [userPerkList, setUserPerkList] = useState(initialUerPerkList);
+const GameUserPerkList = ({ userPerkList, disabled }: Props) => {
   const {
     applyPerk,
     gameSession: { activePerkList },
@@ -45,14 +41,6 @@ const GameUserPerkList = ({
       const { status } = await actionUsePerk({ userPerkId });
       if (status === "error") return;
       applyPerk(perkType);
-      setUserPerkList((prev) =>
-        prev.map((userPerk) => {
-          if (userPerk.id === userPerkId) {
-            return { ...userPerk, quantity: userPerk.quantity - 1 };
-          }
-          return userPerk;
-        })
-      );
     } catch (error) {
       console.log(error);
     }

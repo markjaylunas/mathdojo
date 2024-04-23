@@ -36,6 +36,7 @@ export const actionUsePerk = async (params: {
     return { status: "error", message: "Failed to use perk" };
   }
 
+  revalidatePath("/classic");
   return {
     status: "success",
     message: "Used perk successfully",
