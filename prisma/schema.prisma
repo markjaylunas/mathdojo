@@ -70,6 +70,8 @@ model User {
   games    Game[]
   likes    GameLike[]
   perks    UserPerk[]
+  followers Follower[] @relation("follower")
+  following Follower[] @relation("following")
 }
 
 model Account {
@@ -194,4 +196,14 @@ model UserPerk {
 
   user User @relation(fields: [userId], references: [id])
   perk Perk @relation(fields: [perkId], references: [id])
+}
+
+model Follower {
+  id        String   @id @default(uuid())
+  userId    String
+  followerId String
+  createdAt DateTime @default(now())
+
+  user User @relation("following", fields: [userId], references: [id])
+  follower User @relation("follower", fields: [followerId], references: [id])
 }
