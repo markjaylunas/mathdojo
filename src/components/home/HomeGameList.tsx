@@ -1,18 +1,25 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useInViewport } from "@mantine/hooks";
 import { actionGetGameWithUserList } from "@/src/actions/game";
+import { GameWithUser } from "@/src/lib/types";
+import { useInViewport } from "@mantine/hooks";
+import { User } from "@prisma/client";
+import { useEffect, useState } from "react";
+import { toast } from "../ui/use-toast";
 import HomeGameCard from "./HomeGameCard";
 import HomeGameCardSkeleton from "./HomeGameCardSkeleton";
-import { toast } from "../ui/use-toast";
-import { GameWithUser } from "@/src/lib/types";
 
 type Props = {
   gameList: GameWithUser[];
+  userId?: User["id"] | undefined;
+  isGlobal?: boolean;
 };
 
-const HomeGameList = ({ gameList: initialGameList }: Props) => {
+const HomeGameList = ({
+  gameList: initialGameList,
+  isGlobal,
+  userId,
+}: Props) => {
   const [gameList, setGameList] = useState<GameWithUser[]>(initialGameList);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -31,6 +38,8 @@ const HomeGameList = ({ gameList: initialGameList }: Props) => {
         message,
       } = await actionGetGameWithUserList({
         page: newPage,
+        userId,
+        isGlobal,
       });
 
       if (status === "error") {

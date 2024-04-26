@@ -27,8 +27,8 @@ export const createGame = async (params: {
 };
 
 export const followUser = async (params: {
-  followerId: Follower["id"];
-  userId: User["id"];
+  followerId: Follower["followerId"];
+  followingId: Follower["followingId"];
 }): Promise<Follower> => {
   const follower = await prisma.follower.create({
     data: {
@@ -37,9 +37,9 @@ export const followUser = async (params: {
           id: params.followerId,
         },
       },
-      user: {
+      following: {
         connect: {
-          id: params.userId,
+          id: params.followingId,
         },
       },
     },

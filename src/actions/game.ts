@@ -1,10 +1,14 @@
 "use server";
 
-import { createGame } from "@/data/post";
-import { Prisma, Game } from "@prisma/client";
-import { ActionResponse, GameWithUser } from "../lib/types";
-import { revalidatePath } from "next/cache";
 import { getGameList, getGameWithUserList } from "@/data/get";
+import { createGame } from "@/data/post";
+import { Game, Prisma } from "@prisma/client";
+import { revalidatePath } from "next/cache";
+import {
+  ActionResponse,
+  GameWithUser,
+  GetGameWithUserListParams,
+} from "../lib/types";
 
 // create game
 export const actionCreateGame = async (params: {
@@ -45,15 +49,13 @@ export const actionGetGameList = async (params: {
 };
 
 // get list of  games with user
-export const actionGetGameWithUserList = async (params: {
-  where?: Prisma.GameWhereInput;
-  page?: number;
-  limit?: number;
-}): Promise<ActionResponse & { data?: GameWithUser[] }> => {
+export const actionGetGameWithUserList = async (
+  params: GetGameWithUserListParams
+): Promise<ActionResponse & { data: GameWithUser[] }> => {
   const gameList = await getGameWithUserList(params);
 
   if (!gameList) {
-    return { status: "error", message: "Failed to get game list" };
+    return { status: "error", message: "Failed to get game list", data: [] };
   }
 
   return {

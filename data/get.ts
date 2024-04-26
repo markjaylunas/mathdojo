@@ -5,6 +5,7 @@ import {
   BasicUser,
   GameMode,
   GameWithUser,
+  GetGameWithUserListParams,
   HighScore,
   PlayerInfo,
   UserProfile,
@@ -96,18 +97,36 @@ export const getGameList = async ({
 };
 
 export const getGameWithUserList = async ({
-  where = {},
+  userId,
   page = 1,
   limit = 10,
-}: {
-  where?: Prisma.GameWhereInput;
-  include?: Prisma.GameInclude;
-  page?: number;
-  limit?: number;
-}): Promise<GameWithUser[]> => {
+  isGlobal,
+}: GetGameWithUserListParams): Promise<GameWithUser[]> => {
+  let where: Prisma.GameWhereInput = {};
+  let followingUserIds: string[] = [];
+
+  if (!isGlobal) {
+    const followingList = await prisma.follower.findMany({
+      where: {
+        followerId: userId,
+      },
+      select: {
+        followingId: true,
+      },
+    });
+
+    followingUserIds = followingList.map((following) => following.followingId);
+
+    where = {
+      userId: {
+        in: followingUserIds,
+      },
+    };
+  }
+
   const gameList = await prisma.game.findMany({
     orderBy: {
-      createdAt: "desc",
+      createdAt: "asc",
     },
     where,
     include: {
@@ -289,28 +308,31 @@ export const getUserProfile = async (params: {
           id: true,
         },
       },
-      followers: {
-        select: {
-          id: true,
-        },
-      },
-      following: {
-        select: {
-          id: true,
-        },
-      },
     },
   });
 
-  if (!user) {
+  if (user === null) {
     throw new Error("User not found");
   }
 
-  const { followers, following, games, ...userOnly } = user;
+  const { games, ...userOnly } = user;
+
+  // Get the counts
+  const followersCount = await prisma.follower.count({
+    where: {
+      followingId: user.id,
+    },
+  });
+
+  const followingCount = await prisma.follower.count({
+    where: {
+      followerId: user.id,
+    },
+  });
 
   const followUser = await prisma.follower.findFirst({
     where: {
-      userId: user.id,
+      followingId: user.id,
       followerId: params.currentUserId,
     },
   });
@@ -318,8 +340,8 @@ export const getUserProfile = async (params: {
   const userProfile = {
     user: userOnly,
     games: games.length,
-    followings: following.length,
-    followers: followers.length,
+    followings: followingCount,
+    followers: followersCount,
     followUser: followUser,
   };
 

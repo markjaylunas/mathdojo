@@ -30,8 +30,8 @@ const UserProfilePage = async ({
           {session?.user.id !== profile.user.id && (
             <FollowButton
               userFollow={profile.followUser}
-              followerId={profile.user.id}
-              userId={`${session?.user.id}`}
+              followerId={`${session?.user.id}`}
+              followingId={profile.user.id}
             />
           )}
         </div>

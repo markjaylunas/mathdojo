@@ -134,3 +134,11 @@ export type ShopOnLoad = {
 };
 
 export type FollowAction = "FOLLOW" | "UNFOLLOW";
+
+export type GetGameWithUserListParams = {
+  include?: Prisma.GameInclude;
+  page?: number;
+  limit?: number;
+  isGlobal?: boolean;
+  userId?: User["id"];
+};

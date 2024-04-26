@@ -10,11 +10,11 @@ import { toast } from "../ui/use-toast";
 
 type Props = {
   userFollow: Follower | null;
-  userId: string;
+  followingId: string;
   followerId: string;
 };
 
-const FollowButton = ({ followerId, userId, userFollow }: Props) => {
+const FollowButton = ({ followerId, followingId, userFollow }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const pathname = usePathname();
 
@@ -30,7 +30,7 @@ const FollowButton = ({ followerId, userId, userFollow }: Props) => {
       } else {
         newFollower = await actionFollowUser({
           followerId,
-          userId,
+          followingId,
           path: pathname,
         });
       }

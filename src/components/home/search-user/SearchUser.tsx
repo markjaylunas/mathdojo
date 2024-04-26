@@ -4,6 +4,8 @@ import * as React from "react";
 
 import { Button } from "@components/ui/button";
 
+import { actionSearchUser } from "@/src/actions/get";
+import { BasicUser } from "@/src/lib/types";
 import {
   Command,
   CommandEmpty,
@@ -19,8 +21,6 @@ import {
   PopoverTrigger,
 } from "@components/ui/popover";
 import { useMediaQuery } from "@mantine/hooks";
-import { actionSearchUser } from "@/src/actions/get";
-import { BasicUser } from "@/src/lib/types";
 import { useRouter } from "next/navigation";
 import UserProfileSection from "../../user/UserProfileSection";
 
@@ -41,7 +41,6 @@ const SearchUser = () => {
     try {
       const { data: userList } = await actionSearchUser({ search });
       if (userList) {
-        console.log(userList);
         setUserList(userList);
       }
     } catch (error) {

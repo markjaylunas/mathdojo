@@ -66,12 +66,21 @@ model User {
   role          UserRole  @default(USER)
   coin          Int       @default(0)
 
-  accounts Account[]
-  games    Game[]
-  likes    GameLike[]
-  perks    UserPerk[]
-  followers Follower[] @relation("follower")
-  following Follower[] @relation("following")
+  accounts  Account[]
+  games     Game[]
+  likes     GameLike[]
+  perks     UserPerk[]
+  followers Follower[] @relation(name: "follower")
+  following Follower[] @relation(name: "following")
+}
+
+model Follower {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  followerId  String
+  follower    User     @relation("follower", fields: [followerId], references: [id])
+  followingId String
+  following   User     @relation("following", fields: [followingId], references: [id])
 }
 
 model Account {
@@ -196,14 +205,4 @@ model UserPerk {
 
   user User @relation(fields: [userId], references: [id])
   perk Perk @relation(fields: [perkId], references: [id])
-}
-
-model Follower {
-  id        String   @id @default(uuid())
-  userId    String
-  followerId String
-  createdAt DateTime @default(now())
-
-  user User @relation("following", fields: [userId], references: [id])
-  follower User @relation("follower", fields: [followerId], references: [id])
 }

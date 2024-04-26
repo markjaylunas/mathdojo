@@ -1,7 +1,12 @@
 "use client";
 
+import { actionUsePerk } from "@/src/actions/update";
+import { PERK_SOON } from "@/src/lib/game.config";
 import { PlayerInfo } from "@/src/lib/types";
-import { ScrollArea } from "../../ui/scroll-area";
+import useGameSessionStore from "@/src/store/useGameSessionStore";
+import { PerkType } from "@prisma/client";
+import { useState } from "react";
+import { useStore } from "zustand";
 import { Button } from "../../ui/button";
 import {
   Drawer,
@@ -11,13 +16,8 @@ import {
   DrawerTrigger,
 } from "../../ui/drawer";
 import { Icons } from "../../ui/icons";
-import { useState } from "react";
+import { ScrollArea } from "../../ui/scroll-area";
 import Text from "../../ui/text";
-import { useStore } from "zustand";
-import useGameSessionStore from "@/src/store/useGameSessionStore";
-import { PerkType } from "@prisma/client";
-import { actionUsePerk } from "@/src/actions/update";
-import { PERK_SOON } from "@/src/lib/game.config";
 
 type Props = {
   userPerkList: PlayerInfo["userPerkList"];
@@ -42,7 +42,7 @@ const GameUserPerkList = ({ userPerkList, disabled }: Props) => {
       if (status === "error") return;
       applyPerk(perkType);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
