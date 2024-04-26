@@ -15,19 +15,21 @@ const Page = async ({
   searchParams?: { [key: string]: string | string[] | undefined };
 }) => {
   const session = await auth();
+  const userId = `${session?.user.id}`;
   const tab = searchParams?.tab ? `${searchParams?.tab}` : "global";
 
   const globalGameListPromise = actionGetGameWithUserList({
     page: 1,
     limit: 5,
     isGlobal: true,
+    userId,
   });
 
   const followingGameListPromise = actionGetGameWithUserList({
     page: 1,
     limit: 5,
     isGlobal: false,
-    userId: `${session?.user.id}`,
+    userId,
   });
 
   const [globalGameListData, followingGameListData] = await Promise.all([
@@ -72,7 +74,11 @@ const Page = async ({
         </div>
         <TabsContent value="global">
           {globalGameList ? (
-            <HomeGameList gameList={globalGameList} isGlobal={true} />
+            <HomeGameList
+              gameList={globalGameList}
+              isGlobal={true}
+              userId={userId}
+            />
           ) : (
             <EmptyList />
           )}
@@ -82,7 +88,7 @@ const Page = async ({
             <HomeGameList
               gameList={followingGameList}
               isGlobal={false}
-              userId={session?.user.id}
+              userId={userId}
             />
           ) : (
             <EmptyList />

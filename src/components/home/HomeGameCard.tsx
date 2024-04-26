@@ -1,26 +1,71 @@
-import { Game } from "@prisma/client";
-import { Card } from "../ui/card";
-import GameRating from "../ui/game-rating";
-import UserProfileSection from "../user/UserProfileSection";
-import Text from "../ui/text";
+"use client";
+
+import { actionLikeGame, actionUnlikeGame } from "@/src/actions/update";
 import { formatNumber } from "@/src/lib/game";
-import moment from "moment";
-import { formatTime } from "@/src/lib/utils";
+import { GameWithUser } from "@/src/lib/types";
+import { cn, formatShortNumber, formatTime } from "@/src/lib/utils";
 import {
   IconClockFilled,
   IconSquareCheckFilled,
   IconSquareXFilled,
 } from "@tabler/icons-react";
-import { GameWithUser } from "@/src/lib/types";
-import { Separator } from "../ui/separator";
+import moment from "moment";
+import { useState } from "react";
+import GameRating from "../ui/game-rating";
 import { Icons } from "../ui/icons";
+import { Separator } from "../ui/separator";
+import Text from "../ui/text";
+import { toast } from "../ui/use-toast";
+import UserProfileSection from "../user/UserProfileSection";
 
 type Props = {
   game: GameWithUser;
+  userId: string;
+  setGameList: React.Dispatch<React.SetStateAction<GameWithUser[]>>;
 };
-const HomeGameCard = ({ game }: Props) => {
+const HomeGameCard = ({ game, setGameList, userId }: Props) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleLikeGame = async (game: GameWithUser) => {
+    try {
+      setIsLoading(true);
+      let newGame: GameWithUser | null = null;
+
+      if (game.likes.length <= 0) {
+        const { data } = await actionLikeGame({ gameId: game.id, userId });
+        newGame = data;
+      } else {
+        const { data } = await actionUnlikeGame({
+          gameId: game.id,
+          gameLikeId: game.likes[0].id,
+          userId,
+        });
+        newGame = data;
+      }
+
+      setGameList((currentGameList) =>
+        currentGameList.map((currentGame) => {
+          if (currentGame.id === newGame.id) {
+            return newGame;
+          }
+
+          return currentGame;
+        })
+      );
+    } catch (error) {
+      console.error(error);
+
+      toast({
+        description: "Something went wrong, please try again",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <div className="min-h-56 w-full border-b border-slate-300 px-4 pb-6 pt-4 dark:border-slate-700">
+    <div className="w-full border-b border-slate-300 px-4 pb-2 pt-4 dark:border-slate-700">
       <div className="flex items-start justify-between gap-4">
         <UserProfileSection user={game.user} />
         <Text className="mt-1 text-xs">{moment(game.createdAt).fromNow()}</Text>
@@ -68,6 +113,23 @@ const HomeGameCard = ({ game }: Props) => {
             </div>
           </div>
         </div>
+      </div>
+
+      <div className="mt-4 px-12">
+        <button
+          className="group flex gap-1 transition-all duration-200 ease-in-out"
+          onClick={() => handleLikeGame(game)}
+          disabled={isLoading}
+        >
+          {game.likes.length > 0 ? (
+            <Icons.heartFilled className="size-5 text-red-500" />
+          ) : (
+            <Icons.heart className="size-5 text-slate-600 group-hover:text-red-500 dark:text-slate-400" />
+          )}
+          <Text className="text-sm text-slate-600 group-hover:text-red-500 dark:text-slate-400">
+            {formatShortNumber(game.like)}
+          </Text>
+        </button>
       </div>
     </div>
   );

@@ -1,9 +1,11 @@
 "use server";
 
+import { unlikeGame } from "@/data/delete";
+import { likeGame } from "@/data/post";
 import { buyPerk, updateUsePerk } from "@/data/update";
-import { UserPerk } from "@prisma/client";
+import { Game, UserPerk } from "@prisma/client";
 import { revalidatePath } from "next/cache";
-import { ActionResponse } from "../lib/types";
+import { ActionResponse, GameWithUser } from "../lib/types";
 
 // buy perk
 export const actionBuyPerk = async (params: {
@@ -38,5 +40,44 @@ export const actionUsePerk = async (params: {
   return {
     status: "success",
     message: "Used perk successfully",
+  };
+};
+
+export const actionLikeGame = async (params: {
+  gameId: string;
+  userId: string;
+}): Promise<ActionResponse & { data: GameWithUser }> => {
+  const updateGame = await likeGame(params);
+
+  if (!updateGame) {
+    return {
+      status: "error",
+      message: "Failed to like game",
+      data: updateGame,
+    };
+  }
+
+  return {
+    status: "success",
+    message: "Liked game successfully",
+    data: updateGame,
+  };
+};
+
+export const actionUnlikeGame = async (params: {
+  gameId: string;
+  gameLikeId: string;
+  userId: string;
+}): Promise<ActionResponse & { data: GameWithUser }> => {
+  const game = await unlikeGame(params);
+
+  if (!game) {
+    return { status: "error", message: "Failed to unlike game", data: game };
+  }
+
+  return {
+    status: "success",
+    message: "Unliked game successfully",
+    data: game,
   };
 };

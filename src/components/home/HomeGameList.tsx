@@ -1,6 +1,7 @@
 "use client";
 
 import { actionGetGameWithUserList } from "@/src/actions/game";
+import { actionLikeGame, actionUnlikeGame } from "@/src/actions/update";
 import { GameWithUser } from "@/src/lib/types";
 import { useInViewport } from "@mantine/hooks";
 import { User } from "@prisma/client";
@@ -11,7 +12,7 @@ import HomeGameCardSkeleton from "./HomeGameCardSkeleton";
 
 type Props = {
   gameList: GameWithUser[];
-  userId?: User["id"] | undefined;
+  userId: User["id"];
   isGlobal?: boolean;
 };
 
@@ -76,7 +77,14 @@ const HomeGameList = ({
   return (
     <div className="flex w-full flex-col">
       {gameList.map((game) => {
-        return <HomeGameCard game={game} key={game.id} />;
+        return (
+          <HomeGameCard
+            game={game}
+            key={game.id}
+            setGameList={setGameList}
+            userId={userId}
+          />
+        );
       })}
 
       {loading && <HomeGameCardSkeleton />}

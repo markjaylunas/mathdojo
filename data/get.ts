@@ -139,6 +139,15 @@ export const getGameWithUserList = async ({
           image: true,
         },
       },
+      likes: {
+        where: {
+          userId: userId,
+        },
+        select: {
+          id: true,
+        },
+        take: 1,
+      },
     },
     take: limit,
     skip: (page - 1) * limit,

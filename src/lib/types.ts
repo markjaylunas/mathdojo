@@ -87,6 +87,9 @@ export type GameMode = Prisma__GameMode & {
 
 export type GameWithUser = Game & {
   user: BasicUser;
+  likes: {
+    id: string;
+  }[];
 };
 
 export type PlayerInfo = {
@@ -140,5 +143,5 @@ export type GetGameWithUserListParams = {
   page?: number;
   limit?: number;
   isGlobal?: boolean;
-  userId?: User["id"];
+  userId: User["id"];
 };
