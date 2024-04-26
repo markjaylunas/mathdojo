@@ -1,6 +1,5 @@
 import prisma from "@lib/prisma";
 import { Follower, Game, Prisma, User } from "@prisma/client";
-import { connect } from "http2";
 
 export const createGame = async (params: {
   gameParams: Prisma.GameCreateInput;

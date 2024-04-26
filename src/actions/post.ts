@@ -1,7 +1,7 @@
 "use server";
 
 import { followUser } from "@/data/post";
-import { Follower, Prisma, User } from "@prisma/client";
+import { Follower, User } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 export const actionFollowUser = async (params: {

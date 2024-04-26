@@ -1,7 +1,6 @@
-import { User } from "@prisma/client";
-import UserAvatar from "./UserAvatar";
-import Link from "next/link";
 import { BasicUser } from "@/src/lib/types";
+import Link from "next/link";
+import UserAvatar from "./UserAvatar";
 
 type Props = {
   user: BasicUser;

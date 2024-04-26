@@ -1,11 +1,9 @@
 "use server";
 
 import { buyPerk, updateUsePerk } from "@/data/update";
-import { ActionResponse } from "../lib/types";
-import { revalidatePath } from "next/cache";
-import { routesConfig } from "../lib/config";
-import { User } from "next-auth";
 import { UserPerk } from "@prisma/client";
+import { revalidatePath } from "next/cache";
+import { ActionResponse } from "../lib/types";
 
 // buy perk
 export const actionBuyPerk = async (params: {
