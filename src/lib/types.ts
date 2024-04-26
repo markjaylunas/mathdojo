@@ -1,13 +1,14 @@
 import { Icons } from "@components/ui/icons";
 import {
+  Follower,
+  Game,
+  Perk,
+  Prisma,
+  GameDigitRange as Prisma__GameDigitRangeClient,
   GameMode as Prisma__GameMode,
   GameOperation as Prisma__GameOperation,
-  GameDigitRange as Prisma__GameDigitRangeClient,
   Rating,
-  Prisma,
-  Game,
   User,
-  Perk,
   UserPerk,
 } from "@prisma/client";
 
@@ -110,6 +111,14 @@ export type HighScore = {
   user: BasicUser;
 };
 
+export type UserProfile = {
+  user: BasicUser;
+  games: number;
+  followings: number;
+  followers: number;
+  followUser: Follower | null;
+};
+
 export type BasicUser = {
   id: User["id"];
   name: User["name"];
@@ -123,3 +132,5 @@ export type ShopOnLoad = {
   userPerkList: UserPerk[];
   userCoin: User["coin"];
 };
+
+export type FollowAction = "FOLLOW" | "UNFOLLOW";

@@ -1,5 +1,6 @@
 import prisma from "@lib/prisma";
-import { Game, Prisma } from "@prisma/client";
+import { Follower, Game, Prisma, User } from "@prisma/client";
+import { connect } from "http2";
 
 export const createGame = async (params: {
   gameParams: Prisma.GameCreateInput;
@@ -24,4 +25,30 @@ export const createGame = async (params: {
     },
   });
   return game;
+};
+
+export const followUser = async (params: {
+  followerId: Follower["id"];
+  userId: User["id"];
+}): Promise<Follower> => {
+  const follower = await prisma.follower.create({
+    data: {
+      follower: {
+        connect: {
+          id: params.followerId,
+        },
+      },
+      user: {
+        connect: {
+          id: params.userId,
+        },
+      },
+    },
+  });
+
+  if (!follower) {
+    throw new Error("Failed to create follower");
+  }
+
+  return follower;
 };

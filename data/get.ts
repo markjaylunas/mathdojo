@@ -1,15 +1,16 @@
 "use server";
 
+import { auth } from "@/src/lib/auth";
 import {
   BasicUser,
   GameMode,
   GameWithUser,
   HighScore,
   PlayerInfo,
+  UserProfile,
 } from "@/src/lib/types";
 import prisma from "@lib/prisma";
-import { Game, Perk, Prisma, User, UserPerk } from "@prisma/client";
-import { get } from "lodash";
+import { Perk, Prisma, User, UserPerk } from "@prisma/client";
 
 export const getUserByEmail = async (params: { email: string }) => {
   const { email } = params;
@@ -267,4 +268,60 @@ export const searchUser = async ({
   });
 
   return userList;
+};
+
+export const getUserProfile = async (params: {
+  username: string;
+  currentUserId: string;
+}): Promise<UserProfile> => {
+  const user = await prisma.user.findFirst({
+    where: {
+      username: params.username,
+    },
+    select: {
+      id: true,
+      name: true,
+      username: true,
+      email: true,
+      image: true,
+      games: {
+        select: {
+          id: true,
+        },
+      },
+      followers: {
+        select: {
+          id: true,
+        },
+      },
+      following: {
+        select: {
+          id: true,
+        },
+      },
+    },
+  });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  const { followers, following, games, ...userOnly } = user;
+
+  const followUser = await prisma.follower.findFirst({
+    where: {
+      userId: user.id,
+      followerId: params.currentUserId,
+    },
+  });
+
+  const userProfile = {
+    user: userOnly,
+    games: games.length,
+    followings: following.length,
+    followers: followers.length,
+    followUser: followUser,
+  };
+
+  return userProfile;
 };
