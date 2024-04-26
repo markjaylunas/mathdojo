@@ -34,7 +34,7 @@ export const Icons = {
 
   google: (props: IconProps) => (
     <svg
-      enable-background="new 0 0 48 48"
+      enableBackground="new 0 0 48 48"
       viewBox="0 0 48 48"
       xmlns="http://www.w3.org/2000/svg"
       {...props}
