@@ -59,9 +59,9 @@ const Page = async ({
         </p>
       </div>
 
-      <div className="p-4 ">
+      {/* <div className="p-4 ">
         <SearchUser />
-      </div>
+      </div> */}
 
       <Tabs defaultValue={tab} className="mx-4 mt-4">
         <div className="flex items-center justify-between">
