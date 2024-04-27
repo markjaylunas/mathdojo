@@ -1,9 +1,13 @@
 "use client";
 
+import { actionBuyPerk } from "@/src/actions/update";
+import { formatNumber } from "@/src/lib/game";
+import { PERK_SOON } from "@/src/lib/game.config";
+import { cn } from "@/src/lib/utils";
+import useUserStore from "@/src/store/useUserStore";
 import { Perk, UserPerk } from "@prisma/client";
-import Text from "../ui/text";
+import { useState } from "react";
 import { Button } from "../ui/button";
-import { Icons } from "../ui/icons";
 import {
   Drawer,
   DrawerClose,
@@ -14,14 +18,10 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "../ui/drawer";
-import { useState } from "react";
-import { formatNumber } from "@/src/lib/game";
-import { actionBuyPerk } from "@/src/actions/update";
-import useUserStore from "@/src/store/useUserStore";
-import { toast } from "../ui/use-toast";
+import { Icons } from "../ui/icons";
 import SubmitButton from "../ui/submit-button";
-import { cn } from "@/src/lib/utils";
-import { PERK_SOON } from "@/src/lib/game.config";
+import Text from "../ui/text";
+import { toast } from "../ui/use-toast";
 
 type Props = {
   perk: Perk;
@@ -85,7 +85,7 @@ const ShopItem = ({ perk, userPerk, userCoin }: Props) => {
             disabled={loading || isSoon}
           >
             {isSoon && (
-              <span className="absolute right-0 top-0 rounded-bl bg-accent px-1 text-xs text-white">
+              <span className=" absolute right-0 top-0 rounded-bl  px-1 text-xs ">
                 Avalable soon
               </span>
             )}
