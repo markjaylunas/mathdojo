@@ -3,7 +3,6 @@ import HomeGameList from "@/src/components/home/HomeGameList";
 import SearchUser from "@/src/components/home/search-user/SearchUser";
 import EmptyList from "@/src/components/ui/empty-list";
 import Heading from "@/src/components/ui/heading";
-import Text from "@/src/components/ui/text";
 import { auth } from "@/src/lib/auth";
 import { siteConfig } from "@/src/lib/config";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@components/ui/tabs";
@@ -61,16 +60,13 @@ const Page = async ({
         </p>
       </div>
 
-      {/* <div className="p-4 ">
-        <SearchUser />
-      </div> */}
-
       <Tabs defaultValue={tab} className="mx-4 mt-4">
         <div className="flex items-center justify-between">
           <TabsList>
             <TabsTrigger value="global">Global</TabsTrigger>
             <TabsTrigger value="following">Following</TabsTrigger>
           </TabsList>
+          <SearchUser />
         </div>
         <TabsContent value="global">
           {globalGameList ? (

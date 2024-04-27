@@ -70,7 +70,7 @@ const SearchUser = () => {
             {selectedUser ? <>{selectedUser.name}</> : <>Search </>}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-[200px] p-0" align="start">
+        <PopoverContent className="w-fit p-0" align="end">
           <StatusList
             search={search}
             setSearch={setSearch}
@@ -87,7 +87,7 @@ const SearchUser = () => {
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button variant="outline" className="w-[150px] justify-start">
+        <Button variant="outline" className=" justify-start">
           {selectedUser ? <>{selectedUser.name}</> : <>Search</>}
         </Button>
       </DrawerTrigger>
@@ -147,7 +147,7 @@ function StatusList({
                   userList.find((user) => user.username === value) || null
                 );
                 setOpen(false);
-                router.push(`/user/${value}`);
+                router.push(`/user/${user.username}`);
               }}
             >
               {<UserProfileSection user={user} />}
