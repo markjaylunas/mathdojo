@@ -80,7 +80,7 @@ const HomeGameList = ({
         return (
           <HomeGameCard
             game={game}
-            key={game.id}
+            key={isGlobal ? `global-${game.id}` : `following-${game.id}`}
             setGameList={setGameList}
             userId={userId}
           />
