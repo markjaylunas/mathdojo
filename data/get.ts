@@ -126,7 +126,7 @@ export const getGameWithUserList = async ({
 
   const gameList = await prisma.game.findMany({
     orderBy: {
-      createdAt: "asc",
+      createdAt: "desc",
     },
     where,
     include: {
@@ -137,6 +137,8 @@ export const getGameWithUserList = async ({
           username: true,
           email: true,
           image: true,
+          level: true,
+          exp: true,
         },
       },
       likes: {
@@ -216,6 +218,8 @@ export const getHighScoreList = async (): Promise<HighScore[]> => {
           username: true,
           email: true,
           image: true,
+          level: true,
+          exp: true,
         },
       },
     },
@@ -292,6 +296,8 @@ export const searchUser = async ({
       username: true,
       email: true,
       image: true,
+      level: true,
+      exp: true,
     },
   });
 
@@ -312,6 +318,8 @@ export const getUserProfile = async (params: {
       username: true,
       email: true,
       image: true,
+      level: true,
+      exp: true,
       games: {
         select: {
           id: true,

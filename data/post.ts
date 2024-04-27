@@ -1,13 +1,29 @@
+import { calculateLevel } from "@/src/lib/game";
 import { GameWithUser } from "@/src/lib/types";
 import prisma from "@lib/prisma";
 import { Follower, Game, Prisma, User } from "@prisma/client";
 
 export const createGame = async (params: {
   gameParams: Prisma.GameCreateInput;
+  userId: string;
 }): Promise<Game> => {
-  const { gameParams } = params;
+  const { gameParams, userId } = params;
+  const expGained = gameParams?.expGained || 0;
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+
+  const newLevel = calculateLevel({
+    exp: user?.exp || 0 + expGained,
+  });
+
   const game = await prisma.game.create({
-    data: gameParams,
+    data: {
+      ...gameParams,
+    },
   });
 
   if (!game) {
@@ -16,14 +32,21 @@ export const createGame = async (params: {
 
   await prisma.user.update({
     where: {
-      id: game.userId,
+      id: userId,
     },
     data: {
       coin: {
         increment: gameParams.coin,
       },
+      exp: {
+        increment: expGained,
+      },
+      level: {
+        set: newLevel,
+      },
     },
   });
+
   return game;
 };
 
@@ -74,6 +97,8 @@ export const likeGame = async (params: {
               username: true,
               email: true,
               image: true,
+              level: true,
+              exp: true,
             },
           },
           likes: {
@@ -128,6 +153,8 @@ export const likeGame = async (params: {
               username: true,
               email: true,
               image: true,
+              level: true,
+              exp: true,
             },
           },
           likes: {

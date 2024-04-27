@@ -6,17 +6,22 @@ type Props = {
   user: BasicUser;
 };
 const UserProfileSection = ({ user }: Props) => {
-  const { id, email, name, username } = user;
+  const { id, email, name, username, level } = user;
   return (
     <div className="flex items-center gap-2">
       <UserAvatar user={user} />
       <div>
-        <p className="text-sm">{name}</p>
+        <p className="w-full overflow-hidden overflow-ellipsis whitespace-nowrap text-sm">
+          {name}
+        </p>
         <Link href={`/user/${username ? username : id}`}>
-          <p className="text-xs text-slate-400 hover:underline">
+          <p className="w-full overflow-hidden overflow-ellipsis whitespace-nowrap text-xs text-slate-400 hover:underline">
             @{username ? username : email}
           </p>
         </Link>
+        <p className="w-full overflow-hidden overflow-ellipsis whitespace-nowrap text-xs text-slate-400">
+          Lvl.{level}
+        </p>
       </div>
     </div>
   );

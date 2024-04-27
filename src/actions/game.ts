@@ -13,6 +13,7 @@ import {
 // create game
 export const actionCreateGame = async (params: {
   gameParams: Prisma.GameCreateInput;
+  userId: string;
 }): Promise<ActionResponse & { data?: Game }> => {
   const createdGame = await createGame(params);
 

@@ -75,6 +75,7 @@ export type GameInfo = {
   level: number;
   rating: Rating;
   coin: number;
+  expGained: number;
 };
 
 export type GameOperation = Prisma__GameOperation & {
@@ -128,6 +129,8 @@ export type BasicUser = {
   username: User["username"];
   email: User["email"];
   image: User["image"];
+  level: User["level"];
+  exp: User["exp"];
 };
 
 export type ShopOnLoad = {

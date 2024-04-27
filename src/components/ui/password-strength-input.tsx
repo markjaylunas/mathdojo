@@ -1,4 +1,11 @@
+import { Progress } from "@/src/components/ui/time-progress";
+import { cn } from "@/src/lib/utils";
 import { TSignupSchema } from "@/src/lib/validationSchema";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@components/ui/popover";
 import { IconCheck, IconX } from "@tabler/icons-react";
 import { useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
@@ -11,13 +18,6 @@ import {
 } from "./form";
 import { Input, InputProps } from "./input";
 import Text from "./text";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@components/ui/popover";
-import { cn } from "@/src/lib/utils";
-import { Progress } from "@components/ui/progress";
 
 function PasswordRequirement({
   meets,

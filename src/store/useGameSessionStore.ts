@@ -1,22 +1,23 @@
+import { PerkType } from "@prisma/client";
+import { v4 as uuidV4 } from "uuid";
 import { create } from "zustand";
-import {
-  CLASSIC_ANSWER_DELAY_TIME,
-  CLASSIC_CORRECT_ADD_TIME,
-  CLASSIC_WRONG_REDUCE_TIME,
-  CLASSIC_LEVEL_UP_THRESHOLD,
-  CLASSIC_TIME,
-  INITIAL_GAME_SESSION_STATE,
-  GAME_MAX_TIMER,
-} from "../lib/game.config";
 import { createJSONStorage, persist } from "zustand/middleware";
-import { GameInfo, GameMode, Problem } from "../lib/types";
 import {
   adjustGameSettingDifficulty,
+  calculateExpGained,
   generateProblem,
   getRating,
 } from "../lib/game";
-import { v4 as uuidV4 } from "uuid";
-import { PerkType } from "@prisma/client";
+import {
+  CLASSIC_ANSWER_DELAY_TIME,
+  CLASSIC_CORRECT_ADD_TIME,
+  CLASSIC_LEVEL_UP_THRESHOLD,
+  CLASSIC_TIME,
+  CLASSIC_WRONG_REDUCE_TIME,
+  GAME_MAX_TIMER,
+  INITIAL_GAME_SESSION_STATE,
+} from "../lib/game.config";
+import { GameInfo, GameMode, Problem } from "../lib/types";
 
 export type GameTimerStatus =
   | "IDLE"
@@ -393,6 +394,7 @@ const useGameSessionStore = create<
                 level: 1,
                 rating: "E",
                 coin: 0,
+                expGained: 0,
               },
               isCooldown: false,
               activePerkList: [],
@@ -432,6 +434,11 @@ const useGameSessionStore = create<
             level: state.gameSession.gameInfo.level,
           });
 
+          const expGained = calculateExpGained({
+            gameDifficulty: state.gameSession.gameInfo.level,
+            highestCombo: state.gameSession.gameInfo.highestCombo,
+          });
+
           return {
             gameSession: {
               ...state.gameSession,
@@ -440,6 +447,7 @@ const useGameSessionStore = create<
                 ...state.gameSession.gameInfo,
                 gameTime: newGameTime,
                 rating,
+                expGained: expGained,
               },
               timer: {
                 ...timer,

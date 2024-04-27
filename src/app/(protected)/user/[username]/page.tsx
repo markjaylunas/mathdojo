@@ -1,5 +1,6 @@
 import { getGameList, getUserProfile } from "@/data/get";
 import FollowButton from "@/src/components/user/FollowButton";
+import UserExperienceSection from "@/src/components/user/UserExperienceSecion";
 import UserHistorySection from "@/src/components/user/UserHistorySection";
 import UserMoreInfo from "@/src/components/user/UserMoreInfo";
 import UserProfileSection from "@/src/components/user/UserProfileSection";
@@ -35,9 +36,13 @@ const UserProfilePage = async ({
             />
           )}
         </div>
-
-        <UserMoreInfo profile={profile} />
+        <div className="my-4">
+          <UserMoreInfo profile={profile} />
+        </div>
       </div>
+
+      <UserExperienceSection profile={profile} />
+
       <UserHistorySection gameList={gameList} />
     </div>
   );

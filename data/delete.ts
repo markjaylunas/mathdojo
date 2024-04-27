@@ -50,6 +50,8 @@ export const unlikeGame = async (params: {
           username: true,
           email: true,
           image: true,
+          level: true,
+          exp: true,
         },
       },
       likes: {

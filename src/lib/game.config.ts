@@ -36,6 +36,7 @@ export const INITIAL_CLASSIC_GAME_INFO: GameInfo = {
   gameTime: 0,
   rating: "E",
   coin: 0,
+  expGained: 0,
 };
 
 export const GAME_MAX_TIMER = convertTimeToMilliseconds({

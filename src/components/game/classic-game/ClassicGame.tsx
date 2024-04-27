@@ -1,23 +1,23 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useFullscreen } from "@mantine/hooks";
-import GameFinished from "../layout/GameFinished";
-import ClassicLobbyScreen from "./ClassicLobbyScreen";
-import ClassicRunningScreen from "./ClassicRunningScreen";
-import ClassicPausedScreen from "./ClassicPausedScreen";
-import { useRouter } from "next/navigation";
+import { createGame } from "@/data/post";
+import { actionCreateGame } from "@/src/actions/game";
 import { DEFAULT_HOME_PATH } from "@/src/lib/routes";
-import { useStore } from "zustand";
+import { GameMode, PlayerInfo } from "@/src/lib/types";
 import useGameSessionStore, {
   GameTimerStatus,
 } from "@/src/store/useGameSessionStore";
-import GameStartingCountdown from "../layout/GameStartingCountdown";
-import { GameMode, PlayerInfo } from "@/src/lib/types";
-import { createGame } from "@/data/post";
-import { toast } from "../../ui/use-toast";
-import { actionCreateGame } from "@/src/actions/game";
 import useUserStore from "@/src/store/useUserStore";
+import { useFullscreen } from "@mantine/hooks";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useStore } from "zustand";
+import { toast } from "../../ui/use-toast";
+import GameFinished from "../layout/GameFinished";
+import GameStartingCountdown from "../layout/GameStartingCountdown";
+import ClassicLobbyScreen from "./ClassicLobbyScreen";
+import ClassicPausedScreen from "./ClassicPausedScreen";
+import ClassicRunningScreen from "./ClassicRunningScreen";
 
 type Props = {
   gameMode: GameMode;
@@ -106,6 +106,7 @@ const ClassicGame = ({ gameMode: initialGameMode, playerInfo }: Props) => {
             },
           },
         },
+        userId: `${user?.id}`,
       });
 
       const isError = status === "error";

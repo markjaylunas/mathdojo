@@ -65,6 +65,8 @@ model User {
   password      String?
   role          UserRole  @default(USER)
   coin          Int       @default(0)
+  exp           Int       @default(0)
+  level         Int       @default(1)
 
   accounts  Account[]
   games     Game[]
@@ -167,6 +169,7 @@ model Game {
   createdAt     DateTime @default(now())
   like          Int      @default(0)
   coin          Int      @default(0)
+  expGained     Int      @default(0)
 
   user User @relation(fields: [userId], references: [id])
 

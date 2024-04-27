@@ -1,5 +1,7 @@
-import Heading from "../../ui/heading";
-import { Button } from "../../ui/button";
+import { formatNumber } from "@/src/lib/game";
+import { DEFAULT_HOME_PATH } from "@/src/lib/routes";
+import { formatTime } from "@/src/lib/utils";
+import { GameSessionState } from "@/src/store/useGameSessionStore";
 import {
   IconHome,
   IconReload,
@@ -7,14 +9,12 @@ import {
   IconSquareXFilled,
 } from "@tabler/icons-react";
 import Link from "next/link";
-import { DEFAULT_HOME_PATH } from "@/src/lib/routes";
-import GameLayout from "./GameLayout";
-import { formatTime } from "@/src/lib/utils";
-import { GameSessionState } from "@/src/store/useGameSessionStore";
+import { Button } from "../../ui/button";
+import GameRating from "../../ui/game-rating";
+import Heading from "../../ui/heading";
 import { Icons } from "../../ui/icons";
 import Text from "../../ui/text";
-import { formatNumber } from "@/src/lib/game";
-import GameRating from "../../ui/game-rating";
+import GameLayout from "./GameLayout";
 
 type Props = {
   gameSession: GameSessionState;
@@ -79,6 +79,12 @@ const GameFinished = ({ gameSession, onRetry, isSaving }: Props) => {
                 <Icons.coin className="size-6" />
                 <Text className="text-xl font-bold">
                   +{formatNumber(gameInfo.coin)}
+                </Text>
+              </div>
+
+              <div className="flex items-center justify-center gap-1">
+                <Text className="text-xl font-bold">
+                  +{formatNumber(gameInfo.expGained)} Exp
                 </Text>
               </div>
             </div>

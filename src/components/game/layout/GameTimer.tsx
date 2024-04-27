@@ -1,11 +1,10 @@
 "use client";
 
-import { formatTime } from "@/src/lib/utils";
-import React, { useEffect } from "react";
-import { Progress } from "../../ui/progress";
 import { Problem } from "@/src/lib/types";
+import { formatTime } from "@/src/lib/utils";
 import { TimerState } from "@/src/store/useGameSessionStore";
-import { GAME_MAX_TIMER } from "@/src/lib/game.config";
+import React, { useEffect } from "react";
+import { Progress } from "../../ui/time-progress";
 
 type GameTimerProps = {
   timer: TimerState;
@@ -55,7 +54,7 @@ const GameTimer: React.FC<GameTimerProps> = ({
   return (
     <div>
       <div className="relative">
-        <p className="absolute left-1/2  top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 transform text-sm text-white mix-blend-exclusion">
+        <p className="absolute left-1/2  top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 transform text-xs  text-white mix-blend-difference">
           {formattedTime}
         </p>
         <Progress size="lg" value={percentage} status={status} />

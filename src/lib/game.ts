@@ -1,15 +1,15 @@
+import { Rating } from "@prisma/client";
+import { evaluate } from "mathjs";
+import { v4 as uuidV4 } from "uuid";
+import { MAX_CLASSIC_LEVEL } from "./game.config";
 import {
   Difficulty,
-  OperationSymbol,
-  Problem,
+  GameInfo,
   GameMode,
   GameOperation,
-  GameInfo,
+  OperationSymbol,
+  Problem,
 } from "./types";
-import { v4 as uuidV4 } from "uuid";
-import { evaluate } from "mathjs";
-import { Rating } from "@prisma/client";
-import { MAX_CLASSIC_LEVEL } from "./game.config";
 
 export const getRandomInt = (min: number, max: number) => {
   let byteArray = new Uint32Array(1);
@@ -254,4 +254,20 @@ export const getRating = ({
   } else {
     return "E";
   }
+};
+
+
+export const calculateLevel = (params: { exp: number }) => {
+  return Math.floor(params.exp / 100) + 1;
+};
+
+export const calculateExpGained = (params: {
+  gameDifficulty: number;
+  highestCombo: number;
+}) => {
+  return params.gameDifficulty * 10 + params.highestCombo;
+};
+
+export const calculateExpToNextLevel = (params: { currentLevel: number }) => {
+  return (params.currentLevel + 1) * 100;
 };
