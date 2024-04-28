@@ -8,8 +8,19 @@ const LeaderBoardPage = async () => {
 
   return (
     <div className="py-8">
-      <Heading>Leaderboard</Heading>
-      <HighScoreList highScoreList={highScoreList} />
+      <Heading order="4xl" className="px-4 sm:px-8">
+        Leaderboard
+      </Heading>
+      <Heading
+        order="2xl"
+        className="px-4 font-medium  text-slate-500 sm:px-8 "
+      >
+        High Scores
+      </Heading>
+
+      <div className="mt-8">
+        <HighScoreList highScoreList={highScoreList} />
+      </div>
     </div>
   );
 };

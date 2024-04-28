@@ -1,4 +1,6 @@
+import { formatNumber } from "@/src/lib/game";
 import { HighScore } from "@/src/lib/types";
+import { cn } from "@/src/lib/utils";
 import {
   Table,
   TableBody,
@@ -8,10 +10,8 @@ import {
   TableHeader,
   TableRow,
 } from "@components/ui/table";
-import UserProfileSection from "../../user/UserProfileSection";
-import { formatNumber } from "@/src/lib/game";
 import { Icons } from "../../ui/icons";
-import { cn } from "@/src/lib/utils";
+import UserProfileSection from "../../user/UserProfileSection";
 
 type Props = {
   highScoreList: HighScore[];

@@ -60,8 +60,8 @@ const Page = async ({
         </p>
       </div>
 
-      <Tabs defaultValue={tab} className="mx-4 mt-4">
-        <div className="flex items-center justify-between">
+      <Tabs defaultValue={tab} className="mt-4">
+        <div className="mx-4 flex items-center justify-between">
           <TabsList>
             <TabsTrigger value="global">Global</TabsTrigger>
             <TabsTrigger value="following">Following</TabsTrigger>

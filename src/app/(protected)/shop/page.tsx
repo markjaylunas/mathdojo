@@ -14,7 +14,7 @@ const ShopPage = async () => {
   if (!data) throw new Error(message);
 
   return (
-    <div className="py-8">
+    <div className="px-4 py-8">
       <div className="flex items-center justify-between">
         <Heading>Shop</Heading>
         <div className="flex items-center">
