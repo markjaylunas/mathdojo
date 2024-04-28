@@ -8,7 +8,12 @@ export const createGame = async (params: {
   userId: string;
 }): Promise<Game> => {
   const { gameParams, userId } = params;
-  const expGained = gameParams?.expGained || 0;
+
+  if (!gameParams) {
+    throw new Error("No game params provided");
+  }
+
+  const expGained = gameParams.expGained || 0;
 
   const user = await prisma.user.findUnique({
     where: {
@@ -16,9 +21,16 @@ export const createGame = async (params: {
     },
   });
 
+  if (!user) {
+    throw new Error("User not found");
+  }
+
   const newLevel = calculateLevel({
-    exp: user?.exp || 0 + expGained,
+    exp: user.exp || 0 + expGained,
   });
+
+  const doLevelUp = newLevel > user.level;
+  const levelUpCoin = doLevelUp ? newLevel * 100 : 0;
 
   const game = await prisma.game.create({
     data: {
@@ -36,7 +48,7 @@ export const createGame = async (params: {
     },
     data: {
       coin: {
-        increment: gameParams.coin,
+        increment: gameParams.coin || 0 + levelUpCoin,
       },
       exp: {
         increment: expGained,
