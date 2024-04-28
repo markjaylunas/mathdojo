@@ -190,7 +190,7 @@ model Perk {
   id          String   @id @default(uuid())
   name        String
   description String
-  type        PerkType
+  type        PerkType @unique
   price       Int
   icon        String
   createdAt   DateTime @default(now())
