@@ -41,7 +41,7 @@ export const routesConfig: RoutesConfig = {
         },
         {
           title: "Leaderboard",
-          href: "/leaderboard",
+          href: `/leaderboard?month=${new Date().getMonth() + 1}&year=${new Date().getFullYear()}`,
           items: [],
         },
         {
@@ -49,11 +49,6 @@ export const routesConfig: RoutesConfig = {
           href: "/shop",
           items: [],
         },
-        // {
-        //   title: "Friends",
-        //   href: "/friends",
-        //   items: [],
-        // },
       ],
     },
   ],
@@ -75,8 +70,6 @@ export const routesConfig: RoutesConfig = {
         // },
       ],
     },
-    // {
-    //   title: "",
     //   items: [
     //     {
     //       title: "GitHub",

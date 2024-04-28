@@ -1,11 +1,22 @@
+import { cn } from "@/src/lib/utils";
+
 export default function EmptyList({
-  message = "Empty List",
+  children,
+  className,
 }: {
-  message?: string;
+  children: React.ReactNode;
+  className?: string;
 }) {
   return (
     <div className="flex items-center justify-center p-8">
-      <p className="text-slate-300 dark:text-gray-700 ">message</p>
+      <p
+        className={cn(
+          "whitespace-nowrap text-slate-300 dark:text-gray-700",
+          className
+        )}
+      >
+        {children ? children : "Empty List"}
+      </p>
     </div>
   );
 }

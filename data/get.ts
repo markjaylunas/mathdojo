@@ -204,12 +204,18 @@ export const getPlayerInfo = async (params: {
   return { highestScore, userPerkList };
 };
 
-export const getHighScoreList = async (): Promise<HighScore[]> => {
+export const getHighScoreList = async (params: {
+  month: number;
+  year: number;
+}): Promise<HighScore[]> => {
+  const { month, year } = params;
+
   const highScoreList = await prisma.game.findMany({
     orderBy: {
       score: "desc",
     },
     select: {
+      id: true,
       score: true,
       user: {
         select: {
@@ -222,10 +228,16 @@ export const getHighScoreList = async (): Promise<HighScore[]> => {
           exp: true,
         },
       },
+      createdAt: true,
+    },
+    where: {
+      createdAt: {
+        gte: new Date(`${year}-${month}-01`),
+        lte: month === 12 ? new Date(year + 1, 0, 1) : new Date(year, month, 1),
+      },
     },
     take: 12,
   });
-
   return highScoreList;
 };
 

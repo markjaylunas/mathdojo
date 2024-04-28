@@ -111,6 +111,7 @@ export type UserPerkWithPerk = {
 };
 
 export type HighScore = {
+  id: Game["id"];
   score: Game["score"];
   user: BasicUser;
 };
