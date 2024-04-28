@@ -21,15 +21,11 @@ export const createGame = async (params: {
     },
   });
 
-  if (!user) {
-    throw new Error("User not found");
-  }
-
   const newLevel = calculateLevel({
-    exp: user.exp || 0 + expGained,
+    exp: user?.exp || 0 + expGained,
   });
 
-  const doLevelUp = newLevel > user.level;
+  const doLevelUp = user && newLevel > user.level;
   const levelUpCoin = doLevelUp ? newLevel * 100 : 0;
 
   const game = await prisma.game.create({
