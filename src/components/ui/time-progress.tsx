@@ -12,8 +12,8 @@ const timeProgressVariants = cva(
     variants: {
       status: {
         UNANSWERED: "",
-        CORRECT: "bg-green-600 dark:bg-green-700",
-        WRONG: "bg-red-600 dark:bg-red-700",
+        CORRECT: "bg-green-400 dark:bg-green-700",
+        WRONG: "bg-red-400 dark:bg-red-700",
       },
       size: {
         default: "h-2",
