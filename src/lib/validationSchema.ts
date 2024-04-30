@@ -1,4 +1,5 @@
 import z from "zod";
+import { ACCEPTED_IMAGE_TYPES, MAX_FILE_SIZE } from "./constants";
 import { removeExtraSpaces, usernameFormat } from "./string";
 
 const zCreatePassword = z
@@ -82,3 +83,24 @@ export const createUsernameSchema = z.object({
 });
 
 export type TCreateUsernameSchema = z.infer<typeof createUsernameSchema>;
+
+export const editProfileSchema = z.object({
+  id: z.string().min(1, "ID is required"),
+  image: z.any(),
+  username: z
+    .string()
+    .min(3, "Username must be at least 3 characters long")
+    .max(30, "Username must be at most 30 characters long")
+    .refine((value) => /^[a-zA-Z0-9._-]+$/.test(value), {
+      message:
+        "Username can only include alphanumeric characters, periods, underscores, and hyphens",
+      path: ["username"],
+    })
+    .refine((value) => !/\s/.test(value), {
+      message: "Username cannot contain spaces",
+      path: ["username"],
+    }),
+  name: z.string().min(1, "Name is required").max(255, "Name is too long"),
+});
+
+export type TEditProfileSchema = z.infer<typeof editProfileSchema>;

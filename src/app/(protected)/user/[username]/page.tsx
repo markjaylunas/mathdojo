@@ -1,4 +1,5 @@
 import { getGameList, getUserProfile } from "@/data/get";
+import EditProfile from "@/src/components/user/EditProfile";
 import FollowButton from "@/src/components/user/FollowButton";
 import UserExperienceSection from "@/src/components/user/UserExperienceSecion";
 import UserHistorySection from "@/src/components/user/UserHistorySection";
@@ -24,27 +25,29 @@ const UserProfilePage = async ({
   const gameList = await getGameList({ where: { userId: profile.user.id } });
 
   return (
-    <div className="">
-      <div className="flex flex-col  sm:flex-row">
+    <>
+      <section className="flex flex-col  sm:flex-row">
         <div className="mt-4 flex flex-col gap-4 sm:mt-0 sm:flex-row sm:items-center">
           <UserProfileSection user={profile.user} />
-          {session?.user.id !== profile.user.id && (
+          {session?.user.id !== profile.user.id ? (
             <FollowButton
               userFollow={profile.followUser}
               followerId={`${session?.user.id}`}
               followingId={profile.user.id}
             />
+          ) : (
+            <EditProfile user={profile.user} />
           )}
         </div>
-        <div className="my-4">
+        <div className="my-4 flex-none sm:flex-1">
           <UserMoreInfo profile={profile} />
         </div>
-      </div>
+      </section>
 
       <UserExperienceSection profile={profile} />
 
       <UserHistorySection gameList={gameList} />
-    </div>
+    </>
   );
 };
 
