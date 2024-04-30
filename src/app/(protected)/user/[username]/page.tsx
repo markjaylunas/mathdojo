@@ -25,8 +25,8 @@ const UserProfilePage = async ({
 
   return (
     <div className="">
-      <div className="flex flex-col gap-4 sm:flex-row">
-        <div className="flex flex-col gap-4 sm:flex-row">
+      <div className="flex flex-col  sm:flex-row">
+        <div className="mt-4 flex flex-col gap-4 sm:mt-0 sm:flex-row sm:items-center">
           <UserProfileSection user={profile.user} />
           {session?.user.id !== profile.user.id && (
             <FollowButton
