@@ -16,15 +16,17 @@ const Page = () => {
         <span className="">{siteConfig.name}</span>
       </h1>
 
+      <section>
+        <Heading className="mt-4">Sign up</Heading>
+
+        <Text className="my-4">Create an account to start using the app</Text>
+      </section>
+
       <OauthButtons />
 
       <Separator />
 
       <section>
-        <Heading className="mt-4">Sign up</Heading>
-
-        <Text className="my-4">Create an account to start using the app</Text>
-
         <SignupForm />
 
         <Text className="mt-4 space-x-1 text-center text-xs">

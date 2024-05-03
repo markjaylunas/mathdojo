@@ -22,15 +22,11 @@ const Page = () => {
         <div className=" mx-auto max-w-3xl flex-col border-0 sm:border-x">
           <div className=" min-h-screen px-8">
             <div className="flex justify-center">
-              <div className="mt-8 max-w-[520px] space-y-8">
+              <div className="my-8 max-w-[520px] space-y-8">
                 <h1 className="flex items-center justify-center gap-2 text-5xl font-bold">
                   <Icons.logo className="size-16" />
                   <span className="">{siteConfig.name}</span>
                 </h1>
-
-                <OauthButtons />
-
-                <Separator />
 
                 <section>
                   <Heading className="mt-4">Sign in</Heading>
@@ -38,7 +34,13 @@ const Page = () => {
                     Sign in to access your account and start mathdojo with your
                     friends.
                   </Text>
+                </section>
 
+                <OauthButtons />
+
+                <Separator />
+
+                <section>
                   <SigninForm />
 
                   <Link href={DEFAULT_FORGOT_PASSWORD_PATH}>
