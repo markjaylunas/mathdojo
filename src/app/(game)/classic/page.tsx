@@ -8,7 +8,7 @@ const ClassicPage = async () => {
   const session = await auth();
   if (!session) notFound();
 
-  const gameModePromise = getGameMode({ title: "Mathwars" });
+  const gameModePromise = getGameMode({ title: "Mathdojo" });
   const playerInfoPromise = actionGetPlayerInfo({
     userId: `${session.user.id}`,
   });

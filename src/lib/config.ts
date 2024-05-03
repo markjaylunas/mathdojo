@@ -2,11 +2,11 @@ import { MainNavItem, SidebarNavItem, UserNavItem } from "@lib/types";
 import { DEFAULT_HOME_PATH } from "./routes";
 
 export const siteConfig = {
-  name: "mathwars",
-  url: "https://mathwars.makje.com",
-  description: "Mathwars created by Makje",
+  name: "mathdojo",
+  url: "https://mathdojo.makje.com",
+  description: "mathdojo created by Makje",
   links: {
-    github: "https://github.com/markjaylunas/mathwars-makje",
+    github: "https://github.com/markjaylunas/mathdojo",
   },
 };
 

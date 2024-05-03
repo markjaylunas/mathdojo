@@ -14,8 +14,8 @@ const fontSans = FontSans({
 });
 
 export const metadata: Metadata = {
-  title: "Mathwars | Makje",
-  description: "Mathwars is a fun way to master basic math with your friends.",
+  title: "Mathdojo | Makje",
+  description: "Mathdojo is a fun way to master basic math with your friends.",
   icons: {
     icon: ["/favicon.ico?v=4"],
     apple: ["/apple-touch-icon.png?v=4"],

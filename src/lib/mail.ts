@@ -20,9 +20,9 @@ export const sendVerificationEmail = async (params: {
   const mailOption = {
     from: SMTP_USER,
     to: email,
-    subject: "Mathwars | Email Verification",
+    subject: "Mathdojo | Email Verification",
     html: `
-    <h1>Welcome to Mathwars!</h1>
+    <h1>Welcome to Mathdojo!</h1>
     <p>Thank you for registering. Please click the link below to verify your email address:</p>
     <p><a href="${confirmLink}">Verify Email Address</a></p>
     <p>If you did not request this, please ignore this email.</p>
@@ -54,7 +54,7 @@ export const sendPasswordResetEmail = async (params: {
   const mailOption = {
     from: SMTP_USER,
     to: email,
-    subject: "Mathwars | Reset Password",
+    subject: "Mathdojo | Reset Password",
     html: `
     <h1>Reset Password</h1>
     <p>Please click the link below to reset your password:</p>

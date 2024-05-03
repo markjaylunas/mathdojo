@@ -43,7 +43,7 @@ const Page = async ({
     <div>
       <div>
         <Heading className="pt-4 text-center" order="3xl">
-          mathwars
+          mathdojo
         </Heading>
 
         <p className="text-balance text-center text-sm leading-loose text-muted-foreground">
