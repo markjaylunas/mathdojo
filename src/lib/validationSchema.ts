@@ -86,7 +86,6 @@ export type TCreateUsernameSchema = z.infer<typeof createUsernameSchema>;
 
 export const editProfileSchema = z.object({
   id: z.string().min(1, "ID is required"),
-  image: z.any(),
   username: z
     .string()
     .min(3, "Username must be at least 3 characters long")

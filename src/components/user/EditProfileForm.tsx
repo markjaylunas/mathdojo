@@ -37,7 +37,6 @@ const EditProfileForm = ({ user }: Props) => {
     resolver: zodResolver(editProfileSchema),
     defaultValues: {
       id: `${user.id}`,
-      image: `${user.image}`,
       name: `${user.name}`,
       username: `${user.username}`,
     },
@@ -76,7 +75,6 @@ const EditProfileForm = ({ user }: Props) => {
           id: `${newUser.id}`,
           name: `${newUser.name}`,
           username: `${newUser.username}`,
-          image: `${newUser.image}`,
         });
 
         router.push(`/user`);

@@ -96,14 +96,9 @@ export const actionEditProfile = async (
     };
   }
 
-  const { id, username, name, image } = validatedFields.data;
+  const { id, username, name } = validatedFields.data;
 
-  let userParams: Prisma.UserCreateInput = { id, username, name, image };
-
-  if (image instanceof File) {
-    const newImage = "asd";
-    userParams = { ...userParams, image: newImage };
-  }
+  let userParams: Prisma.UserCreateInput = { id, username, name };
 
   const updatedUser = await updateUser(userParams);
   revalidatePath(`/user/${updatedUser.username}`);
