@@ -1,13 +1,9 @@
 "use client";
 
-import {
-  DEFAULT_OAUTH_SIGNIN_REDIRECT,
-  DEFAULT_SIGNIN_REDIRECT,
-} from "@/src/lib/routes";
+import { DEFAULT_OAUTH_SIGNIN_REDIRECT } from "@/src/lib/routes";
 import { Button } from "@components/ui/button";
-import { Separator } from "@components/ui/separator";
-import React from "react";
 import { signIn } from "next-auth/react";
+import React from "react";
 import { Icons } from "../../ui/icons";
 
 const OauthButtons = () => {
@@ -20,7 +16,6 @@ const OauthButtons = () => {
 
   return (
     <div className="w-full space-y-2">
-      <Separator className="my-4" />
       <Button
         variant="outline"
         size="lg"
