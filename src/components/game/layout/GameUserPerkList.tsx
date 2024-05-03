@@ -36,6 +36,8 @@ const GameUserPerkList = ({ userPerkList, disabled }: Props) => {
     setOpen(false);
     const appliable = !activePerkList.includes(perkType);
     if (!appliable) return;
+    const gamePerkAudio = new Audio("/audio/game-perk.wav");
+    gamePerkAudio.play();
 
     try {
       const { status } = await actionUsePerk({ userPerkId });

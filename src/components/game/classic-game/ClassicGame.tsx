@@ -1,6 +1,5 @@
 "use client";
 
-import { createGame } from "@/data/post";
 import { actionCreateGame } from "@/src/actions/game";
 import { DEFAULT_HOME_PATH } from "@/src/lib/routes";
 import { GameMode, PlayerInfo } from "@/src/lib/types";
@@ -61,7 +60,21 @@ const ClassicGame = ({ gameMode: initialGameMode, playerInfo }: Props) => {
   };
 
   const handleAnswer = (answer: number) => {
-    gameAnswer(answer);
+    const { isCorrect, isLeveledUp } = gameAnswer(answer);
+
+    const gameCorrectAudio = new Audio("/audio/game-correct.wav");
+    const gameWrongAudio = new Audio("/audio/game-wrong.wav");
+    const gameLeveledUpAudio = new Audio("/audio/game-level.wav");
+
+    if (isCorrect) {
+      if (isLeveledUp) {
+        gameLeveledUpAudio.play();
+      } else {
+        gameCorrectAudio.play();
+      }
+    } else {
+      gameWrongAudio.play();
+    }
   };
 
   const handleReset = () => {
@@ -70,6 +83,8 @@ const ClassicGame = ({ gameMode: initialGameMode, playerInfo }: Props) => {
 
   const handleFinish = () => {
     gameFinish();
+    const gameEndAudio = new Audio("/audio/game-level-up.wav");
+    gameEndAudio.play();
     if (isFullscreen) toggleFullscreen();
   };
 

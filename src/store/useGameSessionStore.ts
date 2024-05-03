@@ -1,4 +1,5 @@
 import { PerkType } from "@prisma/client";
+import { re } from "mathjs";
 import { v4 as uuidV4 } from "uuid";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
@@ -74,7 +75,7 @@ export type UseGameSessionActions = {
   gameStart: () => void;
   gamePause: () => void;
   gameContinue: () => void;
-  gameAnswer: (answer: number) => void;
+  gameAnswer: (answer: number) => { isCorrect: boolean; isLeveledUp: boolean };
   gameFinish: () => void;
   gameReset: () => void;
   gameDoneCooldown: (adjustedGameSetting: GameMode | null) => void;
@@ -166,9 +167,11 @@ const useGameSessionStore = create<
       },
 
       gameAnswer: (answer) => {
+        let playerIsCorrect = false;
+        let isLeveledUp = false;
+
         set((state) => {
           const { gameSession } = state;
-
           const {
             timer,
             problemList,
@@ -186,9 +189,11 @@ const useGameSessionStore = create<
 
           // constants
           const isCorrect = answer === problem.answer;
+          playerIsCorrect = isCorrect;
           let newLevelCounter = isCorrect ? levelCounter + 1 : 1;
           const doLevelUp =
             levelCounter === CLASSIC_LEVEL_UP_THRESHOLD + level * 2;
+          isLeveledUp = doLevelUp;
           const initialValue = isCorrect
             ? timer.value + CLASSIC_CORRECT_ADD_TIME
             : timer.value - CLASSIC_WRONG_REDUCE_TIME;
@@ -293,6 +298,7 @@ const useGameSessionStore = create<
             },
           };
         });
+        return { isCorrect: playerIsCorrect, isLeveledUp };
       },
 
       gameDoneCooldown: (adjustedGameSetting: GameMode | null) => {
