@@ -83,7 +83,7 @@ const ClassicGame = ({ gameMode: initialGameMode, playerInfo }: Props) => {
 
   const handleFinish = () => {
     gameFinish();
-    const gameEndAudio = new Audio("/audio/game-level-up.wav");
+    const gameEndAudio = new Audio("/audio/game-end.wav");
     gameEndAudio.play();
     if (isFullscreen) toggleFullscreen();
   };
