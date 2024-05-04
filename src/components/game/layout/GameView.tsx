@@ -1,8 +1,8 @@
 import { Problem } from "@/src/lib/types";
-import Number from "./Number";
-import Text from "../../ui/text";
 import { cn } from "@/src/lib/utils";
 import { PerkType } from "@prisma/client";
+import Text from "../../ui/text";
+import Number from "./Number";
 
 type Props = {
   problem: Problem;
@@ -44,14 +44,14 @@ const GameView = ({ problem, activePerkList }: Props) => {
       </div>
       <div className="border-[3px] border-gray-600 dark:border-gray-300" />
       <div className="flex items-end justify-end gap-5">
-        {userAnswer && (
+        {userAnswer !== null && (
           <Number
             numberFullValue={userAnswer || 0}
             maxDigitLength={maxDigitLength}
             status={status}
           />
         )}
-        {!userAnswer && <div className={cn("h-[48px] w-full")} />}
+        {userAnswer === null && <div className={cn("h-[48px] w-full")} />}
       </div>
     </div>
   );
