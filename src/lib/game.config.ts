@@ -103,3 +103,5 @@ export const RATING_CSS = {
   D: "text-indigo-600",
   E: "text-gray-600",
 };
+
+export const EDIT_PROFILE_COST = 1_800;

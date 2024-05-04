@@ -376,3 +376,29 @@ export const getUserProfile = async (params: {
 
   return userProfile;
 };
+
+export const checkUsernameAvailability = async (params: {
+  id: string;
+  username: string;
+}): Promise<boolean> => {
+  const { id, username } = params;
+
+  const user = await prisma.user.findFirst({
+    where: { username, id: { not: id } },
+  });
+
+  return user === null;
+};
+
+export const checkNameAvailability = async (params: {
+  id: string;
+  name: string;
+}): Promise<boolean> => {
+  const { id, name } = params;
+
+  const user = await prisma.user.findFirst({
+    where: { name, id: { not: id } },
+  });
+
+  return user === null;
+};

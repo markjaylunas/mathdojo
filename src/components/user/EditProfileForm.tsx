@@ -121,7 +121,12 @@ const EditProfileForm = ({ user }: Props) => {
           )}
         />
 
-        <SubmitButton loading={isLoading} className="w-full" type="submit">
+        <SubmitButton
+          loading={isLoading}
+          disabled={!form.formState.isDirty}
+          className="w-full"
+          type="submit"
+        >
           Save
         </SubmitButton>
       </form>

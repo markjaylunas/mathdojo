@@ -1,10 +1,16 @@
 "use server";
 
 import { unlikeGame } from "@/data/delete";
+import {
+  checkNameAvailability,
+  checkUsernameAvailability,
+  getUserCoin,
+} from "@/data/get";
 import { likeGame } from "@/data/post";
-import { buyPerk, updateUsePerk, updateUser } from "@/data/update";
+import { buyPerk, editProfile, updateUsePerk, updateUser } from "@/data/update";
 import { Game, Prisma, UserPerk } from "@prisma/client";
 import { revalidatePath } from "next/cache";
+import { EDIT_PROFILE_COST } from "../lib/game.config";
 import { ActionResponse, BasicUser, GameWithUser } from "../lib/types";
 import { editProfileSchema, TEditProfileSchema } from "../lib/validationSchema";
 
@@ -100,7 +106,40 @@ export const actionEditProfile = async (
 
   let userParams: Prisma.UserCreateInput = { id, username, name };
 
-  const updatedUser = await updateUser(userParams);
+  const [isUsernameAvailable, isNameAvailable, userCoin] = await Promise.all([
+    await checkUsernameAvailability({ id, username }),
+    await checkNameAvailability({ id, name }),
+    await getUserCoin({ userId: id }),
+  ]);
+
+  if (userCoin < EDIT_PROFILE_COST) {
+    return {
+      status: "error",
+      message: "Not enough coin to edit profile",
+      data: null,
+    };
+  }
+
+  if (!isNameAvailable) {
+    return {
+      status: "error",
+      path: "name",
+      message: "Name is already taken",
+      data: null,
+    };
+  }
+
+  if (!isUsernameAvailable) {
+    return {
+      status: "error",
+      path: "username",
+      message: "Username is already taken",
+      data: null,
+    };
+  }
+
+  const updatedUser = await editProfile(userParams);
+
   revalidatePath(`/user/${updatedUser.username}`);
 
   return {

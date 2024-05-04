@@ -1,5 +1,5 @@
-import { Perk, Prisma, User, UserPerk } from "@prisma/client";
 import prisma from "@lib/prisma";
+import { Perk, Prisma, User, UserPerk } from "@prisma/client";
 
 export const updateUser = async (
   params: Prisma.UserUpdateInput
@@ -101,4 +101,39 @@ export const updateUsePerk = async (params: {
   });
 
   return Boolean(udpatedUserPerk);
+};
+
+export const editProfile = async (
+  params: Prisma.UserUpdateInput
+): Promise<User> => {
+  const editProfileCost = 1_800;
+  const { id, coin, ...userWithoutId } = params;
+  if (!id) throw new Error("id is required");
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: `${id}`,
+    },
+  });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  if (user.coin < editProfileCost) {
+    throw new Error("User's coin is not enough");
+  }
+
+  await prisma.user.update({
+    data: {
+      coin: {
+        decrement: editProfileCost,
+      },
+      ...userWithoutId,
+    },
+    where: {
+      id: `${id}`,
+    },
+  });
+  return user;
 };
