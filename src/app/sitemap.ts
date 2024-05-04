@@ -8,8 +8,5 @@ export default async function sitemap() {
     {
       url: `${process.env.NEXT_PUBLIC_BASE_URL}/sign-up`,
     },
-    {
-      url: `${process.env.NEXT_PUBLIC_BASE_URL}/home`,
-    },
   ];
 }
