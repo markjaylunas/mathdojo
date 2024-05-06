@@ -32,12 +32,11 @@ const ShopItem = ({ perk, userPerk, userCoin }: Props) => {
   const user = useUserStore((state) => state.user);
   const havePerk = Boolean(userPerk);
   const isFree = !havePerk;
-  const isSufficientCoins = userPerk
-    ? userCoin >= perk.price * userPerk.quantity
-    : false;
-
   const [quantity, setQuantity] = useState(1);
   const [loading, setIsLoading] = useState(false);
+  const isSufficientCoins = userPerk
+    ? userCoin >= perk.price * quantity || 0
+    : false;
 
   const handleBuy = async () => {
     try {
